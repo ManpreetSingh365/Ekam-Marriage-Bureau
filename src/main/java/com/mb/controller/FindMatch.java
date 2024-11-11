@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,7 +13,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.mb.entities.User;
 import com.mb.forms.UserFormDetails;
@@ -29,6 +32,16 @@ public class FindMatch {
 	@Autowired
 	private UserService userService;
 
+	@Value("${admin.email}")
+	private String adminEmail;
+
+	@RequestMapping(value = "/getCastes", method = RequestMethod.GET)
+	@ResponseBody
+	public List<String> getCastesByReligion(@RequestParam String religion) {
+		System.out.println("Fetching castes for religion: " + religion);
+		return userService.getAllDistinctCastes(religion);
+	}
+
 //  Open for FindMatch Page Handler----->
 	@RequestMapping("/findmatch")
 	public String findmatch(Model model) {
@@ -36,37 +49,65 @@ public class FindMatch {
 
 		UserFormDetails userFormDetails = new UserFormDetails();
 		model.addAttribute("userFormDetails", userFormDetails);
+
+		// Fetch distinct relisions, castes categories from the database
+		List<String> religions = userService.getAllDistinctReligions();
+		List<String> castes = userService.getAllDistinctCastes(userFormDetails.getReligion());
+		List<String> qualification = userService.getAllDistinctQualification();
+		List<String> occupation = userService.getAllDistinctOccupation();
+
+		model.addAttribute("religions", religions);
+		model.addAttribute("castes", castes);
+		model.addAttribute("qualification", qualification);
+		model.addAttribute("occupation", occupation);
+
 		return "findmatch";
-	}
-
-	@RequestMapping("/user/findmatch")
-	public String findmatchUser(Model model) {
-		System.out.println("Opening findMatch Handler...");
-
-		UserFormDetails userFormDetails = new UserFormDetails();
-		model.addAttribute("userFormDetails", userFormDetails);
-		return "User/findmatch";
 	}
 
 //  Processing for FindMatching Handler----->
 	@RequestMapping("/do-findmatch")
-	public String processFindmatch(@RequestParam(value = "page", defaultValue = "0") int page,
-			@RequestParam(value = "size", defaultValue = AppConstants.PAGE_SIZE + "") int size,
+	public String processFindmatchUser(@RequestParam(value = "page", defaultValue = "0") int page,
+			@RequestParam(value = "size", defaultValue = "10") int size,
 			@RequestParam(value = "sortBy", defaultValue = "userId") String sortBy,
 			@RequestParam(value = "direction", defaultValue = "asc") String direction,
-			@RequestParam(value = "gender", required = false) String gender,
-			@RequestParam(value = "religion", required = false) String religion,
-			@RequestParam(value = "caste", required = false) String caste,
-			@RequestParam(value = "minAge", required = false) Integer minAge,
-			@RequestParam(value = "maxAge", required = false) Integer maxAge,
-			@RequestParam(value = "minHeight", required = false) Integer minHeight,
-			@RequestParam(value = "maxHeight", required = false) Integer maxHeight,
-			@RequestParam(value = "marriedStatus", required = false) String marriedStatus,
-			@RequestParam(value = "place", required = false) String place,
-			@RequestParam(value = "occupation", required = false) String occupation, Model model) throws Exception {
+			@RequestParam(value = "gender", required = true) String gender,
+			@RequestParam(value = "religion", required = true) String religion,
+			@RequestParam(value = "caste", required = true) String caste,
+			@RequestParam(value = "minAge") Integer minAge, @RequestParam(value = "maxAge") Integer maxAge,
+			@RequestParam(value = "minHeight") Float minHeight, @RequestParam(value = "maxHeight") Float maxHeight,
+			@RequestParam(value = "marriedStatus") String marriedStatus, @RequestParam(value = "place") String place,
+			@RequestParam(value = "qualification", required = false) String qualification,
+			@RequestParam(value = "occupation", required = false) String occupation, Model model,
+			Authentication authentication) throws Exception {
 
 		// Fetch Form-Data from UserForm to bind with Model_Object by @ModelAttribute
-		System.out.println("Processing Process do-findmatch Handler...");
+		System.out.println("Processing Process user/do-findmatch Handler...");
+
+		// Apply default values if this fields are zero or invalid
+		if (minAge <= 0)
+			minAge = 18;
+		if (maxAge <= 0)
+			maxAge = 90;
+		if (minHeight <= 0.0)
+			minHeight = 2.2f;
+		if (maxHeight <= 0.0)
+			maxHeight = 8.8f;
+
+		// If marriedStatus is empty or null, set it to "single"
+		if (marriedStatus == null || marriedStatus.trim().isEmpty()) {
+			marriedStatus = "single";
+		}
+		// If marriedStatus is empty or null, set it to "single"
+		if (place == null || place.trim().isEmpty()) {
+			marriedStatus = "Indian";
+		}
+
+		System.out.println("minAge: " + minAge);
+		System.out.println("maxAge: " + maxAge);
+		System.out.println("minHeight: " + minHeight);
+		System.out.println("maxHeight: " + maxHeight);
+		System.out.println("marriedStatus: " + marriedStatus);
+		System.out.println("place: " + place);
 
 		UserFormDetails userFormDetails = new UserFormDetails();
 		userFormDetails.setGender(gender);
@@ -78,6 +119,7 @@ public class FindMatch {
 		userFormDetails.setMaxHeight(maxHeight);
 		userFormDetails.setMarriedStatus(marriedStatus);
 		userFormDetails.setPlace(place);
+		userFormDetails.setQualification(qualification);
 		userFormDetails.setOccupation(occupation);
 
 		// Save UserForm Data to Database [ UserForm -> Created_User -> Database ]
@@ -93,57 +135,52 @@ public class FindMatch {
 		user.setMaxHeight(userFormDetails.getMaxHeight());
 		user.setMarriedStatus(userFormDetails.getMarriedStatus());
 		user.setPlace(userFormDetails.getPlace());
+		user.setQualification(userFormDetails.getQualification());
 		user.setOccupation(userFormDetails.getOccupation());
 
-		System.out.println("\n\n\nThis is matchUser from users.... Process do-findmatch  Handler");
 		Page<User> pageContent = userService.findMatchUserDetailsByFilter(user, page, size, sortBy, direction);
-		System.out.println(pageContent); // Page 1 of 4 containing com.mb.entities.User instances
-		System.out.println(pageContent.getPageable()); // Page request [number: 0, size 3, sort: userId: ASC]
-		System.out.println(pageContent.getPageable().getPageNumber()); // 0 page no.
-		System.out.println(pageContent.getPageable().getPageSize()); // 3 size
-		System.out.println(pageContent.getContent()); // [com.mb.entities.User@1337f51e, com.mb.entities.User@1cf82dbc,
-														// com.mb.entities.User@5acf9f4b]
-		System.out.println(pageContent.getTotalPages()); // 4 page, as per all user, set by pageSize:3
-		System.out.println(pageContent.getNumberOfElements()); // 3 on per page
-		System.out.println(pageContent.getTotalElements()); // 12 is total user
 
-//		if (authentication == null) {
-//		    model.addAttribute("isSubscriptionIsActive", false);
-//		    return "redirect:/paymentplans"; // replace with your actual pay link URL
-//		} else {
-//		    String username = Helper.getEmailOfLoggedInUser(authentication);
-//		    User userData = userService.getUserByEmail(username);
-//		    model.addAttribute("isSubscriptionIsActive", userData.isSubscriptionIsActive());
-//		    System.out.println(userData.getUserId() + " =========================================================== "
-//		    		+ userData.isSubscriptionIsActive() + " ===========================================================");
-//		}
+		Optional<Authentication> authOptional = Optional.ofNullable(authentication);
+		System.out.println("authOptional: " + authOptional);
+		System.out.println("authOptional toString: " + authOptional.toString());
+		System.out.println("authOptional toString: " + authOptional.isPresent());
+		System.out.println("authOptional toString: " + authOptional.isEmpty());
+		if (authOptional.isPresent()) {
+			String username = Helper.getEmailOfLoggedInUser(authOptional.get());
+			User userData = userService.getUserByEmail(username);
+			model.addAttribute("isSubscriptionIsActive", userData.isSubscriptionIsActive());
+		}
 
-//		Optional<Authentication> authOptional = Optional.ofNullable(authentication);
-//		if (authOptional.isPresent()) {
-//			String username = Helper.getEmailOfLoggedInUser(authOptional.get());
-//			User userData = userService.getUserByEmail(username);
-//			model.addAttribute("isSubscriptionIsActive", userData.isSubscriptionIsActive());
-//			System.out.println(userData.getUserId() + " =========================================================== "
-//					+ userData.isSubscriptionIsActive()
-//					+ " ===========================================================");
-//		} else {
-//			return "redirect:/paymentplans"; // replace with your actual pay link URL
-//		}
+		model.addAttribute("authOptional", authOptional.isPresent());
 
+		model.addAttribute("foundTotalMatches", pageContent.getTotalElements());
 		model.addAttribute("pageContent", pageContent);
-		model.addAttribute("pageSize", AppConstants.PAGE_SIZE);
+		model.addAttribute("pageSize", size); // Add the current page size to the model
 		model.addAttribute("sortBy", sortBy);
 		model.addAttribute("direction", direction);
 		model.addAttribute("userFormDetails", userFormDetails);
 
-		System.out.println(pageContent); // Page 1 of 1 containing com.mb.entities.User instances
-		for (User u : pageContent) {
-			System.out.println("User ID: " + u.getUserId() + ", Gender: " + u.getGender() + ", Religion: "
-					+ u.getReligion() + ", Caste: " + u.getCaste() + ", Age: " + u.getAge() + ", MinAge: "
-					+ u.getMinAge() + ", MaxAge: " + u.getMaxAge() + ", MinHeight: " + u.getMinHeight() + ", Height: "
-					+ u.getHeight() + ", MaxHeight: " + u.getMaxHeight() + ", MarriedStatus: " + u.getMarriedStatus()
-					+ ", Place: " + u.getPlace() + ", Occupation: " + u.getOccupation());
+		int totalPages = pageContent.getTotalPages();
+		int currentPage = pageContent.getNumber();
+		int pageWindow = 5; // How many pages to display in the pagination window
+
+		int startPage = Math.max(1, currentPage - (pageWindow / 2));
+		int endPage = Math.min(totalPages, currentPage + (pageWindow / 2));
+
+		// Ensure there are always 5 pages displayed, adjusting start or end if
+		// necessary
+		if (endPage - startPage + 1 < pageWindow) {
+			if (startPage == 1) {
+				endPage = Math.min(pageWindow, totalPages);
+			} else if (endPage == totalPages) {
+				startPage = Math.max(1, totalPages - pageWindow + 1);
+			}
 		}
+
+		model.addAttribute("startPage", startPage);
+		model.addAttribute("endPage", endPage);
+		model.addAttribute("totalPages", totalPages);
+		model.addAttribute("currentPage", currentPage);
 
 		if (pageContent.isEmpty()) {
 			return "/matchedusernotfound";
@@ -152,175 +189,57 @@ public class FindMatch {
 		return "matcheduserlist";
 	}
 
-//  Processing for FindMatching Handler----->
-	@RequestMapping("/user/do-findmatch")
-	public String processFindmatchUser(@RequestParam(value = "page", defaultValue = "0") int page,
-			@RequestParam(value = "size", defaultValue = AppConstants.PAGE_SIZE + "") int size,
-			@RequestParam(value = "sortBy", defaultValue = "userId") String sortBy,
-			@RequestParam(value = "direction", defaultValue = "asc") String direction,
-			@RequestParam(value = "gender", required = false) String gender,
-			@RequestParam(value = "religion", required = false) String religion,
-			@RequestParam(value = "caste", required = false) String caste,
-			@RequestParam(value = "minAge", required = false) Integer minAge,
-			@RequestParam(value = "maxAge", required = false) Integer maxAge,
-			@RequestParam(value = "minHeight", required = false) Integer minHeight,
-			@RequestParam(value = "maxHeight", required = false) Integer maxHeight,
-			@RequestParam(value = "marriedStatus", required = false) String marriedStatus,
-			@RequestParam(value = "place", required = false) String place,
-			@RequestParam(value = "occupation", required = false) String occupation, Model model,
-			Authentication authentication) throws Exception {
-
-		// Fetch Form-Data from UserForm to bind with Model_Object by @ModelAttribute
-		System.out.println("Processing Process do-findmatch Handler...");
-
-		UserFormDetails userFormDetails = new UserFormDetails();
-		userFormDetails.setGender(gender);
-		userFormDetails.setReligion(religion);
-		userFormDetails.setCaste(caste);
-		userFormDetails.setMinAge(minAge);
-		userFormDetails.setMaxAge(maxAge);
-		userFormDetails.setMinHeight(minHeight);
-		userFormDetails.setMaxHeight(maxHeight);
-		userFormDetails.setMarriedStatus(marriedStatus);
-		userFormDetails.setPlace(place);
-		userFormDetails.setOccupation(occupation);
-
-		// Save UserForm Data to Database [ UserForm -> Created_User -> Database ]
-		// userId | gender | religion | caste | age | height | marriedStatus | place |
-		// occupation
-		User user = new User();
-		user.setGender(userFormDetails.getGender());
-		user.setReligion(userFormDetails.getReligion());
-		user.setCaste(userFormDetails.getCaste());
-		user.setMinAge(userFormDetails.getMinAge());
-		user.setMaxAge(userFormDetails.getMaxAge());
-		user.setMinHeight(userFormDetails.getMinHeight());
-		user.setMaxHeight(userFormDetails.getMaxHeight());
-		user.setMarriedStatus(userFormDetails.getMarriedStatus());
-		user.setPlace(userFormDetails.getPlace());
-		user.setOccupation(userFormDetails.getOccupation());
-
-		System.out.println("\n\n\nThis is matchUser from users.... Process do-findmatch  Handler");
-		Page<User> pageContent = userService.findMatchUserDetailsByFilter(user, page, size, sortBy, direction);
-		System.out.println(pageContent); // Page 1 of 4 containing com.mb.entities.User instances
-		System.out.println(pageContent.getPageable()); // Page request [number: 0, size 3, sort: userId: ASC]
-		System.out.println(pageContent.getPageable().getPageNumber()); // 0 page no.
-		System.out.println(pageContent.getPageable().getPageSize()); // 3 size
-		System.out.println(pageContent.getContent()); // [com.mb.entities.User@1337f51e, com.mb.entities.User@1cf82dbc,
-		// com.mb.entities.User@5acf9f4b]
-		System.out.println(pageContent.getTotalPages()); // 4 page, as per all user, set by pageSize:3
-		System.out.println(pageContent.getNumberOfElements()); // 3 on per page
-		System.out.println(pageContent.getTotalElements()); // 12 is total user
-
-//		if (authentication == null) {
-//		    model.addAttribute("isSubscriptionIsActive", false);
-//		    return "redirect:/paymentplans"; // replace with your actual pay link URL
-//		} else {
-//		    String username = Helper.getEmailOfLoggedInUser(authentication);
-//		    User userData = userService.getUserByEmail(username);
-//		    model.addAttribute("isSubscriptionIsActive", userData.isSubscriptionIsActive());
-//		    System.out.println(userData.getUserId() + " =========================================================== "
-//		    		+ userData.isSubscriptionIsActive() + " ===========================================================");
-//		}
-
-		Optional<Authentication> authOptional = Optional.ofNullable(authentication);
-		if (authOptional.isPresent()) {
-			String username = Helper.getEmailOfLoggedInUser(authOptional.get());
-			User userData = userService.getUserByEmail(username);
-			model.addAttribute("isSubscriptionIsActive", userData.isSubscriptionIsActive());
-			System.out.println(userData.getUserId() + " =========================================================== "
-					+ userData.isSubscriptionIsActive()
-					+ " ===========================================================");
-		} else {
-			return "redirect:/paymentplans"; // replace with your actual pay link URL
-		}
-
-		model.addAttribute("pageContent", pageContent);
-		model.addAttribute("pageSize", AppConstants.PAGE_SIZE);
-		model.addAttribute("sortBy", sortBy);
-		model.addAttribute("direction", direction);
-		model.addAttribute("userFormDetails", userFormDetails);
-
-		System.out.println(pageContent); // Page 1 of 1 containing com.mb.entities.User instances
-		for (User u : pageContent) {
-			System.out.println("User ID: " + u.getUserId() + ", Gender: " + u.getGender() + ", Religion: "
-					+ u.getReligion() + ", Caste: " + u.getCaste() + ", Age: " + u.getAge() + ", MinAge: "
-					+ u.getMinAge() + ", MaxAge: " + u.getMaxAge() + ", MinHeight: " + u.getMinHeight() + ", Height: "
-					+ u.getHeight() + ", MaxHeight: " + u.getMaxHeight() + ", MarriedStatus: " + u.getMarriedStatus()
-					+ ", Place: " + u.getPlace() + ", Occupation: " + u.getOccupation());
-		}
-
-		if (pageContent.isEmpty()) {
-			return "/matchedusernotfound";
-		}
-
-		return "User/matcheduserlist";
-	}
-
-//  Open for View of All UserList Page Handler----->
 	@RequestMapping("/user/userlist")
 	public String userList(@RequestParam(value = "page", defaultValue = "0") int page,
-			@RequestParam(value = "size", defaultValue = AppConstants.PAGE_SIZE + "") int size,
+			@RequestParam(value = "size", defaultValue = "10") int size, // Allow dynamic size
 			@RequestParam(value = "sortBy", defaultValue = "userId") String sortBy,
 			@RequestParam(value = "direction", defaultValue = "asc") String direction, Model model,
 			Authentication authentication) {
 
-		System.out.println("Opening userList Handler...");
-
-//		Illegal Access Handler....
+		// Illegal Access Handler
 		String username = Helper.getEmailOfLoggedInUser(authentication);
 		User userData = userService.getUserByEmail(username);
 
-		System.out.println("username----> " + username);
-		System.out.println("userData.getEmail()----> " + userData.getEmail());
-
-		if (!userData.getEmail().equals("admin@gmail.com"))
+		if (!userData.getEmail().equals(adminEmail)) {
 			return "NotAuthorizedAccess";
+		}
 
-//		--------------------
-		System.out.println("\n\n\nThis is userList from User.... userList Handler");
 		Page<User> pageContent = userService.getByUser(page, size, sortBy, direction);
-		System.out.println(pageContent); // Page 1 of 4 containing com.mb.entities.User instances
-		System.out.println(pageContent.getPageable()); // Page request [number: 0, size 3, sort: userId: ASC]
-		System.out.println(pageContent.getPageable().getPageNumber()); // 0 page no.
-		System.out.println(pageContent.getPageable().getPageSize()); // 3 size
-		System.out.println(pageContent.getContent()); // [com.mb.entities.User@1337f51e, com.mb.entities.User@1cf82dbc,
-														// com.mb.entities.User@5acf9f4b]
-		System.out.println(pageContent.getTotalPages()); // 4 page, as per all user, set by pageSize:3
-		System.out.println(pageContent.getNumberOfElements()); // 3 on per page
-		System.out.println(pageContent.getTotalElements()); // 12 is total user
-
-//		System.out.println(pageContent.getContent());
 
 		model.addAttribute("pageContent", pageContent);
-		model.addAttribute("pageSize", AppConstants.PAGE_SIZE);
+		model.addAttribute("pageSize", size); // Add the current page size to the model
 
-		for (User user : pageContent) {
-			System.out.println("User ID: " + user.getUserId() + ", Gender: " + user.getGender() + ", Religion: "
-					+ user.getReligion() + ", Caste: " + user.getCaste() + ", Age: " + user.getMaxAge() + ", Height: "
-					+ user.getMaxHeight() + ", MarriedStatus: " + user.getMarriedStatus() + ", Place: "
-					+ user.getPlace() + ", Occupation: " + user.getOccupation());
+		int totalPages = pageContent.getTotalPages();
+		int currentPage = pageContent.getNumber();
+		int pageWindow = 5; // How many pages to display in the pagination window
+
+		int startPage = Math.max(1, currentPage - (pageWindow / 2));
+		int endPage = Math.min(totalPages, currentPage + (pageWindow / 2));
+
+		// Ensure there are always 5 pages displayed, adjusting start or end if
+		// necessary
+		if (endPage - startPage + 1 < pageWindow) {
+			if (startPage == 1) {
+				endPage = Math.min(pageWindow, totalPages);
+			} else if (endPage == totalPages) {
+				startPage = Math.max(1, totalPages - pageWindow + 1);
+			}
 		}
-		System.out.println("\n\n\n");
-//		--------------------
+
+		model.addAttribute("startPage", startPage);
+		model.addAttribute("endPage", endPage);
+		model.addAttribute("totalPages", totalPages);
+		model.addAttribute("currentPage", currentPage);
 
 		List<User> users = userService.getAllUsers();
-		System.out.println(users);
-
-		for (User user : users) {
-			System.out.println("User ID: " + user.getUserId() + ", Gender: " + user.getGender() + ", Religion: "
-					+ user.getReligion() + ", Caste: " + user.getCaste() + ", Age: " + user.getMaxAge() + ", Height: "
-					+ user.getMaxHeight() + ", MarriedStatus: " + user.getMarriedStatus() + ", Place: "
-					+ user.getPlace() + ", Occupation: " + user.getOccupation());
-		}
-
 		if (users.isEmpty()) {
 			model.addAttribute("users", Collections.emptyList());
 		} else {
 			model.addAttribute("users", users);
+			model.addAttribute("adminEmail", adminEmail);
 		}
-		return "User/userlist";
 
+		return "User/userlist";
 	}
 
 }

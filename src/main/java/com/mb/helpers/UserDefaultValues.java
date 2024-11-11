@@ -40,9 +40,9 @@ public class UserDefaultValues {
 		if (userFormDetails.getBrithTime() == null || userFormDetails.getBrithTime().trim().isEmpty()) {
 			userFormDetails.setBrithTime("Not Mention");
 		}
-//		if (userFormDetails.getHeight() == null || userFormDetails.getHeight().trim().isEmpty()) {
-//			userFormDetails.setHeight(height);
-//		}
+		if (userFormDetails.getHeight() == null) {
+			userFormDetails.setHeight(0.0);
+		}
 		if (userFormDetails.getMarriedStatus() == null || userFormDetails.getMarriedStatus().trim().isEmpty()) {
 			userFormDetails.setMarriedStatus("Not Mention");
 		}
@@ -65,22 +65,21 @@ public class UserDefaultValues {
 		if (userFormDetails.getYourJobTitle() == null || userFormDetails.getYourJobTitle().trim().isEmpty()) {
 			userFormDetails.setYourJobTitle("Not Mention");
 		}
-//		if (userFormDetails.getYourJobSalary() == null) {
-//			userFormDetails.setYourJobSalary(0); // Default value for int field
-//		}
+		if (userFormDetails.getYourJobSalary() == null) {
+			userFormDetails.setYourJobSalary("Not Mention"); // Default value for int field
+		}
 		if (userFormDetails.getFamilyStatus() == null || userFormDetails.getFamilyStatus().trim().isEmpty()) {
 			userFormDetails.setFamilyStatus("Not Mention");
 		}
-//		if (userFormDetails.getTotalFamilyMembers() == null
-//				|| userFormDetails.getTotalFamilyMembers().trim().isEmpty()) {
-//			userFormDetails.setTotalFamilyMembers("Not Mention");
-//		}
-//		if (userFormDetails.getTotalBrothers() == null || userFormDetails.getTotalBrothers().trim().isEmpty()) {
-//			userFormDetails.setTotalBrothers("Not Mention");
-//		}
-//		if (userFormDetails.getTotalSisters() == null || userFormDetails.getTotalSisters().trim().isEmpty()) {
-//			userFormDetails.setTotalSisters("Not Mention");
-//		}
+		if (userFormDetails.getTotalFamilyMembers() == null) {
+			userFormDetails.setTotalFamilyMembers(0);
+		}
+		if (userFormDetails.getTotalBrothers() == null) {
+			userFormDetails.setTotalBrothers(0);
+		}
+		if (userFormDetails.getTotalSisters() == null ) {
+			userFormDetails.setTotalSisters(0);
+		}
 		if (userFormDetails.getFatherName() == null || userFormDetails.getFatherName().trim().isEmpty()) {
 			userFormDetails.setFatherName("Not Mention");
 		}
@@ -90,9 +89,9 @@ public class UserDefaultValues {
 		if (userFormDetails.getFatherJobTitle() == null || userFormDetails.getFatherJobTitle().trim().isEmpty()) {
 			userFormDetails.setFatherJobTitle("Not Mention");
 		}
-//		if (userFormDetails.getFatherJobSalary() == null || userFormDetails.getFatherJobSalary().trim().isEmpty()) {
-//			userFormDetails.setFatherJobSalary("Not Mention");
-//		}
+		if (userFormDetails.getFatherJobSalary() == null) {
+			userFormDetails.setFatherJobSalary("Not Mention");
+		}
 		if (userFormDetails.getMotherName() == null || userFormDetails.getMotherName().trim().isEmpty()) {
 			userFormDetails.setMotherName("Not Mention");
 		}
@@ -102,9 +101,9 @@ public class UserDefaultValues {
 		if (userFormDetails.getMotherJobTitle() == null || userFormDetails.getMotherJobTitle().trim().isEmpty()) {
 			userFormDetails.setMotherJobTitle("Not Mention");
 		}
-//		if (userFormDetails.getMotherJobSalary() == null || userFormDetails.getMotherJobSalary().trim().isEmpty()) {
-//			userFormDetails.setMotherJobSalary("Not Mention");
-//		}
+		if (userFormDetails.getMotherJobSalary() == null ) {
+			userFormDetails.setMotherJobSalary("Not Mention");
+		}
 		if (userFormDetails.getAnyDemand() == null || userFormDetails.getAnyDemand().trim().isEmpty()) {
 			userFormDetails.setAnyDemand("Not Mention");
 		}

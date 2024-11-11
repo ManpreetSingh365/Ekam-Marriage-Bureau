@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{base :: parent(~{::#content},~{::title},~{::script})}">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>NotAuthorizedAccess</title>
+</head>
+
+<body>
+
+	<div id="content">
+
+		<center>
+			<h1 class="text-3xl text-red-600 font-bold">Not Authorized Access</h1>
+		</center>
+
+	</div>
+
+	<script>
+		console.log("NotAuthorizedAccess");
+	</script>
+
+</body>
+
+</html>

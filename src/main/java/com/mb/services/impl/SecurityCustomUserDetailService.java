@@ -17,6 +17,7 @@ public class SecurityCustomUserDetailService implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		// Apne user ko Load Karana hai...
-		return userRepo.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("User not found with email : " + username));
+		return userRepo.findByEmail(username)
+				.orElseThrow(() -> new UsernameNotFoundException("User not found with email : " + username));
 	}
 }

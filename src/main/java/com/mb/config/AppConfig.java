@@ -11,6 +11,7 @@ import com.mb.services.impl.EmailServiceImpl;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import org.springframework.web.client.RestTemplate;
 
 @Configuration
 public class AppConfig {
@@ -25,11 +26,11 @@ public class AppConfig {
 //		return new BCryptPasswordEncoder();
 //	}
 
-    @Bean
-    public PasswordEncoder appPasswordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-    
+	@Bean
+	public PasswordEncoder appPasswordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
+
 	@Value("${cloudinary.cloud.name}")
 	private String cloudName;
 
@@ -43,5 +44,10 @@ public class AppConfig {
 	public Cloudinary cloudinary() {
 
 		return new Cloudinary(ObjectUtils.asMap("cloud_name", cloudName, "api_key", apiKey, "api_secret", apiSecret));
+	}
+
+	@Bean
+	public RestTemplate restTemplate() {
+		return new RestTemplate();
 	}
 }

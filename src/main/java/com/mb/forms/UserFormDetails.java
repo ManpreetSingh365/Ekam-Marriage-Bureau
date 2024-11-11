@@ -15,6 +15,7 @@ import com.mb.validators.ValidFile;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -35,7 +36,7 @@ import lombok.ToString;
 @Builder
 @ToString
 public class UserFormDetails {
-    @Size(min = 3, message = "Username is required and must be at least 3 characters long")
+	@Size(min = 3, message = "Username is required and must be at least 3 characters long")
 	private String yourName;
 	@NotBlank(message = "Gender is required")
 	private String gender;
@@ -44,7 +45,7 @@ public class UserFormDetails {
 	private String religion; // hindu, sikh, muslium
 	@NotBlank(message = "Caste is required")
 	private String caste; // ramgharia, suri, jatt
-	
+
 	private String subcaste; // Bhamra...
 
 //	@NotBlank(message = "MinAge is required")
@@ -56,25 +57,26 @@ public class UserFormDetails {
 //	@NotBlank(message = "MaxAge is required")
 //	@Max(value = 60, message = "Please fill Min. & Max. Age+ as follow")
 	private int maxAge;
-	
+
 	@NotBlank(message = "dateOfBirth is required")
 	private String dateOfBirth;
 //	@NotNull(message = "Age is required")
 //	@Range(min = 18, max = 60, message = "Age must be between 18 and 100")
-    private Integer age;
-    private String brithTime;
+	private Integer age;
+	private String brithTime;
 
 //	@NotBlank(message = "MinHeight is required")
 //	@Min(value = 4, message = "Please fill Min. & Max. Height as follow")
-	private int minHeight;
+	private double minHeight;
 	@NotNull(message = "Height is required")
 	@Range(min = 3, max = 8, message = "Height must be between 3 and 8")
 	private Double height;
 //	@NotBlank(message = "MaxHeight is required")
 //	@Max(value = 7, message = "Please fill Min. & Max. Height+ as follow")
-	private int maxHeight;
-	
-	// Created Annotation that will manage File Properties such as Validate, Size, Resolution...
+	private double maxHeight;
+
+	// Created Annotation that will manage File Properties such as Validate, Size,
+	// Resolution...
 	@ValidFile(message = "Invalid File")
 	private MultipartFile userImages;
 
@@ -89,8 +91,8 @@ public class UserFormDetails {
 	@NotBlank(message = "Occupation is required")
 	private String occupation;
 	private String yourJobTitle;
-	private Integer yourJobSalary;
-	
+	private String yourJobSalary;
+
 	@NotBlank(message = "familyStatus is required")
 	private String familyStatus;
 	@NotNull(message = "totalFamilyMembers is required")
@@ -103,30 +105,30 @@ public class UserFormDetails {
 	private String fatherName;
 	private String fatherOccupation;
 	private String fatherJobTitle;
-	private Integer fatherJobSalary;
-	
+	private String fatherJobSalary;
+
 	private String motherName;
 	private String motherOccupation;
 	private String motherJobTitle;
-	private Integer motherJobSalary;
-	
+	private String motherJobSalary;
+
 	private String anyDemand;
 	private String anyRemarks;
 	private String address;
-	
-    @NotBlank(message = "PhoneNumber1 is required")
-    @Size(min = 8, max = 12, message = "Invalid Phone Number")
-    private String phoneNumber1;
-    private String phoneNumber2;
-    
-    @NotBlank(message = "formFilledBy is required")
-    private String formFilledBy;
-    
-//    @NotBlank(message = "Please Check Term & Condition")
-    private String agreement;
-    
 
-	
+	@NotBlank(message = "PhoneNumber1 is required")
+	@Size(min = 8, max = 12, message = "Invalid Phone Number")
+	private String phoneNumber1;
+	private String phoneNumber2;
+
+	@NotBlank(message = "formFilledBy is required")
+	private String formFilledBy;
+
+	@NotBlank(message = "Accept Terms & Conditions to Register")
+	private String agreement;
+
 //	@Getter(value = AccessLevel.NONE)
-	private boolean enabled = true;
+//	@AssertTrue(message = "Accept Terms & Conditions to Register")
+//	private boolean isAgreemented = false;
+
 }

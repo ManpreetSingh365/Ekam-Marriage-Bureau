@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -26,6 +27,7 @@ import com.mb.entities.PaymentResponse;
 import com.mb.entities.User;
 import com.mb.forms.UserForm;
 import com.mb.forms.UserFormDetails;
+import com.mb.forms.UserFormDetailsAdmin;
 import com.mb.helpers.Helper;
 import com.mb.helpers.Message;
 import com.mb.helpers.MessageType;
@@ -66,7 +68,6 @@ public class LoginUserCRUD {
 //		String username = Helper.getEmailOfLoggedInUser(authentication);
 //		User userData = userService.getUserByEmail(username);
 
-	
 		System.out.println("userData.getPaymentResponse()----------------->");
 		System.out.println(userData);
 		if (userData.getPaymentResponse() != null) {
@@ -89,11 +90,14 @@ public class LoginUserCRUD {
 			model.addAttribute("paymentResponse", response);
 		}
 
-
 		System.out.println("\n\n\nThis is userId from user.... Process UserProfile  Handler");
-		
+
 		model.addAttribute("user", userData);
-		model.addAttribute("userImages", userData.getImages());
+		model.addAttribute("userImages", userData.getImagesList());
+		model.addAttribute("isLoginProfile", false);
+
+		int size = this.userService.getAllUsers().size();
+		model.addAttribute("totalUsers", size);
 
 		return "User/userprofile";
 	}
@@ -106,13 +110,6 @@ public class LoginUserCRUD {
 		User userData = userService.getUserByEmail(username);
 
 		System.out.println("\n\n\nThis is LoginUser from logginprofile.... Process showLoginUserDetail  Handler");
-		System.out.println("User ID: " + userData.getUserId() + ", Gender: " + userData.getGender() + ", Religion: "
-				+ userData.getReligion() + ", Caste: " + userData.getCaste() + ", Age: " + userData.getAge()
-				+ ", MinAge: " + userData.getMinAge() + ", MaxAge: " + userData.getMaxAge() + ", MinHeight: "
-				+ userData.getMinHeight() + ", Height: " + userData.getHeight() + ", MaxHeight: "
-				+ userData.getMaxHeight() + ", Picture: " + userData.getPicture() + ", MarriedStatus: "
-				+ userData.getMarriedStatus() + ", Place: " + userData.getPlace() + ", Occupation: "
-				+ userData.getOccupation());
 
 		System.out.println("userData.getPaymentResponse()----------------->");
 		System.out.println(userData);
@@ -156,8 +153,8 @@ public class LoginUserCRUD {
 //		}
 
 		model.addAttribute("user", userData);
-		model.addAttribute("userImages", userData.getImages());
-
+		model.addAttribute("userImages", userData.getImagesList());
+		model.addAttribute("isLoginProfile", true);
 		return "User/userprofile";
 	}
 
@@ -174,7 +171,7 @@ public class LoginUserCRUD {
 		userFormDetails.setYourName(userData.getName());
 		userFormDetails.setGender(userData.getGender());
 		userFormDetails.setReligion(userData.getReligion());
-		userFormDetails.setCaste(userData.getCaste());
+//		userFormDetails.setCaste(userData.getCaste());
 		userFormDetails.setSubcaste(userData.getSubcaste());
 
 		userFormDetails.setDateOfBirth(userData.getDateOfBirth());
@@ -215,8 +212,22 @@ public class LoginUserCRUD {
 
 		userFormDetails.setFormFilledBy(userData.getFormFilledBy());
 
+		// Fetch distinct Religions, castes categories from the database
+		List<String> religions = userService.getAllDistinctReligions();
+		List<String> castes = userService.getAllDistinctCastes(userData.getReligion());
+
+		model.addAttribute("religions", religions);
+		model.addAttribute("castes", castes);
+
+		for (String val : religions) {
+			System.out.println(val);
+		}
+		for (String val : castes) {
+			System.out.println(val);
+		}
+
 		model.addAttribute("userFormDetails", userFormDetails);
-		model.addAttribute("userImages", userData.getImages());
+		model.addAttribute("userImages", userData.getImagesList());
 
 		return "User/update_user_view";
 	}
@@ -232,6 +243,10 @@ public class LoginUserCRUD {
 		String username = Helper.getEmailOfLoggedInUser(authentication);
 		User userData = userService.getUserByEmail(username);
 
+		if (!agreement) {
+			throw new Exception("You must agree to the terms and conditions.");
+		}
+
 		// update the contact
 		if (bindingResult.hasErrors()) {
 			return "user/update_user_view";
@@ -245,10 +260,20 @@ public class LoginUserCRUD {
 		userData.setCaste(userFormDetails.getCaste());
 		userData.setSubcaste(userFormDetails.getSubcaste());
 
-		String dateOfBirth = userFormDetails.getDateOfBirth();
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d/yyyy");
-		LocalDate dob = LocalDate.parse(dateOfBirth, formatter);
-		int age = Period.between(dob, LocalDate.now()).getYears();
+//		String dateOfBirth = userFormDetails.getDateOfBirth();
+//		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+//		LocalDate dob = LocalDate.parse(dateOfBirth, formatter);
+//		int age = Period.between(dob, LocalDate.now()).getYears();
+
+		// Getting Age from DOB...
+		String dateOfBirth = userFormDetails.getDateOfBirth(); // This is in "MM/dd/yyyy"
+		DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+		DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+		LocalDate dob = LocalDate.parse(dateOfBirth, inputFormatter); // Parse input date
+		String formattedDateOfBirth = dob.format(outputFormatter); // Format to "dd/MM/yyyy"
+
+		int age = Period.between(dob, LocalDate.now()).getYears(); // Calculate age
 
 		userData.setDateOfBirth(dateOfBirth);
 		userData.setAge(age);
@@ -296,11 +321,9 @@ public class LoginUserCRUD {
 				publicIds.add(UUID.randomUUID().toString());
 			}
 
-			userData.setPicture(imageUrls.get(0)); // set the first image as the profile picture
-//			userData.setCloudinaryImagePublicId(publicIds.get(0)); // set the first image as the cloudinary image public
-																	// id
-			userData.setImages(imageUrls); // store the list of image URLs
-//			userData.setCloudinaryImagePublicIds(publicIds); // store the list of public IDs
+//			userData.setPicture(imageUrls.get(0)); // set the first image as the profile picture
+//			userData.setImages(imageUrls); // store the list of image URLs
+			userData.setImagesList(imageUrls); // store the list of image URLs
 
 			System.out.println("URL-------------------");
 			System.out.println(imageUrls);
@@ -321,23 +344,90 @@ public class LoginUserCRUD {
 		return "redirect:/user/logginprofile";
 	}
 
-	// Delete User Client Handler----->
-	@GetMapping("/do-deleteclient/{userId}")
-	public String deleteUserByClient(@PathVariable("userId") Long userId, Model model, HttpSession session) {
+//  Open Update_Contact Handler by Admin ----->
+	@GetMapping("/view/userDetailsUpdateForm/{userId}")
+	public String updateUserFormViewAdmin(@PathVariable("userId") Long userId, Model model) {
 
-		System.out.println("deleteUser Handler..........");
+		System.out.println("updateUserFormView Handler..........");
+
 		Optional<User> userOptional = this.userService.getUserById(userId);
 		User userData = userOptional.get();
 
-		// delete the user
-		userService.deleteUser(userData);
+		UserFormDetailsAdmin userFormDetailsAdmin = new UserFormDetailsAdmin();
 
-		// Adding Message that User Deleted Successfully :)
-		Message message = Message.builder().content("Your Deleted Successful by Client :)").type(MessageType.green)
+		model.addAttribute("userId", userId);
+		model.addAttribute("userFormDetails", userFormDetailsAdmin);
+		model.addAttribute("userImages", userData.getImagesList());
+
+		return "User/update_user_view_by_admin";
+	}
+
+//  Processing for Update_Contact Handler by Admin ----->
+	@PostMapping("/update/userDetailsUpdateForm/{userId}")
+	public String processUpdateUserFormViewAdmin(
+			@Valid @ModelAttribute("userFormDetails") UserFormDetailsAdmin userFormDetailsAdmin,
+			BindingResult bindingResult, @RequestParam(value = "agreement", defaultValue = "false") boolean agreement,
+			@RequestParam("userImages") List<MultipartFile> userImages, @PathVariable("userId") Long userId,
+			Model model, HttpSession session) throws Exception {
+
+		System.out.println("processUpdateUserFormView Handler..........");
+
+		Optional<User> userOptional = this.userService.getUserById(userId);
+		User userData = userOptional.get();
+
+		// If there are validation errors, return to the same form view
+		if (bindingResult.hasErrors()) {
+			return "user/update_user_view";
+		}
+
+		// Process and upload images if provided
+		if (userImages != null && !userImages.isEmpty()) {
+			List<String> imageUrls = imageService.uploadImages(userImages, UUID.randomUUID().toString());
+
+			System.out.println("URL-------------------");
+			System.out.println(imageUrls);
+			// Set image data on the user object
+			userData.setImagesList(imageUrls); // store the list of image URLs
+		}
+
+		// Update the user in the database
+		var updateUser = userService.updateUser(userData);
+		logger.info("Updated User {}", updateUser);
+
+		// Add user ID and success message to the model
+		model.addAttribute("userId", userId);
+		model.addAttribute("message", Message.builder().content("User Updated !!").type(MessageType.green).build());
+
+		// Set a success message in the session
+		Message message = Message.builder().content("Your Data is Updated Successful :)").type(MessageType.green)
 				.build();
 		session.setAttribute("message", message);
 
-		return "redirect:/register";
+		// Redirect to the user details page after update
+		// return "redirect:/user/" + userId;
+		return "redirect:/user/userlist";
+	}
+
+	@GetMapping("/do-deleteclient/{userId}")
+	public String deleteUserByClient(@PathVariable("userId") Long userId, Model model, HttpSession session) {
+		Optional<User> userOptional = this.userService.getUserById(userId);
+
+		if (userOptional.isEmpty()) {
+			// Handle case where user is not found
+			session.setAttribute("message", new Message("User not found", MessageType.red));
+			return "redirect:/user/userlist"; // Redirect to a safe page
+		}
+
+		User userData = userOptional.get();
+		userService.deleteUser(userData); // Deleting user from DB
+
+		// After deleting, invalidate the session to ensure the user is logged out
+		session.invalidate(); // Invalidate the session to remove any references to the user
+
+		// Optional: You can redirect to login page or a safe page after account
+		// deletion
+		session.setAttribute("message", new Message("Your account has been deleted successfully.", MessageType.green));
+		return "redirect:/login"; // Redirect to login page, or any page you want after deletion
 	}
 
 	// Delete User Admin Handler----->
@@ -355,6 +445,33 @@ public class LoginUserCRUD {
 		Message message = Message.builder().content("User Deleted Successful by Admin :)").type(MessageType.green)
 				.build();
 		session.setAttribute("message", message);
+
+		return "redirect:/user/userlist";
+	}
+
+	@GetMapping("/do-deleteimgadmin/{userId}")
+	public String deleteAllUserImagesByAdmin(@PathVariable("userId") Long userId, Model model, HttpSession session) {
+		System.out.println("deleteAllUserImagesByAdmin Handler..........");
+
+		// Fetch the user by ID
+		Optional<User> userOptional = userService.getUserById(userId);
+		User userData = userOptional.get();
+
+		// Create a modifiable copy of the images list
+		List<String> imagesList = new ArrayList<>(userData.getImagesList());
+//		System.out.println("Images before deletion: " + imagesList.toString());
+
+		// Clear the list
+		imagesList.clear();
+
+//		System.out.println("Images after deletion: " + imagesList.toString());
+		imagesList.add("https://res.cloudinary.com/dcrlfty5k/image/upload/v1729153915/yjllp8ag6uab4gdq7hog.png");
+//		System.out.println("Added Images after deletion: " + imagesList.toString());
+
+		// Set the modified list back to the user object
+		userData.setImagesList(imagesList);
+
+		userService.updateUser(userData);
 
 		return "redirect:/user/userlist";
 	}

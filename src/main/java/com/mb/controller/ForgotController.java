@@ -14,7 +14,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.mb.repositories.UserRepo;
 import com.mb.entities.User;
+import com.mb.helpers.Message;
+import com.mb.helpers.MessageType;
 import com.mb.services.EmailService;
+import com.mb.services.UserService;
 
 @Controller
 public class ForgotController {
@@ -26,12 +29,14 @@ public class ForgotController {
 	@Autowired
 	private UserRepo userRepo;
 
+	@Autowired
+	private UserService userService;
+
 //	@Autowired
 //	private BCryptPasswordEncoder bcrypt;
-	
+
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-
 
 	// Open Email_id Form Handler.....
 	@RequestMapping("/forgot")
@@ -43,6 +48,15 @@ public class ForgotController {
 	@PostMapping("/send-otp")
 	public String sendOTP(@RequestParam("email") String email, HttpSession session) {
 		System.out.println("EMAIL " + email);
+
+		// Check If Email is Unique, Forward to Next Registration step...
+		boolean isEmailValid = userService.isEmailUnique(email);
+		if (isEmailValid) {
+			Message message = Message.builder().content("Oops! This Email is Invalid (Not in our DB)")
+					.type(MessageType.red).build();
+			session.setAttribute("message", message);
+			return "forgot_email_form";
+		}
 
 		// Generating OTP of 4 digit
 		int otp = random.nextInt(999999);
@@ -58,7 +72,6 @@ public class ForgotController {
 		boolean flag = this.emailService.sendEmail(subject, message, to);
 
 		if (flag) {
-
 			session.setAttribute("myotp", otp);
 			session.setAttribute("email", email);
 			return "verify_otp";
@@ -110,6 +123,5 @@ public class ForgotController {
 		return "redirect:/login?change=password changed successfully..";
 
 	}
-	
 
 }

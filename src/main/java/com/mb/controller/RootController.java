@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -23,7 +24,9 @@ public class RootController {
 	@Autowired
 	private UserService userService;
 
-	
+	@Value("${admin.email}")
+	private String adminEmail;
+
 	@ModelAttribute
 	public void addLoggedInUserInformation(Model model, Authentication authentication) {
 		if (authentication == null) {
@@ -44,6 +47,7 @@ public class RootController {
 			logger.debug("User logged in: {}", username);
 		}
 		model.addAttribute("loggedInUser", user);
+		model.addAttribute("adminEmail", adminEmail);
 	}
 
 	@ModelAttribute

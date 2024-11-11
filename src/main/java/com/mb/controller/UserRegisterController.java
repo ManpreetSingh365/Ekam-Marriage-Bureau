@@ -63,12 +63,33 @@ public class UserRegisterController {
 			return "register";
 		}
 
+		// Check If Email is Unique, Forward to Next Registration step...
+		boolean isEmailValid = userService.isEmailUnique(userForm.getEmail());
+		System.out.println("1isEmailValid: " + isEmailValid);
+
+		if (!isEmailValid) {
+			System.out.println("2isEmailValid: " + isEmailValid);
+			Message message = Message.builder().content("Oops! This Email is taken. Kindly use Another One")
+					.type(MessageType.red).build();
+			session.setAttribute("message", message);
+			return "register";
+		}
+
+		System.out.println("isEmailValid=================> :" + isEmailValid);
+
 		UserFormDetails userFormDetails = new UserFormDetails();
 
 		session.setAttribute("userForm", userForm);
 
 		model.addAttribute("userForm", userForm);
 		model.addAttribute("userFormDetails", userFormDetails);
+
+		// Fetch distinct relisions, castes categories from the database
+		List<String> religions = userService.getAllDistinctReligions();
+		List<String> castes = userService.getAllDistinctCastes(userFormDetails.getReligion());
+
+		model.addAttribute("religions", religions);
+		model.addAttribute("castes", castes);
 
 		return "registerdetails";
 	}
@@ -79,6 +100,10 @@ public class UserRegisterController {
 			BindingResult bindingResult, @RequestParam(value = "agreement", defaultValue = "false") boolean agreement,
 			@RequestParam(value = "userImages") List<MultipartFile> userImages, Model model, HttpSession session)
 			throws Exception {
+
+		if (!agreement) {
+			throw new Exception("You must agree to the terms and conditions.");
+		}
 
 		// Fetch Form-Data from UserForm to bind with Model_Object by @ModelAttribute
 		System.out.println("Processing Process do-register Handler...");
@@ -118,18 +143,22 @@ public class UserRegisterController {
 		user.setName(userFormDetails.getYourName());
 		user.setGender(userFormDetails.getGender());
 		user.setReligion(userFormDetails.getReligion());
-		user.setCaste(userFormDetails.getCaste());
+		user.setCaste(userFormDetails.getCaste().trim());
+		System.out.println("userFormDetails.getCaste(): " + userFormDetails.getCaste());
+		System.out.println("userFormDetails.getCaste().trim(): " + userFormDetails.getCaste().trim());
 		user.setSubcaste(userFormDetails.getSubcaste());
 
 		// Getting Age from DOB...
-		String dateOfBirth = userFormDetails.getDateOfBirth();
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d/yyyy");
-		LocalDate dob = LocalDate.parse(dateOfBirth, formatter);
-		String formattedDateOfBirth = dob.format(DateTimeFormatter.ofPattern("MM/dd/yyyy"));
-		user.setDateOfBirth(formattedDateOfBirth);
-		int age = Period.between(dob, LocalDate.now()).getYears();
-		user.setDateOfBirth(dateOfBirth);
-		user.setAge(age);
+		String dateOfBirth = userFormDetails.getDateOfBirth(); // This is in "MM/dd/yyyy"
+		DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+		DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+		LocalDate dob = LocalDate.parse(dateOfBirth, inputFormatter); // Parse input date
+		String formattedDateOfBirth = dob.format(outputFormatter); // Format to "dd/MM/yyyy"
+
+		user.setDateOfBirth(formattedDateOfBirth); // Set formatted date for database storage
+		int age = Period.between(dob, LocalDate.now()).getYears(); // Calculate age
+		user.setAge(age); // Set age on user object
 
 		System.out.println("--------------------------------------birthDate-------------------------------------"
 				+ user.getDateOfBirth());
@@ -186,10 +215,9 @@ public class UserRegisterController {
 				publicIds.add(UUID.randomUUID().toString());
 			}
 
-			user.setPicture(imageUrls.get(0)); // set the first image as the profile picture
-//			user.setCloudinaryImagePublicId(publicIds.get(0)); // set the first image as the cloudinary image public id
-			user.setImages(imageUrls); // store the list of image URLs
-//			user.setCloudinaryImagePublicIds(publicIds); // store the list of public IDs
+//			user.setPicture(imageUrls.get(0)); // set the first image as the profile picture
+//			user.setImages(imageUrls); // store the list of image URLs
+			user.setImagesList(imageUrls); // store the list of image URLs
 
 			System.out.println("URL-------------------");
 			System.out.println(imageUrls);

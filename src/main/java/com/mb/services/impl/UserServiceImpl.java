@@ -88,10 +88,10 @@ public class UserServiceImpl implements UserService {
 		User user2 = userRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("User not found"));
 		userRepo.delete(user2);
 	}
-	
+
 	@Override
 	public void deleteUser(User user) {
-	    userRepo.delete(user);
+		userRepo.delete(user);
 	}
 
 	@Override
@@ -124,6 +124,26 @@ public class UserServiceImpl implements UserService {
 //        return userRepo.findByAgeBetween(minAge, maxAge);
 //    }	
 
+	public List<String> getAllDistinctReligions() {
+		return userRepo.findDistinctReligion();
+	}
+
+	public List<String> getAllDistinctCastes(String religion) {
+		return userRepo.findDistinctCaste(religion);
+	}
+
+	public List<String> getAllDistinctQualification() {
+		return userRepo.findDistinctQualification();
+	}
+
+	public List<String> getAllDistinctOccupation() {
+		return userRepo.findDistinctOccupation();
+	}
+
+	public boolean isEmailUnique(String email) {
+		return userRepo.countEmail(email)==0;
+	}
+
 	@Override
 	public List<User> findMatchUserDetails(User user) {
 		String gender = user.getGender();
@@ -131,14 +151,15 @@ public class UserServiceImpl implements UserService {
 		String caste = user.getCaste();
 		int minAge = user.getMinAge();
 		int maxAge = user.getMaxAge();
-		int minheight = user.getMinHeight();
-		int maxheight = user.getMaxHeight();
+		double minheight = user.getMinHeight();
+		double maxheight = user.getMaxHeight();
 		String marriedStatus = user.getMarriedStatus();
 		String place = user.getPlace();
+		String qualification = user.getQualification();
 		String occupation = user.getOccupation();
 
 		return userRepo.findUsersByCustomCriterialist(gender, religion, caste, minAge, maxAge, minheight, maxheight,
-				marriedStatus, place, occupation);
+				marriedStatus, place, qualification, occupation);
 	}
 
 	@Override
@@ -148,17 +169,18 @@ public class UserServiceImpl implements UserService {
 		String caste = user.getCaste();
 		int minAge = user.getMinAge();
 		int maxAge = user.getMaxAge();
-		int minheight = user.getMinHeight();
-		int maxheight = user.getMaxHeight();
+		double minheight = user.getMinHeight();
+		double maxheight = user.getMaxHeight();
 		String marriedStatus = user.getMarriedStatus();
 		String place = user.getPlace();
+		String qualification = user.getQualification();
 		String occupation = user.getOccupation();
 
 		Sort sort = direction.equals("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
 		Pageable pageable = PageRequest.of(page, size, sort);
 
 		return userRepo.findUsersByCustomCriteria(gender, religion, caste, minAge, maxAge, minheight, maxheight,
-				marriedStatus, place, occupation, pageable);
+				marriedStatus, place, qualification, occupation, pageable);
 	}
 
 	@Override
@@ -168,16 +190,15 @@ public class UserServiceImpl implements UserService {
 		Pageable pageable = PageRequest.of(page, size, sort);
 		return userRepo.findAll(pageable);
 	}
-	
-	
-	public void saveFile(MultipartFile file){
 
-        try {
-            List<User> users = FileCRUD.convertExcelToListOfUser(file.getInputStream());
-            this.userRepo.saveAll(users);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+	public void saveFile(MultipartFile file) {
 
-    }
+		try {
+			List<User> users = FileCRUD.convertExcelToListOfUser(file.getInputStream());
+			this.userRepo.saveAll(users);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
 }

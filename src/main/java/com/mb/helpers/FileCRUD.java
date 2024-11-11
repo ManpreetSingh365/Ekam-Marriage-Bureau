@@ -1,6 +1,8 @@
 package com.mb.helpers;
 
-import com.mb.entities.PaymentResponse;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mb.entities.User;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
@@ -11,8 +13,12 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Arrays;
 import java.util.List;
 
 public class FileCRUD {
@@ -32,233 +38,272 @@ public class FileCRUD {
 
 	// Convert Excel to List of Users
 	public static List<User> convertExcelToListOfUser(InputStream is) {
-	    List<User> list = new ArrayList<>();
+		List<User> list = new ArrayList<>();
 
-	    try {
-	        XSSFWorkbook workbook = new XSSFWorkbook(is);
-	        XSSFSheet sheet = workbook.getSheetAt(0); // Get the first sheet
+		try (XSSFWorkbook workbook = new XSSFWorkbook(is)) { // Use try-with-resources
+			XSSFSheet sheet = workbook.getSheetAt(0); // Get the first sheet
+			DataFormatter formatter = new DataFormatter();
 
-	        int rowNumber = 0;
-	        Iterator<Row> iterator = sheet.iterator();
+			// Process rows in smaller batches
+			int batchSize = 500;
+			List<User> batch = new ArrayList<>();
 
-	        DataFormatter formatter = new DataFormatter();
+			int rowNumber = 0;
+			for (Row row : sheet) {
+				if (rowNumber == 0) { // Skip header row
+					rowNumber++;
+					continue;
+				}
 
-	        while (iterator.hasNext()) {
-	            Row row = iterator.next();
+				User user = new User();
+				boolean isValidRow = true;
+				int cid = 0;
 
-	            if (rowNumber == 0) {
-	                rowNumber++;
-	                continue;
-	            }
+				for (Cell cell : row) {
+					String cellValue = formatter.formatCellValue(cell);
 
-	            Iterator<Cell> cells = row.iterator();
-	            int cid = 0;
-	            User p = new User();
-	            boolean isValidRow = false;
+					try {
+						switch (cid) {
+						case 0:
+							user.setUserId(Long.parseLong(cellValue));
+							break;
+						case 1:
+							user.setAddress(cellValue);
+							break;
+						case 2:
+							// Left empty for age calculation later
+							break;
+						case 3:
+							user.setAnyDemand(cellValue);
+							break;
+						case 4:
+							user.setAnyRemarks(cellValue);
+							break;
+						case 5:
+							user.setBrithTime(cellValue);
+							break;
+						case 6:
+							user.setCaste(cellValue);
+							break;
+						case 7:
+							// Handle Date of Birth and Age calculation
+							String dateOfBirth = cellValue;
+							LocalDate dob = parseDate(dateOfBirth);
+							if (dob != null) {
+								user.setDateOfBirth(dob.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+								user.setAge(Period.between(dob, LocalDate.now()).getYears());
+							} else {
+								isValidRow = false;
+							}
+							break;
 
-	            while (cells.hasNext()) {
-	                Cell cell = cells.next();
+						case 8: // Email
+							if (cellValue == null || cellValue.trim().isEmpty()) {
+								System.err.printf("Row %d: Email is required but missing.%n", rowNumber + 1);
+								isValidRow = false; // Skip this row
+//								System.out.println("\n\n" + cellValue.trim() + "\n");
+							} else {
+								user.setEmail(cellValue.trim());
+							}
+							break;
 
-	                String cellValue = formatter.formatCellValue(cell);
+						case 9:
+							user.setFamilyStatus(cellValue);
+							break;
+						case 10:
+							user.setFatherJobSalary(cellValue.isEmpty() ? "Not Mention" : cellValue);
+							break;
+						case 11:
+							user.setFatherJobTitle(cellValue);
+							break;
+						case 12:
+							user.setFatherName(cellValue);
+							break;
+						case 13:
+							user.setFatherOccupation(cellValue);
+							break;
+						case 14:
+							user.setFormFilledBy(cellValue);
+							break;
+						case 15:
+							user.setGender(cellValue);
+							break;
+						case 16:
+							user.setHeight(Double.parseDouble(cellValue));
+							break;
+						case 17:
+							user.setMarriedStatus(cellValue);
+							break;
+						case 18:
+							user.setMaxAge(Integer.parseInt(cellValue));
+							break;
+						case 19:
+							user.setMaxHeight(Integer.parseInt(cellValue));
+							break;
+						case 20:
+							user.setMinAge(Integer.parseInt(cellValue));
+							break;
+						case 21:
+							user.setMinHeight(Integer.parseInt(cellValue));
+							break;
+						case 22:
+							user.setMotherJobSalary(cellValue.isEmpty() ? "Not Mention" : cellValue);
+							break;
+						case 23:
+							user.setMotherJobTitle(cellValue);
+							break;
+						case 24:
+							user.setMotherName(cellValue);
+							break;
+						case 25:
+							user.setMotherOccupation(cellValue);
+							break;
+						case 26:
+							user.setName(cellValue);
+							break;
+						case 27:
+							user.setNriPlace(cellValue);
+							break;
+						case 28:
+							user.setOccupation(cellValue);
+							break;
+						case 29:
+							user.setPassword(cellValue);
+							break;
+						case 30:
+							user.setPhoneNumber1(cellValue);
+							break;
+						case 31:
+							user.setPhoneNumber2(cellValue);
+							break;
+						case 32:
+							parseImageUrls(cellValue, user);
+							break;
+						case 33:
+							user.setPlace(cellValue);
+							break;
+						case 34:
+							user.setQualification(cellValue);
+							break;
+						case 35:
+							user.setQualificationField(cellValue);
+							break;
+						case 36:
+							user.setRazorpaySignature(cellValue);
+							break;
+						case 37:
+							user.setReligion(cellValue);
+							break;
+						case 38:
+							user.setSubcaste(cellValue);
+							break;
+						case 39:
+							user.setSubscriptionIsActive(Boolean.parseBoolean(cellValue));
+							break;
+						case 40:
+							user.setTotalBrothers(cellValue.isEmpty() ? 0 : Integer.parseInt(cellValue));
+							break;
+						case 41:
+							user.setTotalFamilyMembers(cellValue.isEmpty() ? 0 : Integer.parseInt(cellValue));
+							break;
+						case 42:
+							user.setTotalSisters(cellValue.isEmpty() ? 0 : Integer.parseInt(cellValue));
+							break;
+						case 43:
+							user.setYourJobSalary(cellValue.isEmpty() ? "Not Mention" : cellValue);
+							break;
+						case 44:
+							user.setYourJobTitle(cellValue);
+							break;
+						default:
+							break;
+						}
+					} catch (NumberFormatException nfe) {
+						System.err.printf("Row %d, Column %d: Invalid number format for value '%s' - %s%n",
+								rowNumber + 1, cid + 1, cellValue, nfe.getMessage());
+						isValidRow = false;
+					} catch (DateTimeParseException dtpe) {
+						System.err.printf("Row %d, Column %d: Invalid date format for value '%s' - %s%n", rowNumber + 1,
+								cid + 1, cellValue, dtpe.getMessage());
+						isValidRow = false;
+					} catch (Exception e) {
+						System.err.printf("Row %d, Column %d: Error processing value '%s' - %s%n", rowNumber + 1,
+								cid + 1, cellValue, e.getMessage());
+						isValidRow = false;
+					}
+					cid++;
+				}
 
-	                switch (cid) {
-	                case 0:
-	                    p.setUserId(Long.parseLong(cellValue));
-	                    isValidRow = true;
-	                    break;
-	                case 1:
-	                    p.setAddress(cellValue);
-	                    isValidRow = true;
-	                    break;
-	                case 2:
-	                    p.setAge(Integer.parseInt(cellValue));
-	                    isValidRow = true;
-	                    break;
-	                case 3:
-	                    p.setAnyDemand(cellValue);
-	                    isValidRow = true;
-	                    break;
-	                case 4:
-	                    p.setAnyRemarks(cellValue);
-	                    isValidRow = true;
-	                    break;
-	                case 5:
-	                    p.setBrithTime(cellValue);
-	                    isValidRow = true;
-	                    break;
-	                case 6:
-	                    p.setCaste(cellValue);
-	                    isValidRow = true;
-	                    break;
-	                case 7:
-	                    p.setDateOfBirth(cellValue);
-	                    isValidRow = true;
-	                    break;
-	                case 8:
-	                    p.setEmail(cellValue);
-	                    isValidRow = true;
-	                    break;
-	                case 9:
-	                    p.setFamilyStatus(cellValue);
-	                    isValidRow = true;
-	                    break;
-	                case 10:
-	                    p.setFatherJobSalary(Integer.parseInt(cellValue));
-	                    isValidRow = true;
-	                    break;
-	                case 11:
-	                    p.setFatherJobTitle(cellValue);
-	                    isValidRow = true;
-	                    break;
-	                case 12:
-	                    p.setFatherName(cellValue);
-	                    isValidRow = true;
-	                    break;
-	                case 13:
-	                    p.setFatherOccupation(cellValue);
-	                    isValidRow = true;
-	                    break;
-	                case 14:
-	                    p.setFormFilledBy(cellValue);
-	                    isValidRow = true;
-	                    break;
-	                case 15:
-	                    p.setGender(cellValue);
-	                    isValidRow = true;
-	                    break;
-	                case 16:
-	                    p.setHeight(Double.parseDouble(cellValue));
-	                    isValidRow = true;
-	                    break;
-	                case 17:
-	                    p.setMarriedStatus(cellValue);
-	                    isValidRow = true;
-	                    break;
-	                case 18:
-	                    p.setMaxAge(Integer.parseInt(cellValue));
-	                    isValidRow = true;
-	                    break;
-	                case 19:
-	                    p.setMaxHeight(Integer.parseInt(cellValue));
-	                    isValidRow = true;
-	                    break;
-	                case 20:
-	                    p.setMinAge(Integer.parseInt(cellValue));
-	                    isValidRow = true;
-	                    break;
-	                case 21:
-	                    p.setMinHeight(Integer.parseInt(cellValue));
-	                    isValidRow = true;
-	                    break;
-	                case 22:
-	                    p.setMotherJobSalary(Integer.parseInt(cellValue));
-	                    isValidRow = true;
-	                    break;
-	                case 23:
-	                    p.setMotherJobTitle(cellValue);
-	                    isValidRow = true;
-	                    break;
-	                case 24:
-	                    p.setMotherName(cellValue);
-	                    isValidRow = true;
-	                    break;
-	                case 25:
-	                    p.setMotherOccupation(cellValue);
-	                    isValidRow = true;
-	                    break;
-	                case 26:
-	                    p.setName(cellValue);
-	                    isValidRow = true;
-	                    break;
-	                case 27:
-	                    p.setNriPlace(cellValue);
-	                    isValidRow = true;
-	                    break;
-	                case 28:
-	                    p.setOccupation(cellValue);
-	                    isValidRow = true;
-	                    break;
-	                case 29:
-	                    p.setPassword(cellValue);
-	                    isValidRow = true;
-	                    break;
-	                case 30:
-	                    p.setPhoneNumber1(cellValue);
-	                    isValidRow = true;
-	                    break;
-	                case 31:
-	                    p.setPhoneNumber2(cellValue);
-	                    isValidRow = true;
-	                    break;
-	                case 32:
-	                    p.setPicture(cellValue);
-	                    List<String> imageUrls = new ArrayList<>();
-	                    imageUrls.add(cellValue);
-	                    p.setImages(imageUrls);
-	                    isValidRow = true;
-	                    break;
-	                case 33:
-	                    p.setPlace(cellValue);
-	                    isValidRow = true;
-	                    break;
-	                case 34:
-	                    p.setQualification(cellValue);
-	                    isValidRow = true;
-	                    break;
-	                case 35:
-	                    p.setQualificationField(cellValue);
-	                    isValidRow = true;
-	                    break;
-	                case 36:
-	                    p.setRazorpaySignature(cellValue);
-	                    isValidRow = true;
-	                    break;
-	                case 37:
-	                    p.setReligion(cellValue);
-	                    isValidRow = true;
-	                    break;
-	                case 38:
-	                    p.setSubcaste(cellValue);
-	                    isValidRow = true;
-	                    break;
-	                case 39:
-	                    p.setSubscriptionIsActive(Boolean.parseBoolean(cellValue));
-	                    isValidRow = true;
-	                    break;
-	                case 40:
-	                    p.setTotalBrothers(Integer.parseInt(cellValue));
-	                    isValidRow = true;
-	                    break;
-	                case 41:
-	                    p.setTotalFamilyMembers(Integer.parseInt(cellValue));
-	                    isValidRow = true;
-	                    break;
-	                case 42:
-	                    p.setTotalSisters(Integer.parseInt(cellValue));
-	                    isValidRow = true;
-	                    break;
-	                case 43:
-	                    p.setYourJobSalary(Integer.parseInt(cellValue));
-	                    isValidRow = true;
-	                    break;
-	                case 44:
-	                    p.setYourJobTitle(cellValue);
-	                    isValidRow = true;
-	                    break;
-	                default:
-	                    break;
-	            }
-	                cid++;
-	            }
+				// Only add the user if the row is valid and email is provided
+				if (isValidRow && user.getEmail().trim() != null && !user.getEmail().trim().isEmpty()) {
+					batch.add(user);
 
-	            if (isValidRow) {
-	                list.add(p);
-	            }
-	        }
+					// If the batch size is reached, process it
+					if (batch.size() >= batchSize) {
+						list.addAll(batch);
+						batch.clear(); // Clear the batch to free up memory
+					}
+				} else {
 
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    }
-	    return list;
+					System.err.printf("Row %d: Skipped due to missing critical data.%n", rowNumber + 1);
+					// isValidRow: false | user.getEmail(): null | isValidRow: false
+					// System.err.printf("isValidRow: " + isValidRow + " | user.getEmail(): " +
+					// user.getEmail() + " | isValidRow: " + isValidRow + "\n");
+				}
+				rowNumber++;
+			}
+
+			// Add any remaining users in the last batch
+			if (!batch.isEmpty()) {
+				list.addAll(batch);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	// Helper method to parse date
+	private static LocalDate parseDate(String dateString) {
+		DateTimeFormatter dateTimeFormatter1 = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		DateTimeFormatter dateTimeFormatter2 = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+		LocalDate dob = null;
+
+		try {
+			dob = LocalDate.parse(dateString, dateTimeFormatter1);
+		} catch (DateTimeParseException e) {
+			try {
+				dob = LocalDate.parse(dateString, dateTimeFormatter2);
+			} catch (DateTimeParseException ignored) {
+				System.err.printf("Invalid date format for value '%s'.%n", dateString);
+			}
+		}
+		return dob;
+	}
+
+	// Helper method to parse image URLs
+	private static void parseImageUrls(String cellValue, User user) {
+		if (cellValue.startsWith("[") && cellValue.endsWith("]")) {
+			ObjectMapper objectMapper = new ObjectMapper();
+			try {
+				List<String> imageUrls = objectMapper.readValue(cellValue, new TypeReference<List<String>>() {
+				});
+				user.setImagesList(imageUrls); // Set the parsed list directly
+			} catch (JsonProcessingException e) {
+				e.printStackTrace();
+				// In case of error, fallback to treat it as a plain string
+				List<String> imageUrls = new ArrayList<>();
+				imageUrls.add(cellValue);
+				user.setImagesList(imageUrls);
+			}
+		} else if (cellValue.contains(",")) {
+			// If multiple URLs are separated by commas, split and add them to the list
+			List<String> imageUrls = Arrays.asList(cellValue.split(","));
+			user.setImagesList(imageUrls);
+		} else {
+			// If it's a single URL, create a list with that single URL
+			user.setImagesList(new ArrayList<>(Arrays.asList(cellValue)));
+		}
 	}
 }

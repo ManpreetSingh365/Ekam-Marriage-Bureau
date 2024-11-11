@@ -1,0 +1,79 @@
+
+To delete/Disconnect Github Repo with railway: GitHub-Settings -> Integration -> Application -> Danger zone -> Uninstall "Railway App" | Suspend your installation
+
+Control Panel\User Accounts\Credential Manager
+remove- git:https://github.com
+
+$ git init
+git config --global user.name "SoravRamgharia"
+git config --global user.email "soravs395@gmail.com"
+$ git config --global --list
+$ git status
+$ git add -A
+$ git status
+$ git commit -m "SomeCommithere"
+$ git remote add origin https://github.com/SoravRamgharia/mb.git
+$ git remote set-url origin https://github.com/SoravRamgharia/mb.git ... If need to re-add
+$ git push origin master
+$ git push origin master --verbose
+
+git remote add origin https://github.com/ManpreetSingh365/Innovative-Contact-Organizer.git
+git branch -M main
+git push -u origin main
+
+
+Set Domain-Configuration in Hostinger (ekammatchmaker.com)---->
+Type   	       Name  Priority      Content                 TTL
+A		@	0	35.213.168.149	 	  14400	
+A		www	0	35.213.168.149		  14400	
+ALIAS|CNAME	@	0	u0yiod55.up.railway.app	  14400	
+
+
+ 
+Set Varaibles in Railway ---->
+Variable_Name   Variable_Value
+ENV		dev
+BASE_URL	https://ekammatchmaker.com/
+MYSQL_HOST	mysql.railway.internal
+MYSQL_DB	railway
+MYSQL_PASSWORD  fxCsbHmhbcMUnFHMkiScgqDRNINDfQma
+
+
+https://innovative-contact-organizer.railway.internal/
+https://ico.up.railway.app/
+
+
+Maven & DOCKER---------------->
+mvn -v
+
+1. Ensure JAR is Built Correctly
+mvn clean package
+
+2. Verify JAR Locally
+java -jar target/MarriageBureau-0.0.1-SNAPSHOT.jar
+
+3. UPDATE Dockerfile Correctly
+FROM openjdk:21
+WORKDIR /app
+
+COPY target/MarriageBureau-0.0.1-SNAPSHOT.jar /app/MarriageBureau-0.0.1-SNAPSHOT.jar
+
+EXPOSE 8080
+
+ENTRYPOINT ["java", "-jar", "MarriageBureau-0.0.1-SNAPSHOT.jar"]
+
+
+4. Rebuild and Deploy Docker Image
+docker-compose build
+docker-compose up
+
+
+
+
+
+
+Failed to commit changes
+
+Your account is on a limited plan. Please visit railway.app/account/plans for details.
+
+

@@ -21,7 +21,7 @@ import lombok.Setter;
 public class Testimonials {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	private int reviewId;
+	private long reviewId;
 
 	private String name;
 	private String review;

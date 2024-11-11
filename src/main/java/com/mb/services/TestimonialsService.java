@@ -6,13 +6,15 @@ import java.util.Optional;
 import com.mb.entities.Testimonials;
 
 public interface TestimonialsService {
-	Testimonials saveTestimonials(Testimonials testimonials);
+	Optional<Testimonials> getTestimonialsById(Long id);
 
 	List<Testimonials> getAllTestimonials();
 
-//	Optional<Testimonials> getTestimonialsById(Long id);
+	Testimonials saveTestimonials(Testimonials testimonials);
+
+	void deleteTestimonialsById(Long id);
+
 //	Optional<Testimonials> updateTestimonials(Testimonials testimonials);
-//	void deleteTestimonialsById(Long id);
 //	public void deleteTestimonials(Testimonials testimonials);
 
 }

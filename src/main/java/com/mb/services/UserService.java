@@ -19,8 +19,8 @@ public interface UserService {
 	Optional<User> updateUser(User user);
 
 	void deleteUserById(Long id);
-	
-	public void deleteUser(User user); 
+
+	public void deleteUser(User user);
 
 	boolean isUserExist(Long userId);
 
@@ -36,7 +36,17 @@ public interface UserService {
 	Page<User> findMatchUserDetailsByFilter(User user, int page, int size, String sortBy, String direction);
 
 	Page<User> getByUser(int page, int size, String sortField, String sortDirection);
-	
+
 	public void saveFile(MultipartFile file);
+
+	public List<String> getAllDistinctReligions();
+
+	public List<String> getAllDistinctCastes(String religion);
+
+	public List<String> getAllDistinctQualification();
+
+	public List<String> getAllDistinctOccupation();
+
+	public boolean isEmailUnique(String email);
 
 }

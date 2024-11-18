@@ -141,7 +141,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	public boolean isEmailUnique(String email) {
-		return userRepo.countEmail(email)==0;
+		return userRepo.countEmail(email) == 0;
 	}
 
 	@Override
@@ -179,7 +179,12 @@ public class UserServiceImpl implements UserService {
 		Sort sort = direction.equals("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
 		Pageable pageable = PageRequest.of(page, size, sort);
 
-		return userRepo.findUsersByCustomCriteria(gender, religion, caste, minAge, maxAge, minheight, maxheight,
+		if (qualification == null || occupation == null) {
+			return userRepo.findUsersByCustomCriteria(gender, religion, caste, minAge, maxAge, minheight, maxheight,
+					marriedStatus, place, pageable);
+		}
+
+		return userRepo.findUsersByCustomCriteriaAll(gender, religion, caste, minAge, maxAge, minheight, maxheight,
 				marriedStatus, place, qualification, occupation, pageable);
 	}
 

@@ -75,32 +75,27 @@ public class FindMatch {
 			@RequestParam(value = "caste", required = true) String caste,
 			@RequestParam(value = "minAge") Integer minAge, @RequestParam(value = "maxAge") Integer maxAge,
 			@RequestParam(value = "minHeight") Float minHeight, @RequestParam(value = "maxHeight") Float maxHeight,
-			@RequestParam(value = "marriedStatus") String marriedStatus, @RequestParam(value = "place") String place,
+			@RequestParam(value = "marriedStatus") String marriedStatus,
+			@RequestParam(value = "place", defaultValue = "Indian") String place,
 			@RequestParam(value = "qualification", required = false) String qualification,
 			@RequestParam(value = "occupation", required = false) String occupation, Model model,
 			Authentication authentication) throws Exception {
 
 		// Fetch Form-Data from UserForm to bind with Model_Object by @ModelAttribute
-		System.out.println("Processing Process user/do-findmatch Handler...");
+		System.out.println("\nProcessing Process user/do-findmatch Handler...");
 
-		// Apply default values if this fields are zero or invalid
-		if (minAge <= 0)
-			minAge = 18;
-		if (maxAge <= 0)
-			maxAge = 90;
-		if (minHeight <= 0.0)
-			minHeight = 2.2f;
-		if (maxHeight <= 0.0)
-			maxHeight = 8.8f;
+		// Set default values if parameters are missing or invalid
+		minAge = (minAge == null || minAge <= 0) ? 18 : minAge;
+		maxAge = (maxAge == null || maxAge <= 0) ? 100 : maxAge;
+		minHeight = (minHeight == null || minHeight <= 0.0f) ? 2.2f : minHeight;
+		maxHeight = (maxHeight == null || maxHeight <= 0.0f) ? 8.8f : maxHeight;
+		marriedStatus = (marriedStatus == null || marriedStatus.trim().isEmpty()) ? "single" : marriedStatus;
+		place = (place == null || place.trim().isEmpty()) ? "Indian" : place;
 
-		// If marriedStatus is empty or null, set it to "single"
-		if (marriedStatus == null || marriedStatus.trim().isEmpty()) {
-			marriedStatus = "single";
-		}
-		// If marriedStatus is empty or null, set it to "single"
-		if (place == null || place.trim().isEmpty()) {
-			marriedStatus = "Indian";
-		}
+		// Set qualification and occupation to null if not provided, allowing the query
+		// to include all options
+		qualification = (qualification == null || qualification.trim().isEmpty()) ? null : qualification;
+		occupation = (occupation == null || occupation.trim().isEmpty()) ? null : occupation;
 
 		System.out.println("minAge: " + minAge);
 		System.out.println("maxAge: " + maxAge);
@@ -108,6 +103,8 @@ public class FindMatch {
 		System.out.println("maxHeight: " + maxHeight);
 		System.out.println("marriedStatus: " + marriedStatus);
 		System.out.println("place: " + place);
+		System.out.println("qualification: " + qualification);
+		System.out.println("occupation: " + occupation);
 
 		UserFormDetails userFormDetails = new UserFormDetails();
 		userFormDetails.setGender(gender);

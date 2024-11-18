@@ -9,7 +9,10 @@
 
 <body>
 	<div id="content">
-		<div class="selfWritter text-2xl text-center p-1">All Matched Users Right here...</div>
+		<div class="selfWritter text-2xl text-center p-1"> Congratulations! You’ve found Total of <span
+				data-th-text="${foundTotalMatches}"></span> Matches! &#128071;
+		</div>
+
 		<div
 			class="relative bg-white dark:bg-gray-800 overflow-x-auto shadow-md sm:rounded-lg h-screen flex flex-col justify-between">
 			<table id="user-table" th:if="${pageContent != null && pageContent.totalElements > 0}"
@@ -108,18 +111,64 @@
 				<nav aria-label="Page navigation example">
 					<ul class="inline-flex -space-x-px text-base h-10">
 						<li data-th-unless="${pageContent.first}">
-							<a data-th-href="@{'/do-findmatch?size=' + ${pageSize} + '&page=' + (${pageContent.number - 1}) + '&sortBy=' + ${sortBy} + '&direction=' + ${direction} + '&gender=' + ${userFormDetails.gender} + '&religion=' + ${userFormDetails.religion} + '&caste=' + ${userFormDetails.caste} + '&minAge=' + ${userFormDetails.minAge} + '&maxAge=' + ${userFormDetails.maxAge} + '&minHeight=' + ${userFormDetails.minHeight} + '&maxHeight=' + ${userFormDetails.maxHeight} + '&marriedStatus=' + ${userFormDetails.marriedStatus} + '&place=' + ${userFormDetails.place} + '&qualification=' + ${userFormDetails.qualification} + '&occupation=' + ${userFormDetails.occupation}}"
+							<a th:href="@{'/do-findmatch?size=' + ${pageSize} 
+							+ '&page=' + (${pageContent.number - 1}) 
+							+ '&sortBy=' + ${sortBy} 
+							+ '&direction=' + ${direction} 
+							+ '&gender=' + ${userFormDetails.gender ?: ''} 
+							+ '&religion=' + ${userFormDetails.religion ?: ''} 
+							+ '&caste=' + ${userFormDetails.caste ?: ''} 
+							+ '&minAge=' + ${userFormDetails.minAge ?: ''} 
+							+ '&maxAge=' + ${userFormDetails.maxAge ?: ''} 
+							+ '&minHeight=' + ${userFormDetails.minHeight ?: ''} 
+							+ '&maxHeight=' + ${userFormDetails.maxHeight ?: ''} 
+							+ '&marriedStatus=' + ${userFormDetails.marriedStatus ?: ''} 
+							+ '&place=' + ${userFormDetails.place ?: ''} 
+							+ '&qualification=' + ${userFormDetails.qualification ?: ''} 
+							+ '&occupation=' + ${userFormDetails.occupation ?: ''}}"
 								class="flex items-center justify-center px-4 h-10 leading-tight text-orange bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Previous</a>
+							</a>
 						</li>
 						<li data-th-if="${startPage > 1}">
-							<a data-th-href="@{'/do-findmatch?size=' + ${pageSize} + '&page=0'}"
-								class="flex items-center justify-center px-4 h-10 leading-tight text-orange border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">1</a>
+
+							<a th:href="@{'/do-findmatch?size=' + ${pageSize} 
+								+ '&page=0'
+								+ '&sortBy=' + ${sortBy} 
+								+ '&direction=' + ${direction} 
+								+ '&gender=' + ${userFormDetails.gender ?: ''} 
+								+ '&religion=' + ${userFormDetails.religion ?: ''} 
+								+ '&caste=' + ${userFormDetails.caste ?: ''} 
+								+ '&minAge=' + ${userFormDetails.minAge ?: ''} 
+								+ '&maxAge=' + ${userFormDetails.maxAge ?: ''} 
+								+ '&minHeight=' + ${userFormDetails.minHeight ?: ''} 
+								+ '&maxHeight=' + ${userFormDetails.maxHeight ?: ''} 
+								+ '&marriedStatus=' + ${userFormDetails.marriedStatus ?: ''} 
+								+ '&place=' + ${userFormDetails.place ?: ''} 
+								+ '&qualification=' + ${userFormDetails.qualification ?: ''} 
+								+ '&occupation=' + ${userFormDetails.occupation ?: ''}}"
+								class="flex items-center justify-center px-4 h-10 leading-tight text-orange border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+								1
+							</a>
 						</li>
 						<li data-th-if="${startPage > 2}">
 							<span class="flex items-center justify-center px-4 h-10 text-orange">...</span>
 						</li>
 						<li data-th-each="index : ${#numbers.sequence(startPage - 1, endPage - 2)}">
-							<a data-th-href="@{'/do-findmatch?size=' + ${pageSize} + '&page=' + ${index} + '&sortBy=' + ${sortBy} + '&direction=' + ${direction} + '&gender=' + ${userFormDetails.gender} + '&religion=' + ${userFormDetails.religion} + '&caste=' + ${userFormDetails.caste} + '&minAge=' + ${userFormDetails.minAge} + '&maxAge=' + ${userFormDetails.maxAge} + '&minHeight=' + ${userFormDetails.minHeight} + '&maxHeight=' + ${userFormDetails.maxHeight} + '&marriedStatus=' + ${userFormDetails.marriedStatus} + '&place=' + ${userFormDetails.place} + '&qualification=' + ${userFormDetails.qualification} + '&occupation=' + ${userFormDetails.occupation}}"
+							<a th:href="@{'/do-findmatch?size=' + ${pageSize} 
+							+ '&page=' + ${index} 
+							+ '&sortBy=' + ${sortBy} 
+							+ '&direction=' + ${direction} 
+							+ '&gender=' + ${userFormDetails.gender ?: ''} 
+							+ '&religion=' + ${userFormDetails.religion ?: ''} 
+							+ '&caste=' + ${userFormDetails.caste ?: ''} 
+							+ '&minAge=' + ${userFormDetails.minAge ?: ''} 
+							+ '&maxAge=' + ${userFormDetails.maxAge ?: ''} 
+							+ '&minHeight=' + ${userFormDetails.minHeight ?: ''} 
+							+ '&maxHeight=' + ${userFormDetails.maxHeight ?: ''} 
+							+ '&marriedStatus=' + ${userFormDetails.marriedStatus ?: ''} 
+							+ '&place=' + ${userFormDetails.place ?: ''} 
+							+ '&qualification=' + ${userFormDetails.qualification ?: ''} 
+							+ '&occupation=' + ${userFormDetails.occupation ?: ''}}"
 								data-th-classappend="${index == pageContent.number ? 'bg-blue-50 dark:bg-gray-600' : 'bg-white dark:bg-gray-800'}"
 								class="flex items-center justify-center px-4 h-10 leading-tight text-orange border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
 								<span data-th-text="${index + 1}"></span>
@@ -129,14 +178,45 @@
 							<span class="flex items-center justify-center px-4 h-10 text-orange">...</span>
 						</li>
 						<li>
-							<a data-th-href="@{'/do-findmatch?size='+${pageSize}+'&page=' + ${totalPages-1}+'&sortBy='+${sortBy}+'&direction='+${direction}+'&gender='+${userFormDetails.gender}+'&religion='+${userFormDetails.religion}+'&caste='+${userFormDetails.caste}+'&minAge='+${userFormDetails.minAge}+'&maxAge='+${userFormDetails.maxAge}+'&minHeight='+${userFormDetails.minHeight}+'&maxHeight='+${userFormDetails.maxHeight}+'&marriedStatus='+${userFormDetails.marriedStatus}+'&place='+${userFormDetails.place}+'&qualification='+${userFormDetails.qualification}+'&occupation='+${userFormDetails.occupation}}"
+							<a th:href="@{'/do-findmatch?size=' + ${pageSize} 
+							+ '&page=' + ${totalPages-1} 
+							+ '&sortBy=' + ${sortBy} 
+							+ '&direction=' + ${direction} 
+							+ '&gender=' + ${userFormDetails.gender ?: ''} 
+							+ '&religion=' + ${userFormDetails.religion ?: ''} 
+							+ '&caste=' + ${userFormDetails.caste ?: ''} 
+							+ '&minAge=' + ${userFormDetails.minAge ?: ''} 
+							+ '&maxAge=' + ${userFormDetails.maxAge ?: ''} 
+							+ '&minHeight=' + ${userFormDetails.minHeight ?: ''} 
+							+ '&maxHeight=' + ${userFormDetails.maxHeight ?: ''} 
+							+ '&marriedStatus=' + ${userFormDetails.marriedStatus ?: ''} 
+							+ '&place=' + ${userFormDetails.place ?: ''} 
+							+ '&qualification=' + ${userFormDetails.qualification ?: ''} 
+							+ '&occupation=' + ${userFormDetails.occupation ?: ''}}"
+								th:classappend="${totalPages - 1 == currentPage ? 'bg-blue-50 dark:bg-gray-600' : 'bg-white dark:bg-gray-800'}"
 								class="flex items-center justify-center px-4 h-10 leading-tight text-orange border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
 								<span data-th-text="${totalPages}"></span>
 							</a>
 						</li>
 						<li data-th-unless="${pageContent.last}">
-							<a data-th-href="@{'/do-findmatch?size=' + ${pageSize} + '&page=' + (${pageContent.number + 1}) + '&sortBy=' + ${sortBy} + '&direction=' + ${direction} + '&gender=' + ${userFormDetails.gender} + '&religion=' + ${userFormDetails.religion} + '&caste=' + ${userFormDetails.caste} + '&minAge=' + ${userFormDetails.minAge} + '&maxAge=' + ${userFormDetails.maxAge} + '&minHeight=' + ${userFormDetails.minHeight} + '&maxHeight=' + ${userFormDetails.maxHeight} + '&marriedStatus=' + ${userFormDetails.marriedStatus} + '&place=' + ${userFormDetails.place} + '&qualification=' + ${userFormDetails.qualification} + '&occupation=' + ${userFormDetails.occupation}}"
-								class="flex items-center justify-center px-4 h-10 leading-tight text-orange bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Next</a>
+							<a th:href="@{'/do-findmatch?size=' + ${pageSize} 
+					        + '&page=' + (${pageContent.number + 1}) 
+					        + '&sortBy=' + ${sortBy} 
+					        + '&direction=' + ${direction} 
+					        + '&gender=' + ${userFormDetails.gender ?: ''} 
+					        + '&religion=' + ${userFormDetails.religion ?: ''} 
+					        + '&caste=' + ${userFormDetails.caste ?: ''} 
+					        + '&minAge=' + ${userFormDetails.minAge ?: ''} 
+					        + '&maxAge=' + ${userFormDetails.maxAge ?: ''} 
+					        + '&minHeight=' + ${userFormDetails.minHeight ?: ''} 
+					        + '&maxHeight=' + ${userFormDetails.maxHeight ?: ''} 
+					        + '&marriedStatus=' + ${userFormDetails.marriedStatus ?: ''} 
+					        + '&place=' + ${userFormDetails.place ?: ''} 
+					        + '&qualification=' + ${userFormDetails.qualification ?: ''} 
+					        + '&occupation=' + ${userFormDetails.occupation ?: ''}}"
+								class="flex items-center justify-center px-4 h-10 leading-tight text-orange bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+								Next
+							</a>
 						</li>
 
 						<li>

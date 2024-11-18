@@ -40,8 +40,17 @@ public interface UserRepo extends JpaRepository<User, Long> {
 	@Query("SELECT u FROM app_user u WHERE ( u.gender = :gender ) AND " + "( u.religion = :religion ) AND "
 			+ "( u.caste = :caste ) AND " + "( u.age BETWEEN :minAge AND :maxAge ) AND "
 			+ "( u.height BETWEEN :minHeight AND :maxHeight ) AND " + "( u.marriedStatus = :marriedStatus ) AND "
-			+ "( u.place = :place ) AND ( u.qualification = :qualification) AND " + "( u.occupation = :occupation)")
+			+ "( u.place = :place )")
 	Page<User> findUsersByCustomCriteria(@Param("gender") String gender, @Param("religion") String religion,
+			@Param("caste") String caste, @Param("minAge") int minAge, @Param("maxAge") int maxAge,
+			@Param("minHeight") double minHeight, @Param("maxHeight") double maxHeight,
+			@Param("marriedStatus") String marriedStatus, @Param("place") String place, Pageable pageable);
+
+	@Query("SELECT u FROM app_user u WHERE ( u.gender = :gender ) AND " + "( u.religion = :religion ) AND "
+			+ "( u.caste = :caste ) AND " + "( u.age BETWEEN :minAge AND :maxAge ) AND "
+			+ "( u.height BETWEEN :minHeight AND :maxHeight ) AND " + "( u.marriedStatus = :marriedStatus ) AND "
+			+ "( u.place = :place ) AND ( u.qualification = :qualification) AND " + "( u.occupation = :occupation)")
+	Page<User> findUsersByCustomCriteriaAll(@Param("gender") String gender, @Param("religion") String religion,
 			@Param("caste") String caste, @Param("minAge") int minAge, @Param("maxAge") int maxAge,
 			@Param("minHeight") double minHeight, @Param("maxHeight") double maxHeight,
 			@Param("marriedStatus") String marriedStatus, @Param("place") String place,

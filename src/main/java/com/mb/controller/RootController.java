@@ -32,16 +32,16 @@ public class RootController {
 		if (authentication == null) {
 			return;
 		}
-		System.out.println("Adding logged in user information to the model");
+//		System.out.println("Adding logged in user information to the model");
 
 		String username = Helper.getEmailOfLoggedInUser(authentication);
 //        logger.info("User logged in: {}", username);
 
 		// Getting/Fetching User-Data from Database:
 		User user = userService.getUserByEmail(username);
-		System.out.println(user);
-		System.out.println(user.getName());
-		System.out.println(user.getEmail());
+//		System.out.println(user);
+//		System.out.println(user.getName());
+//		System.out.println(user.getEmail());
 
 		if (logger.isDebugEnabled()) {
 			logger.debug("User logged in: {}", username);

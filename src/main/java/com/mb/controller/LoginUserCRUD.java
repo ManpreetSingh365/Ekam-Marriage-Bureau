@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.mb.domain.USER_ROLE;
 import com.mb.entities.PaymentResponse;
 import com.mb.entities.User;
 import com.mb.forms.UserForm;
@@ -104,7 +105,7 @@ public class LoginUserCRUD {
 
 	// Showing Particular User Details.....
 	@RequestMapping("/user/logginprofile")
-	public String showLoginUserDetail(Model model, Authentication authentication) {
+	public String showLoginUserDetail(Model model, Authentication authentication, HttpSession session) {
 
 		String username = Helper.getEmailOfLoggedInUser(authentication);
 		User userData = userService.getUserByEmail(username);

@@ -33,7 +33,6 @@ public class FileCRUD {
 		} else {
 			return false;
 		}
-
 	}
 
 	// Convert Excel to List of Users
@@ -210,9 +209,12 @@ public class FileCRUD {
 							user.setTotalSisters(cellValue.isEmpty() ? 0 : Integer.parseInt(cellValue));
 							break;
 						case 43:
-							user.setYourJobSalary(cellValue.isEmpty() ? "Not Mention" : cellValue);
+							user.setUserCreationTime(cellValue.isEmpty() ? "Not Mention" : cellValue);
 							break;
 						case 44:
+							user.setYourJobSalary(cellValue.isEmpty() ? "Not Mention" : cellValue);
+							break;
+						case 45:
 							user.setYourJobTitle(cellValue);
 							break;
 						default:

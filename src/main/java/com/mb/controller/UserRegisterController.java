@@ -1,6 +1,7 @@
 package com.mb.controller;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.mb.domain.USER_ROLE;
 import com.mb.entities.User;
 import com.mb.forms.UserForm;
 import com.mb.forms.UserFormDetails;
@@ -28,12 +30,18 @@ import com.mb.services.UserService;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Null;
+
+import com.mb.utils.UniqueEmailGenerator;
 
 @Controller
 public class UserRegisterController {
 
 	@Autowired
 	private UserService userService;
+
+	@Autowired
+	private UniqueEmailGenerator uniqueEmailGenerator;
 
 	@Autowired
 	private ImageService imageService;
@@ -53,6 +61,25 @@ public class UserRegisterController {
 
 		return "registerdetails";
 	}
+	
+	@RequestMapping("/registerdetailsbyemployee")
+	public String registerationByEmp(Model model) {
+		System.out.println("Opening Registeration Handler...");
+		
+		UserFormDetails userFormDetails = new UserFormDetails();
+		model.addAttribute("userFormDetails", userFormDetails);
+		
+		// Fetch distinct relisions, castes categories from the database
+		List<String> religions = userService.getAllDistinctReligions();
+		List<String> castes = userService.getAllDistinctCastes(userFormDetails.getReligion());
+
+		model.addAttribute("religions", religions);
+		model.addAttribute("castes", castes);
+
+
+		return "registerdetails";
+	}
+
 
 	@PostMapping("/do-register")
 	public String processRegisteration(@Valid @ModelAttribute("userForm") UserForm userForm,
@@ -132,15 +159,27 @@ public class UserRegisterController {
 //			// throw new RuntimeException("File is empty");
 //		}
 
+		String date = LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+		String time = LocalTime.now().format(DateTimeFormatter.ofPattern("HH-mm"));
+		String currentDateAndTime = date + "_" + time;
+
 		userDefaultValues.setDefaultValues(userFormDetails);
 
 		User user = new User();
 		UserForm userForm = (UserForm) session.getAttribute("userForm");
 
-		user.setEmail(userForm.getEmail());
-		user.setPassword(userForm.getPassword());
+		if (userForm != null && userForm.getEmail() != null && !userForm.getEmail().isEmpty()) {
+		    user.setEmail(userForm.getEmail());
+		    user.setPassword(userForm.getPassword());
+		} else {
+		    // If userForm is null or email is empty, generate a unique email
+		    String uniqueEmail = uniqueEmailGenerator.generateUniqueEmail();
+		    user.setEmail(uniqueEmail); // Set the generated unique email
+		    user.setPassword("emp@321");
+		}
 
 		user.setName(userFormDetails.getYourName());
+		user.setUserCreationTime(currentDateAndTime);
 		user.setGender(userFormDetails.getGender());
 		user.setReligion(userFormDetails.getReligion());
 		user.setCaste(userFormDetails.getCaste().trim());
@@ -199,6 +238,7 @@ public class UserRegisterController {
 		user.setPhoneNumber2(userFormDetails.getPhoneNumber2());
 
 		user.setFormFilledBy(userFormDetails.getFormFilledBy());
+		user.setRole(USER_ROLE.ROLE_USER);
 
 //		List<String> userRole = new ArrayList<>();
 //		userRole.add("normal");

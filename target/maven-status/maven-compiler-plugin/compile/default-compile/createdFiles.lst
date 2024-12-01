@@ -14,7 +14,9 @@ com\mb\helpers\SessionHelper.class
 com\mb\helpers\MessageType.class
 com\mb\helpers\FileMultipartFile.class
 com\mb\config\PingScheduler.class
+com\mb\entities\Admin.class
 com\mb\config\SecurityConfig.class
+com\mb\domain\USER_ROLE.class
 com\mb\services\TestimonialsService.class
 com\mb\helpers\AppConstants.class
 com\mb\forms\UserFormDetailsAdmin.class
@@ -34,7 +36,9 @@ com\mb\forms\UserFormDetails.class
 com\mb\validators\ValidFile.class
 com\mb\repositories\PaymentResponseRepo.class
 com\mb\helpers\ResourceNotFoundException.class
+com\mb\entities\Admin$AdminBuilder.class
 com\mb\entities\User$UserBuilder.class
+com\mb\utils\UniqueEmailGenerator.class
 com\mb\services\SubscriptionValidatorService.class
 com\mb\entities\ErrorResponse$ErrorResponseBuilder.class
 com\mb\entities\PaymentResponse.class

@@ -200,12 +200,12 @@
 					if (response.status == "created") {
 						// open payment form
 						let options = {
-							key: "rzp_test_PceptBJlOEtHdK",
+							key: response.key,
 							amount: response.amt,
 							"currency": "INR",
 							"name": "Ekam Marriage Bureau",
 							"description": "Perfect Matches, Real Connections, and Easy Marriages Await You!",
-							"image": "https://res.cloudinary.com/dcrlfty5k/image/upload/v1730366358/d459c434-00ea-4cff-9b7d-c7f18c7023e3.png",
+							"image": "https://res.cloudinary.com/dcrlfty5k/image/upload/v1733063341/1bfd3772-21ae-43d9-ab1a-a2b692a3fd13_dwrvtv.webp",
 							"order_id": response.id,
 							// Inside your Razorpay payment handler
 							handler: function (response) {
@@ -247,7 +247,7 @@
 								"contact": "0123456789"
 							},
 							"notes": {
-								"address": "S.W Road"
+								"address": "S.W Road, Amritsar"
 							},
 							"theme": {
 								"color": "#3399cc"

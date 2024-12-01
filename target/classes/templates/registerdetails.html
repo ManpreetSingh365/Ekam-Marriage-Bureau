@@ -587,7 +587,7 @@
 								<label class="block text-gray-700 text-xs font-bold font-bold mb-2 dark:text-white"
 									for="formFilledBy">This Form Filled By<super
 										class="text-red-600 ml-1 text-lg font-medium">*</super></label>
-								<select data-th-field="*{formFilledBy}" id="formFilledBy" name="formFilledBy"
+								<select th:unless="${loggedInUser != null && loggedInUser.hasRole('ROLE_EMPLOYEE')}" data-th-field="*{formFilledBy}" id="formFilledBy" name="formFilledBy"
 									class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
 									<option value="">Mention here</option>
 									<option value="self" id="self" name="self">Self</option>
@@ -596,6 +596,16 @@
 									<option value="relative" id="relative" name="relative">Relative</option>
 									<option value="self-marriage-bureau" id="self-marriage-bureau"
 										name="self-marriage-bureau">Self-Marriage-Bureau </option>
+								</select>
+								<select th:if="${loggedInUser != null && loggedInUser.hasRole('ROLE_EMPLOYEE')}" data-th-field="*{formFilledBy}" id="formFilledBy" name="formFilledBy"
+									class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+									<option value="">Mention here</option>
+									<option value="Pooja-self" id="Pooja-self" name="Pooja-self">Pooja-Self</option>
+									<option value="Pooja-parent" id="Pooja-parent" name="Pooja-parent">Pooja-Parent</option>
+									<option value="Pooja-friend" id="Pooja-friend" name="Pooja-friend">Pooja-Friends</option>
+									<option value="Pooja-relative" id="Pooja-relative" name="Pooja-relative">Pooja-Relative</option>
+									<option value="Pooja-self-marriage-bureau" id="Pooja-self-marriage-bureau"
+										name="Pooja-self-marriage-bureau">Pooja-Self-Marriage-Bureau </option>
 								</select>
 								<p data-th-if="${#fields.hasErrors('formFilledBy')}" data-th-errors="*{formFilledBy}"
 									class="text-red-600 flex"> </p>

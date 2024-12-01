@@ -155,7 +155,7 @@ public class UsersAPIController {
 					"mother_occupation", "name", "nri_place", "occupation", "password", "phone_number1",
 					"phone_number2", "images", "place", "qualification", "qualification_field", "razorpay_signature",
 					"religion", "subcaste", "subscription_is_active", "total_brothers", "total_family_members",
-					"total_sisters", "your_job_salary", "your_job_title" };
+					"total_sisters", "user_creation_time", "your_job_salary", "your_job_title" };
 
 			for (int i = 0; i < headers.length; i++) {
 				Cell cell = headerRow.createCell(i);
@@ -224,8 +224,10 @@ public class UsersAPIController {
 				row.createCell(41).setCellValue(user.getTotalFamilyMembers() != 0 ? user.getTotalFamilyMembers() : 0);
 				row.createCell(42).setCellValue(user.getTotalSisters() != 0 ? user.getTotalSisters() : 0);
 				row.createCell(43)
-						.setCellValue(user.getYourJobSalary() != null ? user.getYourJobSalary() : "Not Mention");
+				.setCellValue(user.getUserCreationTime() != null ? user.getUserCreationTime() : "Not Mention");
 				row.createCell(44)
+						.setCellValue(user.getYourJobSalary() != null ? user.getYourJobSalary() : "Not Mention");
+				row.createCell(45)
 						.setCellValue(user.getYourJobTitle() != null ? user.getYourJobTitle() : "Not Mention");
 			}
 
@@ -235,7 +237,7 @@ public class UsersAPIController {
 
 			// Get current date and time for filename
 			String date = LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
-			String time = LocalTime.now().format(DateTimeFormatter.ofPattern("HH-mm-ss"));
+			String time = LocalTime.now().format(DateTimeFormatter.ofPattern("HH-mm"));
 			String filename = "MBusers_" + date + "_" + time + ".xlsx";
 
 			HttpHeaders httpHeaders = new HttpHeaders();

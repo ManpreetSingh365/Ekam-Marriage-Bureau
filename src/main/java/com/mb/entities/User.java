@@ -13,6 +13,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.mb.domain.USER_ROLE;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -56,7 +57,9 @@ public class User implements UserDetails {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long userId;
 
-//	@Column(name = "user_name", nullable = false)
+	private String userCreationTime;
+
+	// @Column(name = "user_name", nullable = false)
 	private String name;
 
 	@Column(unique = true, nullable = false)
@@ -182,6 +185,27 @@ public class User implements UserDetails {
 	private String phoneNumber2;
 
 	private String formFilledBy;
+
+	private USER_ROLE role; // role
+
+	public USER_ROLE getRole() {
+		return this.role;
+	}
+
+	public boolean hasRole(String roleName) {
+		return this.role != null && this.role.name().equals(roleName);
+	}
+
+	public boolean hasRole(USER_ROLE user_ROLE) {
+		return this.role != null && this.getRole().equals(user_ROLE);
+	}
+
+	public boolean hasAnyRole(USER_ROLE... roles) {
+		return Arrays.stream(roles).anyMatch(role -> this.role == role);
+	}
+//	public boolean hasAnyRole(String... roles) {
+//		return Arrays.stream(roles).anyMatch(role -> this.role != null && this.role.name().equals(role));
+//	}
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	private List<String> roleList = new ArrayList<>();

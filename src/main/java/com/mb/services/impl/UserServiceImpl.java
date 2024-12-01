@@ -18,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.mb.domain.USER_ROLE;
 import com.mb.entities.User;
 import com.mb.helpers.ResourceNotFoundException;
 import com.mb.repositories.UserRepo;
@@ -52,7 +53,8 @@ public class UserServiceImpl implements UserService {
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 
 		// set the user role
-		user.setRoleList(List.of(AppConstants.ROLE_USER));
+//		user.setRoleList(List.of(AppConstants.ROLE_USER));
+		user.setRole(USER_ROLE.ROLE_USER);
 
 		return userRepo.save(user);
 	}
@@ -176,16 +178,87 @@ public class UserServiceImpl implements UserService {
 		String qualification = user.getQualification();
 		String occupation = user.getOccupation();
 
+		System.out.println("\n----->");
+		System.out.println(gender);
+		System.out.println(religion);
+		System.out.println(caste);
+		System.out.println(minAge);
+		System.out.println(maxAge);
+		System.out.println(minheight);
+		System.out.println(maxheight);
+		System.out.println(marriedStatus);
+		System.out.println(place);
+		System.out.println(qualification);
+		System.out.println(occupation);
+
 		Sort sort = direction.equals("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
 		Pageable pageable = PageRequest.of(page, size, sort);
 
-		if (qualification == null || occupation == null) {
-			return userRepo.findUsersByCustomCriteria(gender, religion, caste, minAge, maxAge, minheight, maxheight,
-					marriedStatus, place, pageable);
-		}
+		// Replace empty values with `null` to simplify the query
+		caste = caste.isEmpty() ? null : caste;
+		marriedStatus = marriedStatus != null && marriedStatus.isEmpty() ? null : marriedStatus;
+		place = place != null && place.isEmpty() ? null : place;
+		qualification = qualification != null && qualification.isEmpty() ? null : qualification;
+		occupation = occupation != null && occupation.isEmpty() ? null : occupation;
+		
+		System.out.println("\n----->");
+		System.out.println(gender);
+		System.out.println(religion);
+		System.out.println(caste);
+		System.out.println(minAge);
+		System.out.println(maxAge);
+		System.out.println(minheight);
+		System.out.println(maxheight);
+		System.out.println(marriedStatus);
+		System.out.println(place);
+		System.out.println(qualification);
+		System.out.println(occupation);
 
-		return userRepo.findUsersByCustomCriteriaAll(gender, religion, caste, minAge, maxAge, minheight, maxheight,
+
+		return userRepo.findUsersWithDynamicCriteria(gender, religion, caste, minAge, maxAge, minheight, maxheight,
 				marriedStatus, place, qualification, occupation, pageable);
+
+//		if (caste == "") {
+//			if (marriedStatus == null && qualification == null && occupation == null) {				
+//				return userRepo.findUsersByCustomCriteriaHome1(gender, religion, minAge, maxAge, place, pageable);
+//			}
+//			
+//			return userRepo.findUsersByCustomCriteria1(gender, religion, minAge, maxAge, minheight, maxheight,
+//					marriedStatus, place, pageable);
+//
+//		}
+//		if (marriedStatus == null && qualification == null && occupation == null) {
+//			return userRepo.findUsersByCustomCriteriaHome2(gender, religion, caste, minAge, maxAge, place, pageable);
+//		}
+//
+//		if (qualification == null || occupation == null) {
+//			return userRepo.findUsersByCustomCriteria2(gender, religion, caste, minAge, maxAge, minheight, maxheight,
+//					marriedStatus, place, pageable);
+//		}
+//
+//		return userRepo.findUsersByCustomCriteriaAll(gender, religion, caste, minAge, maxAge, minheight, maxheight,
+//				marriedStatus, place, qualification, occupation, pageable);
+
+//		if (caste.isEmpty()) {
+//			if (marriedStatus == null && qualification == null && occupation == null) {
+//				return userRepo.findUsersWithoutCasteAndMarriedStatusAndQualificationAndOccupation(gender, religion,
+//						minAge, maxAge, minheight, maxheight, place, pageable);
+//			}
+//			if (marriedStatus == null && qualification == null) {
+//				return userRepo.findUsersWithoutCasteAndMarriedStatusAndQualification(gender, religion, minAge, maxAge,
+//						minheight, maxheight, place, occupation, pageable);
+//			}
+//			if (marriedStatus == null) {
+//				return userRepo.findUsersWithoutCasteAndMarriedStatus(gender, religion, minAge, maxAge, minheight,
+//						maxheight, place, qualification, occupation, pageable);
+//			}
+//			return userRepo.findUsersWithoutCaste(gender, religion, minAge, maxAge, minheight, maxheight, marriedStatus,
+//					place, qualification, occupation, pageable);
+//		}
+
+//		return userRepo.findUsersByCustomCriteriaAll(gender, religion, caste, minAge, maxAge, minheight, maxheight,
+//				marriedStatus, place, qualification, occupation, pageable);
+
 	}
 
 	@Override

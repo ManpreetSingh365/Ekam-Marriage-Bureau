@@ -8,8 +8,6 @@
 	<meta content="Free HTML Templates" name="keywords">
 	<meta content="Free HTML Templates" name="description">
 
-
-
 </head>
 
 <body data-spy="scroll" data-target=".navbar" data-offset="51">
@@ -23,75 +21,111 @@
 		<div class="container-fluid p-0 mb-5 pb-5" id="home">
 			<div id="header-carousel" class="carousel slide carousel-fade" data-ride="carousel">
 				<div class="carousel-inner">
-					<div class="carousel-item position-relative active" style="height: 100vh; min-height: 400px;">
+					<!-- First Slide with Shaadi-like Form -->
+					<div id="carousel-item-1" class="carousel-item position-relative active"
+						style="height: 100vh; min-height: 400px;">
 						<img class="position-absolute w-100 h-100" src="img/carousel-1.jpg" style="object-fit: cover;">
 						<div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
-							<div class="p-3" style="max-width: 900px;">
-								<h1 class="display-1 font-secondary text-white mt-n3 mb-md-4"><span
-										class="text-primary">Ekam</span> Marriage Bureau</h1>
+							<div class="p-3 text-center text-white"
+								style="max-width: 900px; background: rgba(0, 0, 0, 0.6); border-radius: 10px;">
+								<h1 class="display-6 font-secondary text-white mt-n6 mb-md-4">
+									<span class="text-primary">Ekam</span> Marriage Bureau
 								</h1>
-								<div class="d-inline-block border-top border-bottom border-light py-3 px-4">
-									<h3 class="text-uppercase font-weight-normal text-white m-0"
-										style="letter-spacing: 2px;">Your Ultimate Destination for Finding Your Dream
-										Soulmate</h3>
-								</div>
-								<br>
+								<h3 class="text-uppercase font-weight-normal text-white mb-4"
+									style="letter-spacing: 2px;">
+									Trusted Matrimony & Matchmaking Service
+								</h3>
+								<form class="w-100 d-flex flex-wrap justify-content-center gap-3" method="get"
+									th:action="@{/do-homefindmatch}" data-th-object="${userFormDetails}">
+									<div class="form-group mx-2">
+										<label class="text-white">I'm looking for a</label>
+										<select class="form-control" id="gender" name="gender">
+											<option value="female">Girl</option>
+											<option value="male">Boy</option>
+										</select>
+									</div>
+									<div class="form-group mx-2">
+										<label class="text-white">Religion</label>
+										<select class="form-control" id="religion" name="religion">
+											<option value="">Select</option>
+											<th:block th:each="religion : ${religions}">
+												<option th:value="${religion}" th:text="${religion}"></option>
+											</th:block>
+										</select>
+									</div>
+									<div class="form-group mx-2">
+										<label class="text-white">Caste</label>
+										<select class="form-control" id="caste" name="caste">
+											<option value="">Select</option>
+											<th:block th:each="caste : ${caste}">
+												<option th:value="${caste}" th:text="${caste}"></option>
+											</th:block>
+										</select>
+									</div>
 
-								<div>
-									<a data-th-href="@{'/findmatch'}" id="findMatchButton" type="button"
-										class="text-gray-900 bg-gradient-to-r from-red-200 via-red-300 to-yellow-200 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
-										Find Match
-									</a>
-								</div>
+									<div class="form-group mx-2">
+										<label class="text-white">Aged</label>
+										<div class="d-flex">
+											<select id="minAge" name="minAge" class="form-control mx-1">
+												<option>18</option>
+											</select>
+											<div class="text-white" style="width: 100px;"> -to- </div>
+											<select id="maxAge" name="maxAge" class="form-control mx-1">
+												<option>75</option>
+											</select>
+										</div>
+									</div>
+									<div class="form-group mx-2">
+										<label class="text-white">Place of Living</label>
+										<select id="place" name="place" class="form-control">
+											<option name="place" value="">Select</option>
+											<option name="place" value="Indian">India</option>
+											<option name="place" value="nri">NRI</option>
+										</select>
+									</div>
 
+									<!-- Wrapping the button in a div with w-100 -->
+									<div class="w-100 text-center">
+										<button type="submit" class="btn btn-primary px-5 py-2 mt-3">Let's
+											Begin</button>
+									</div>
+								</form>
 							</div>
 						</div>
 					</div>
-					<div class="carousel-item position-relative" style="height: 100vh; min-height: 400px;">
-						<img class="position-absolute w-100 h-100"
-							src="https://i.pinimg.com/736x/a0/6a/6e/a06a6e9fd8689aff56f7c516d7c121d8.jpg"
-							style="object-fit: cover;">
-						<div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
-							<div class="p-3" style="max-width: 900px;">
-								<h1 class="display-1 font-secondary text-white mt-n3 mb-md-4"><span
-										class="text-primary">Ekam</span> Marriage Bureau</h1>
-								</h1>
-								<div class="d-inline-block border-top border-bottom border-light py-3 px-4">
-									<h3 class="text-uppercase font-weight-normal text-white m-0"
-										style="letter-spacing: 2px;">Your Last Stop in the Search for Your Perfect Match
-									</h3>
-								</div>
-								<br>
-
-								<div>
-									<a data-th-href="@{'/findmatch'}" id="findMatchButton" type="button"
-										class="text-gray-900 bg-gradient-to-r from-red-200 via-red-300 to-yellow-200 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
-										Find Match
-									</a>
-								</div>
-
-							</div>
-						</div>
-					</div>
+					<!-- Second Slide -->
+					<!--		            <div id="carousel-item-2" class="carousel-item position-relative" style="height: 100vh; min-height: 400px;">
+		                <img class="position-absolute w-100 h-100" src="https://i.pinimg.com/736x/a0/6a/6e/a06a6e9fd8689aff56f7c516d7c121d8.jpg" style="object-fit: cover;">
+		                <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
+		                    <div class="p-3" style="max-width: 900px;">
+		                        <h1 class="display-1 font-secondary text-white mt-n3 mb-md-4"><span class="text-primary">Ekam</span> Marriage Bureau</h1>
+		                        <h3 class="text-uppercase font-weight-normal text-white mb-4" style="letter-spacing: 2px;">Your Last Stop in the Search for Your Perfect Match</h3>
+		                        <a data-th-href="@{'/findmatch'}" id="findMatchButton" type="button"
+		                            class="btn btn-warning font-weight-bold px-5 py-2">Find Match</a>
+		                    </div>
+		                </div>
+		            </div>
+-->
 				</div>
-				<a class="carousel-control-prev justify-content-start" href="#header-carousel" data-slide="prev">
-					<div class="btn btn-primary px-0" style="width: 68px; height: 68px;">
-						<span class="carousel-control-prev-icon mt-3"></span>
-					</div>
-				</a>
-				<a class="carousel-control-next justify-content-end" href="#header-carousel" data-slide="next">
-					<div class="btn btn-primary px-0" style="width: 68px; height: 68px;">
-						<span class="carousel-control-next-icon mt-3"></span>
-					</div>
-				</a>
+
+				<!--		        <a class="carousel-control-prev justify-content-start" href="#header-carousel" data-slide="prev">
+		            <div class="btn btn-primary px-0" style="width: 68px; height: 68px;">
+		                <span class="carousel-control-prev-icon mt-3"></span>
+		            </div>
+		        </a>
+		        <a class="carousel-control-next justify-content-end" href="#header-carousel" data-slide="next">
+		            <div class="btn btn-primary px-0" style="width: 68px; height: 68px;">
+		                <span class="carousel-control-next-icon mt-3"></span>
+		            </div>
+		        </a>
+-->
 			</div>
 		</div>
-
 		<!-- Carousel End -->
 
 
 		<!-- Video Modal Start -->
-		<div class="modal fade" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+		<!--		<div class="modal fade" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
 			aria-hidden="true">
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
@@ -99,7 +133,7 @@
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 							<span aria-hidden="true">&times;</span>
 						</button>
-						<!-- 16:9 aspect ratio -->
+						 16:9 aspect ratio 
 						<div class="embed-responsive embed-responsive-16by9">
 							<iframe class="embed-responsive-item" src="" id="video" allowscriptaccess="always"
 								allow="autoplay"></iframe>
@@ -108,7 +142,7 @@
 				</div>
 			</div>
 		</div>
-		<!-- Video Modal End -->
+--> <!-- Video Modal End -->
 
 		<div class="container-fluid py-5" id="about">
 
@@ -265,37 +299,43 @@
 					<img class="img-fluid w-100"
 						src="https://lh3.googleusercontent.com/p/AF1QipPoKhP1OrzDr5YGcueLbqMNU3nhCpX_GH3dER7B=s1360-w1360-h1020"
 						alt="">
-					<a href="https://lh3.googleusercontent.com/p/AF1QipPoKhP1OrzDr5YGcueLbqMNU3nhCpX_GH3dER7B=s1360-w1360-h1020" data-lightbox="gallery"><i class="fa fa-2x fa-plus text-white"></i></a>
+					<a href="https://lh3.googleusercontent.com/p/AF1QipPoKhP1OrzDr5YGcueLbqMNU3nhCpX_GH3dER7B=s1360-w1360-h1020"
+						data-lightbox="gallery"><i class="fa fa-2x fa-plus text-white"></i></a>
 				</div>
 				<div class="gallery-item">
 					<img class="img-fluid w-100"
 						src="https://getethnic.com/wp-content/uploads/2019/09/Punjabi-Wedding-Dress-for-Groom-1.jpg"
 						alt="">
-					<a href="https://getethnic.com/wp-content/uploads/2019/09/Punjabi-Wedding-Dress-for-Groom-1.jpg" data-lightbox="gallery"><i class="fa fa-2x fa-plus text-white"></i></a>
+					<a href="https://getethnic.com/wp-content/uploads/2019/09/Punjabi-Wedding-Dress-for-Groom-1.jpg"
+						data-lightbox="gallery"><i class="fa fa-2x fa-plus text-white"></i></a>
 				</div>
 				<div class="gallery-item">
 					<img class="img-fluid w-100"
 						src="https://lh3.googleusercontent.com/p/AF1QipO4upH01LzJhvJKNNlio-Njb5R5w0hfCjGuxLk8=s1360-w1360-h1020"
 						alt="">
-					<a href="https://lh3.googleusercontent.com/p/AF1QipO4upH01LzJhvJKNNlio-Njb5R5w0hfCjGuxLk8=s1360-w1360-h1020" data-lightbox="gallery"><i class="fa fa-2x fa-plus text-white"></i></a>
+					<a href="https://lh3.googleusercontent.com/p/AF1QipO4upH01LzJhvJKNNlio-Njb5R5w0hfCjGuxLk8=s1360-w1360-h1020"
+						data-lightbox="gallery"><i class="fa fa-2x fa-plus text-white"></i></a>
 				</div>
 				<div class="gallery-item">
 					<img class="img-fluid w-100"
 						src="https://www.studiomemorylane.com/wp-content/uploads/2019/06/Ethnic-Punjabi-wedding-couple-photography.jpg"
 						alt="">
-					<a href="https://www.studiomemorylane.com/wp-content/uploads/2019/06/Ethnic-Punjabi-wedding-couple-photography.jpg" data-lightbox="gallery"><i class="fa fa-2x fa-plus text-white"></i></a>
+					<a href="https://www.studiomemorylane.com/wp-content/uploads/2019/06/Ethnic-Punjabi-wedding-couple-photography.jpg"
+						data-lightbox="gallery"><i class="fa fa-2x fa-plus text-white"></i></a>
 				</div>
 				<div class="gallery-item">
 					<img class="img-fluid w-100"
 						src="https://lh3.googleusercontent.com/p/AF1QipOXZcFFBHF-MJWGPyXMrZaQh3DQDSiHrSJPxEm2=s1360-w1360-h1020"
 						alt="">
-					<a href="https://lh3.googleusercontent.com/p/AF1QipOXZcFFBHF-MJWGPyXMrZaQh3DQDSiHrSJPxEm2=s1360-w1360-h1020" data-lightbox="gallery"><i class="fa fa-2x fa-plus text-white"></i></a>
+					<a href="https://lh3.googleusercontent.com/p/AF1QipOXZcFFBHF-MJWGPyXMrZaQh3DQDSiHrSJPxEm2=s1360-w1360-h1020"
+						data-lightbox="gallery"><i class="fa fa-2x fa-plus text-white"></i></a>
 				</div>
 				<div class="gallery-item">
 					<img class="img-fluid w-100"
 						src="https://lh3.googleusercontent.com/p/AF1QipObqti6WkesLPTxoBMjHUgVNvL7B9zRJOvM4-Gr=s1360-w1360-h1020"
 						alt="">
-					<a href="https://lh3.googleusercontent.com/p/AF1QipObqti6WkesLPTxoBMjHUgVNvL7B9zRJOvM4-Gr=s1360-w1360-h1020" data-lightbox="gallery"><i class="fa fa-2x fa-plus text-white"></i></a>
+					<a href="https://lh3.googleusercontent.com/p/AF1QipObqti6WkesLPTxoBMjHUgVNvL7B9zRJOvM4-Gr=s1360-w1360-h1020"
+						data-lightbox="gallery"><i class="fa fa-2x fa-plus text-white"></i></a>
 				</div>
 			</div>
 		</div>
@@ -377,8 +417,7 @@
 					<div class="col-lg-4 col-md-6 mb-4 portfolio-item second">
 						<div class="position-relative mb-2">
 							<img class="img-fluid w-100 boder-orange" style="height: 350px;"
-								src="https://i.pinimg.com/736x/ac/cc/5b/accc5b5cbe188de706d3f1d870235d3d.jpg"
-								alt="">
+								src="https://i.pinimg.com/736x/ac/cc/5b/accc5b5cbe188de706d3f1d870235d3d.jpg" alt="">
 							<div class="bg-secondary text-center p-4">
 								<h4 class="mb-3">Mehak</h4>
 								<p class="text-uppercase">Delhi</p>
@@ -411,7 +450,8 @@
 					<div class="col-lg-4 col-md-6 mb-4 portfolio-item second">
 						<div class="position-relative mb-2">
 							<img class="img-fluid w-100 boder-orange" style="height: 350px;"
-								src="https://i.pinimg.com/originals/7c/44/52/7c445263d015a2e9f7df6647fd0fd1f2.jpg" alt="">
+								src="https://i.pinimg.com/originals/7c/44/52/7c445263d015a2e9f7df6647fd0fd1f2.jpg"
+								alt="">
 							<div class="bg-secondary text-center p-4">
 								<h4 class="mb-3">Reet</h4>
 								<p class="text-uppercase">Jalandhar</p>
@@ -443,7 +483,8 @@
 					<div class="col-lg-4 col-md-6 mb-4 portfolio-item second">
 						<div class="position-relative mb-2">
 							<img class="img-fluid w-100 boder-orange" style="height: 350px;"
-								src="https://thumbs.dreamstime.com/b/happy-indian-sikh-bride-groom-their-wedding-day-doing-cheers-happy-indian-sikh-bride-groom-wedding-day-271405363.jpg" alt="">
+								src="https://thumbs.dreamstime.com/b/happy-indian-sikh-bride-groom-their-wedding-day-doing-cheers-happy-indian-sikh-bride-groom-wedding-day-271405363.jpg"
+								alt="">
 							<div class="bg-secondary text-center p-4">
 								<h4 class="mb-3">Nimrat Kaur</h4>
 								<p class="text-uppercase">Sangrur</p>
@@ -562,6 +603,42 @@
 
 	<!-- Template Javascript -->
 	<script src="js/main.js"></script>
+	<script>
+		console.log("1-----")
+		document.getElementById('religion').addEventListener('change', function () {
+			const religion = this.value;
+			console.log("2-----")
+			if (religion) {
+				console.log("3-----")
+				fetch(`/getCastes?religion=${religion}`)
+					.then(response => response.json())
+					.then(data => {
+						console.log("4-----")
+						const casteSelect = document.getElementById('caste');
+						casteSelect.innerHTML = '<option value="">Select</option>'; // Reset options
+						data.forEach(caste => {
+							const option = document.createElement('option');
+							option.value = caste;
+							option.textContent = caste;
+							casteSelect.appendChild(option);
+						});
+					})
+					.catch(error => console.error('Error fetching castes:', error));
+			}
+		});
+
+		// Populate age options from 18 to 75 for both minAge and maxAge
+		const minAgeSelect = document.getElementById('minAge');
+		const maxAgeSelect = document.getElementById('maxAge');
+
+		for (let age = 18; age <= 75; age++) {
+			minAgeSelect.innerHTML += `<option value="${age}">${age}</option>`;
+			maxAgeSelect.innerHTML += `<option value="${age}">${age}</option>`;
+		}
+
+	</script>
+
+
 
 
 </body>

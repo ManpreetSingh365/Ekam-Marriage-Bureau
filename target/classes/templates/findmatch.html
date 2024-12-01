@@ -20,39 +20,33 @@
 						<h5 class="text-3xl font-bold selfWritter text-center dark:text-white">What you see in your
 							Dream Life Partner</h5>
 
-						<!-- Gender -->
-						<div class="mt-5">
-							<fieldset>
-								<legend class="sr-only">Gender</legend>
-								<label
-									class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Gender</label>
+
+						<!-- Flex for Religion and Caste selection -->
+						<div class="flex flex-wrap justify-between gap-4 mt-5">
+							<!-- Gender -->
+							<div class="flex-1 min-w-0 mt-2">
+								<label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">I'm Looking
+									for a
+									<super class="text-red-600 font-medium">*</super>
+								</label>
 								<p data-th-if="${#fields.hasErrors('gender')}" data-th-errors="*{gender}"
 									class="text-red-600"></p>
 
 								<div class="flex items-center mb-4 space-x-3">
-									<label
-										class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">
-										<input data-th-field="*{gender}" id="gender-option-1" type="radio" name="gender"
-											value="male" class="mr-3">
-										Male
-									</label>
-									<label
-										class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">
-										<input data-th-field="*{gender}" id="gender-option-2" type="radio" name="gender"
-											value="female" class="mr-3">
-										Female
-									</label>
+									<select data-th-field="*{gender}" id="gender" name="gender"
+										class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-sm p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+										<option value="female">Girl</option>
+										<option value="male">Boy</option>
+									</select>
 								</div>
-							</fieldset>
-						</div>
+							</div>
 
-						<!-- Flex for Religion and Caste selection -->
-						<div class="flex flex-wrap justify-between gap-4 mt-5">
 							<!-- Religion -->
 							<div class="flex-1 min-w-0 mx-2">
 								<label for="religion"
 									class="block mb-2 text-sm font-bold font-medium text-gray-900 dark:text-white">Religion
-									<super class="text-red-600 ml-1 text-lg font-medium">*</super></label>
+									<super class="text-red-600 ml-1 text-lg font-medium">*</super>
+								</label>
 								<p data-th-if="${#fields.hasErrors('religion')}" data-th-errors="*{religion}"
 									class="text-red-600"></p>
 								<select data-th-field="*{religion}" id="religion" name="religion"
@@ -81,58 +75,67 @@
 
 						<!-- Age & Height Section -->
 						<div class="flex flex-wrap justify-between gap-4 mt-10">
-						  <!-- Age -->
-						  <div class="mx-2 w-full sm:w-1/2 lg:w-auto space-y-4 border border-2 rounded-xl border-blue-700 hover:border-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-600 p-4">
-						    <label for="age" class="block mb-2 text-center text-sm font-medium text-gray-900 dark:text-white">
-						      Choose Age
-						    </label>
-						    <small> Min. may be 19 and Max. may be 55+</small>
-						    <p data-th-if="${#fields.hasErrors('minAge')}" data-th-errors="*{minAge}" class="text-red-600"></p>
-						    <p data-th-if="${#fields.hasErrors('maxAge')}" data-th-errors="*{maxAge}" class="text-red-600"></p>
+							<!-- Age -->
+							<div
+								class="mx-2 w-full sm:w-1/2 lg:w-auto space-y-4 border border-2 rounded-xl border-blue-700 hover:border-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-600 p-4">
+								<label for="age"
+									class="block mb-2 text-center text-sm font-medium text-gray-900 dark:text-white">
+									Choose Age
+								</label>
+								<small> Min. may be 19 and Max. may be 55+</small>
+								<p data-th-if="${#fields.hasErrors('minAge')}" data-th-errors="*{minAge}"
+									class="text-red-600"></p>
+								<p data-th-if="${#fields.hasErrors('maxAge')}" data-th-errors="*{maxAge}"
+									class="text-red-600"></p>
 
-						    <div class="flex space-x-6">
-						      <div>
-						        <input data-th-field="*{minAge}" type="text" id="minAge"
-						          class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-						          placeholder="Enter Minimum Age" />
-						      </div>
-						      <div class="p-2"><b>-- To --</b></div>
-						      <div>
-						        <input data-th-field="*{maxAge}" type="text" id="maxAge"
-						          class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-						          placeholder="Enter Maximum Age" />
-						      </div>
-						    </div>
-						  </div>
+								<div class="flex space-x-6">
+									<div>
+										<input data-th-field="*{minAge}" type="text" id="minAge"
+											class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+											placeholder="Enter Minimum Age" />
+									</div>
+									<div class="p-2"><b>-- To --</b></div>
+									<div>
+										<input data-th-field="*{maxAge}" type="text" id="maxAge"
+											class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+											placeholder="Enter Maximum Age" />
+									</div>
+								</div>
+							</div>
 
-						  <!-- Height -->
-						  <div class="mx-2 w-full sm:w-1/2 lg:w-auto space-y-4 border border-2 rounded-xl border-blue-700 hover:border-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-600 p-4">
-						    <label for="height" class="block mb-2 text-center text-sm font-medium text-gray-900 dark:text-white">
-						     Choose Height
-						    </label>
-						    <small> Height may vary 4 to 6.5 (in foot)</small>
-						    <p data-th-if="${#fields.hasErrors('minHeight')}" data-th-errors="*{minHeight}" class="text-red-600"></p>
-						    <p data-th-if="${#fields.hasErrors('maxHeight')}" data-th-errors="*{maxHeight}" class="text-red-600"></p>
+							<!-- Height -->
+							<div
+								class="mx-2 w-full sm:w-1/2 lg:w-auto space-y-4 border border-2 rounded-xl border-blue-700 hover:border-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-600 p-4">
+								<label for="height"
+									class="block mb-2 text-center text-sm font-medium text-gray-900 dark:text-white">
+									Choose Height
+								</label>
+								<small> Height may vary 4 to 6.5 (in foot)</small>
+								<p data-th-if="${#fields.hasErrors('minHeight')}" data-th-errors="*{minHeight}"
+									class="text-red-600"></p>
+								<p data-th-if="${#fields.hasErrors('maxHeight')}" data-th-errors="*{maxHeight}"
+									class="text-red-600"></p>
 
-						    <div class="flex space-x-2">
-						      <div>
-						        <input data-th-field="*{minHeight}" type="text" id="minHeight"
-						          class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-						          placeholder="Enter Minimum Height" />
-						      </div>
-						      <div class="p-2"><b>-- To --</b></div>
-						      <div>
-						        <input data-th-field="*{maxHeight}" type="text" id="maxHeight"
-						          class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-						          placeholder="Enter Maximum Height" />
-						      </div>
-						    </div>
-						  </div>
+								<div class="flex space-x-2">
+									<div>
+										<input data-th-field="*{minHeight}" type="text" id="minHeight"
+											class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+											placeholder="Enter Minimum Height" />
+									</div>
+									<div class="p-2"><b>-- To --</b></div>
+									<div>
+										<input data-th-field="*{maxHeight}" type="text" id="maxHeight"
+											class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+											placeholder="Enter Maximum Height" />
+									</div>
+								</div>
+							</div>
 						</div>
 
 						<div class="flex flex-wrap gap-4 mt-10">
 							<!-- Place of Living -->
 							<div class="flex-1 min-w-0 mx-2 mb-5">
+
 								<fieldset>
 									<legend class="sr-only">Place of Living<super
 											class="text-red-600 ml-1 text-lg font-medium">*</super>
@@ -143,7 +146,16 @@
 									<p data-th-if="${#fields.hasErrors('place')}" data-th-errors="*{place}"
 										class="text-red-600 flex"> </p>
 
-									<div class="flex items-center mb-4 space-x-3" id="place">
+									<div id="place">
+										<div class="flex items-center mb-4 space-x-3">
+											<select data-th-field="*{place}" id="place" name="place"
+												class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-sm p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+												<option name="place" value="">Select</option>
+												<option name="place" value="Indian">India</option>
+												<option name="place" value="nri">NRI</option>
+											</select>
+										</div>
+										<!--
 										<label
 											class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">
 											<input data-th-field="*{place}" id="place-option-1" type="radio"
@@ -157,7 +169,9 @@
 												name="place" value="nri" class="mr-3">
 											NRI
 										</label>
+-->
 									</div>
+
 								</fieldset>
 							</div>
 

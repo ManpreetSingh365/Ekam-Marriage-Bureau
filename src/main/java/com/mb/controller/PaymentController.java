@@ -30,6 +30,8 @@ import com.mb.controller.UserPaidBillingController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mb.helpers.AppConstants;
+
 @RestController
 public class PaymentController {
 
@@ -43,13 +45,14 @@ public class PaymentController {
 	private UserPaidBillingController userPaidBillingController;
 
 	private static final Logger logger = LoggerFactory.getLogger(PaymentController.class);
-	
+
 	@PostMapping("/create_order")
 //	@ResponseBody
 	public String createOrder(@RequestBody Map<String, Object> data) throws Exception {
 		int amt = Integer.parseInt(data.get("amount").toString());
 
-		RazorpayClient razorpayClient = new RazorpayClient("rzp_test_PceptBJlOEtHdK", "CAscuG55h1rc4skqP9wZzL27");
+		RazorpayClient razorpayClient = new RazorpayClient(AppConstants.rzp_key_id, AppConstants.rzp_key_secret);
+//		RazorpayClient razorpayClient = new RazorpayClient("rzp_test_PceptBJlOEtHdK", "CAscuG55h1rc4skqP9wZzL27");
 
 		JSONObject options = new JSONObject();
 		options.put("amount", amt * 100); // in paise
@@ -68,7 +71,7 @@ public class PaymentController {
 
 		try {
 //	        String secretKey = System.getenv("RAZORPAY_SECRET_KEY"); // Use environment variable for secret key
-			String secretKey = "CAscuG55h1rc4skqP9wZzL27";
+			String secretKey = AppConstants.rzp_key_secret;
 
 			if (paymentService.verifyPaymentSignature(paymentResponse, secretKey)) {
 				User user = (User) authentication.getPrincipal(); // Get the authenticated user
@@ -86,9 +89,9 @@ public class PaymentController {
 				if (paymentResponse.isSubscriptionValid()) {
 					user.setSubscriptionIsActive(true);
 					paymentResponse.setExpiryDate(paymentResponse.getExpiryDate());
-					userPaidBillingController.processSendUserPaidBilling(user, paymentResponse);
 					response.put("redirect", "true");
 					response.put("redirectUrl", "/paidSuccessfully");
+					userPaidBillingController.processSendUserPaidBilling(user, paymentResponse);
 				} else {
 					user.setSubscriptionIsActive(false);
 					response.put("redirect", "false");

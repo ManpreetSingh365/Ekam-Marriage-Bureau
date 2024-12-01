@@ -38,10 +38,29 @@ public interface UserRepo extends JpaRepository<User, Long> {
 			@Param("qualification") String qualification, @Param("occupation") String occupation);
 
 	@Query("SELECT u FROM app_user u WHERE ( u.gender = :gender ) AND " + "( u.religion = :religion ) AND "
+			+ "( u.age BETWEEN :minAge AND :maxAge ) AND " + "( u.place = :place )")
+	Page<User> findUsersByCustomCriteriaHome1(@Param("gender") String gender, @Param("religion") String religion,
+			@Param("minAge") int minAge, @Param("maxAge") int maxAge, @Param("place") String place, Pageable pageable);
+
+	@Query("SELECT u FROM app_user u WHERE ( u.gender = :gender ) AND " + "( u.religion = :religion ) AND "
+			+ "( u.caste = :caste ) AND " + "( u.age BETWEEN :minAge AND :maxAge ) AND " + "( u.place = :place )")
+	Page<User> findUsersByCustomCriteriaHome2(@Param("gender") String gender, @Param("religion") String religion,
+			@Param("caste") String caste, @Param("minAge") int minAge, @Param("maxAge") int maxAge,
+			@Param("place") String place, Pageable pageable);
+
+	@Query("SELECT u FROM app_user u WHERE ( u.gender = :gender ) AND " + "( u.religion = :religion ) AND "
+			+ "( u.age BETWEEN :minAge AND :maxAge ) AND " + "( u.height BETWEEN :minHeight AND :maxHeight ) AND "
+			+ "( u.marriedStatus = :marriedStatus ) AND " + "( u.place = :place )")
+	Page<User> findUsersByCustomCriteria1(@Param("gender") String gender, @Param("religion") String religion,
+			@Param("minAge") int minAge, @Param("maxAge") int maxAge, @Param("minHeight") double minHeight,
+			@Param("maxHeight") double maxHeight, @Param("marriedStatus") String marriedStatus,
+			@Param("place") String place, Pageable pageable);
+
+	@Query("SELECT u FROM app_user u WHERE ( u.gender = :gender ) AND " + "( u.religion = :religion ) AND "
 			+ "( u.caste = :caste ) AND " + "( u.age BETWEEN :minAge AND :maxAge ) AND "
 			+ "( u.height BETWEEN :minHeight AND :maxHeight ) AND " + "( u.marriedStatus = :marriedStatus ) AND "
 			+ "( u.place = :place )")
-	Page<User> findUsersByCustomCriteria(@Param("gender") String gender, @Param("religion") String religion,
+	Page<User> findUsersByCustomCriteria2(@Param("gender") String gender, @Param("religion") String religion,
 			@Param("caste") String caste, @Param("minAge") int minAge, @Param("maxAge") int maxAge,
 			@Param("minHeight") double minHeight, @Param("maxHeight") double maxHeight,
 			@Param("marriedStatus") String marriedStatus, @Param("place") String place, Pageable pageable);
@@ -55,6 +74,64 @@ public interface UserRepo extends JpaRepository<User, Long> {
 			@Param("minHeight") double minHeight, @Param("maxHeight") double maxHeight,
 			@Param("marriedStatus") String marriedStatus, @Param("place") String place,
 			@Param("qualification") String qualification, @Param("occupation") String occupation, Pageable pageable);
+
+	@Query("SELECT u FROM app_user u WHERE ( u.gender = :gender ) AND " + "( u.religion = :religion ) AND "
+			+ "( u.age BETWEEN :minAge AND :maxAge ) AND " + "( u.height BETWEEN :minHeight AND :maxHeight ) AND "
+			+ "( u.marriedStatus = :marriedStatus ) AND "
+			+ "( u.place = :place ) AND ( u.qualification = :qualification) AND " + "( u.occupation = :occupation)")
+	Page<User> findUsersWithoutCaste(@Param("gender") String gender, @Param("religion") String religion,
+			@Param("minAge") int minAge, @Param("maxAge") int maxAge, @Param("minHeight") double minHeight,
+			@Param("maxHeight") double maxHeight, @Param("marriedStatus") String marriedStatus,
+			@Param("place") String place, @Param("qualification") String qualification,
+			@Param("occupation") String occupation, Pageable pageable);
+
+	@Query("SELECT u FROM app_user u WHERE ( u.gender = :gender ) AND " + "( u.religion = :religion ) AND "
+			+ "( u.age BETWEEN :minAge AND :maxAge ) AND " + "( u.height BETWEEN :minHeight AND :maxHeight ) AND "
+			+ "( u.place = :place ) AND ( u.qualification = :qualification) AND " + "( u.occupation = :occupation)")
+	Page<User> findUsersWithoutCasteAndMarriedStatus(@Param("gender") String gender, @Param("religion") String religion,
+			@Param("minAge") int minAge, @Param("maxAge") int maxAge, @Param("minHeight") double minHeight,
+			@Param("maxHeight") double maxHeight, @Param("place") String place,
+			@Param("qualification") String qualification, @Param("occupation") String occupation, Pageable pageable);
+
+	@Query("SELECT u FROM app_user u WHERE ( u.gender = :gender ) AND " + "( u.religion = :religion ) AND "
+			+ "( u.age BETWEEN :minAge AND :maxAge ) AND " + "( u.height BETWEEN :minHeight AND :maxHeight ) AND "
+			+ "( u.place = :place ) AND " + "( u.occupation = :occupation)")
+	Page<User> findUsersWithoutCasteAndMarriedStatusAndQualification(@Param("gender") String gender,
+			@Param("religion") String religion, @Param("minAge") int minAge, @Param("maxAge") int maxAge,
+			@Param("minHeight") double minHeight, @Param("maxHeight") double maxHeight, @Param("place") String place,
+			@Param("occupation") String occupation, Pageable pageable);
+
+	@Query("SELECT u FROM app_user u WHERE ( u.gender = :gender ) AND " + "( u.religion = :religion ) AND "
+			+ "( u.age BETWEEN :minAge AND :maxAge ) AND " + "( u.height BETWEEN :minHeight AND :maxHeight ) AND "
+			+ "( u.place = :place )")
+	Page<User> findUsersWithoutCasteAndMarriedStatusAndQualificationAndOccupation(@Param("gender") String gender,
+			@Param("religion") String religion, @Param("minAge") int minAge, @Param("maxAge") int maxAge,
+			@Param("minHeight") double minHeight, @Param("maxHeight") double maxHeight, @Param("place") String place,
+			Pageable pageable);
+
+	@Query("SELECT u FROM app_user u WHERE " +
+		       "( :gender IS NULL OR u.gender = :gender ) AND " +
+		       "( :religion IS NULL OR u.religion = :religion ) AND " +
+		       "( :caste IS NULL OR u.caste = :caste ) AND " +
+		       "( u.age BETWEEN :minAge AND :maxAge ) AND " +
+		       "( u.height BETWEEN :minHeight AND :maxHeight ) AND " +
+		       "( :marriedStatus IS NULL OR u.marriedStatus = :marriedStatus ) AND " +
+		       "( :place IS NULL OR u.place = :place ) AND " +
+		       "( :qualification IS NULL OR u.qualification = :qualification ) AND " +
+		       "( :occupation IS NULL OR u.occupation = :occupation )")
+		Page<User> findUsersWithDynamicCriteria(
+		    @Param("gender") String gender,
+		    @Param("religion") String religion,
+		    @Param("caste") String caste,
+		    @Param("minAge") int minAge,
+		    @Param("maxAge") int maxAge,
+		    @Param("minHeight") double minHeight,
+		    @Param("maxHeight") double maxHeight,
+		    @Param("marriedStatus") String marriedStatus,
+		    @Param("place") String place,
+		    @Param("qualification") String qualification,
+		    @Param("occupation") String occupation,
+		    Pageable pageable);
 
 	@EntityGraph(attributePaths = { "userId", "gender", "religion", "caste", "age", "height", "marriedStatus", "place",
 			"qualification", "occupation" })

@@ -16,6 +16,15 @@ $ git remote add origin https://github.com/SoravRamgharia/mb.git
 $ git remote set-url origin https://github.com/SoravRamgharia/mb.git ... If need to re-add
 $ git push origin master
 $ git push origin master --verbose
+If ( 	
+interactive rebase in progress; onto 0d1ea26
+	Last commands done (2 commands done):
+   	pick 863a34b 19Sep2024MB
+   	pick 23c6087 second update
+)then 
+-> $ git rebase --continue
+$ git push origin master --force
+
 
 git remote add origin https://github.com/ManpreetSingh365/Innovative-Contact-Organizer.git
 git branch -M main
@@ -30,7 +39,7 @@ A		@	0	35.213.168.149	 	  		14400
 A		www	0	35.213.168.149		 		14400	
 ALIAS|CNAME	@	0	u0yiod55.up.railway.app	  		14400	
 
-From Render.com :----->
+From R :----->
 CNAME           www	0	ekam-marriage-bureau-8s8e.onrender.com  14400
 ALIAS		@ 	0	ekam-marriage-bureau-8s8e.onrender.com	14400
 A		@ 	0	216.24.57.1 				14400
@@ -58,6 +67,7 @@ MYSQL_HOST	mysql.railway.internal
 MYSQL_DB	railway
 MYSQL_PASSWORD  fxCsbHmhbcMUnFHMkiScgqDRNINDfQma
 
+BASE_URL
 
 https://innovative-contact-organizer.railway.internal/
 https://ico.up.railway.app/
@@ -90,16 +100,5 @@ docker-compose up
 
 
 
-
-
-Failed to commit changes
-
-Your account is on a limited plan. Please visit railway.app/account/plans for details.
-
-
-2024-11-11T12:09:32.891Z  WARN 1 --- [MarriageBureau] [           main] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2024-11-11T12:09:54.788Z  INFO 1 --- [MarriageBureau] [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2024-11-11T12:09:55.192Z ERROR 1 --- [MarriageBureau] [           main] j.LocalContainerEntityManagerFactoryBean : Failed to initialize JPA EntityManagerFactory: [PersistenceUnit: default] Unable to build Hibernate SessionFactory; nested exception is org.hibernate.tool.schema.spi.SchemaManagementException: Schema-validation: wrong column type encountered in column [review_id] in table [testimonials]; found [int4 (Types#INTEGER)], but expecting [bigint (Types#BIGINT)]
-2024-11-11T12:09:55.193Z  WARN 1 --- [MarriageBureau] [           main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'entityManagerFactory' defined in class path resource [org/springframework/boot/autoconfigure/orm/jpa/HibernateJpaConfiguration.class]: [PersistenceUnit: default] Unable to build Hibernate SessionFactory; nested exception is org.hibernate.tool.schema.spi.SchemaManagementException: Schema-validation: wrong column type encountered in column [review_id] in table [testimonials]; found [int4 (Types#INTEGER)], but expecting [bigint (Types#BIGINT)]
 
 

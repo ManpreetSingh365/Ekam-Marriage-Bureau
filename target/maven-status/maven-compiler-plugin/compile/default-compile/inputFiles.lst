@@ -16,6 +16,8 @@ D:\Main\Backend Framework\Spring Boot\MarriageBureau\src\main\java\com\mb\contro
 D:\Main\Backend Framework\Spring Boot\MarriageBureau\src\main\java\com\mb\controller\UserPaidBillingController.java
 D:\Main\Backend Framework\Spring Boot\MarriageBureau\src\main\java\com\mb\controller\UserRegisterController.java
 D:\Main\Backend Framework\Spring Boot\MarriageBureau\src\main\java\com\mb\controller\UsersAPIController.java
+D:\Main\Backend Framework\Spring Boot\MarriageBureau\src\main\java\com\mb\domain\USER_ROLE.java
+D:\Main\Backend Framework\Spring Boot\MarriageBureau\src\main\java\com\mb\entities\Admin.java
 D:\Main\Backend Framework\Spring Boot\MarriageBureau\src\main\java\com\mb\entities\ErrorResponse.java
 D:\Main\Backend Framework\Spring Boot\MarriageBureau\src\main\java\com\mb\entities\PaymentResponse.java
 D:\Main\Backend Framework\Spring Boot\MarriageBureau\src\main\java\com\mb\entities\Testimonials.java
@@ -52,5 +54,6 @@ D:\Main\Backend Framework\Spring Boot\MarriageBureau\src\main\java\com\mb\servic
 D:\Main\Backend Framework\Spring Boot\MarriageBureau\src\main\java\com\mb\services\UserService.java
 D:\Main\Backend Framework\Spring Boot\MarriageBureau\src\main\java\com\mb\subscription\SubscriptionChecker.java
 D:\Main\Backend Framework\Spring Boot\MarriageBureau\src\main\java\com\mb\subscription\SubscriptionManager.java
+D:\Main\Backend Framework\Spring Boot\MarriageBureau\src\main\java\com\mb\utils\UniqueEmailGenerator.java
 D:\Main\Backend Framework\Spring Boot\MarriageBureau\src\main\java\com\mb\validators\FileValidator.java
 D:\Main\Backend Framework\Spring Boot\MarriageBureau\src\main\java\com\mb\validators\ValidFile.java

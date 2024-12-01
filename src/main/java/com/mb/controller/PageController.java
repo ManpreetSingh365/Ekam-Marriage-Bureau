@@ -35,6 +35,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.servlet.http.HttpServletRequest;
+
+import com.mb.domain.USER_ROLE;
 import com.mb.entities.Testimonials;
 import com.mb.entities.User;
 import org.springframework.web.servlet.view.RedirectView; // Import this class
@@ -42,19 +44,23 @@ import org.springframework.web.servlet.view.RedirectView; // Import this class
 @Controller
 public class PageController {
 
-
 	@Autowired
 	private UserService userService;
 
-	// Open Home Page Handler.....
-	@RequestMapping("/")
-	public String startFromHere() {
-//		return "redirect:/findmatch";
-		return "index";
-	}
+	@RequestMapping(value = { "/", "/index" })
+	public String index(Model model) {
 
-	@RequestMapping("/index")
-	public String index() {
+		UserFormDetails userFormDetails = new UserFormDetails();
+		model.addAttribute("userFormDetails", userFormDetails);
+
+		// Fetch distinct relisions, castes categories from the database
+		List<String> religions = userService.getAllDistinctReligions();
+		List<String> castes = userService.getAllDistinctCastes(userFormDetails.getReligion());
+
+		model.addAttribute("religions", religions);
+		model.addAttribute("castes", castes);
+		System.out.println(religions);
+
 		return "index";
 	}
 
@@ -77,6 +83,7 @@ public class PageController {
 	public RedirectView Gallery() {
 		return new RedirectView("/index#gallery");
 	}
+
 	@RequestMapping("/contact-us")
 	public RedirectView ContactUs() {
 		return new RedirectView("/index#rsvp");
@@ -101,6 +108,8 @@ public class PageController {
 		model.addAttribute("DIAMOND_PLAN_PRICE", AppConstants.DIAMOND_PLAN_PRICE);
 		model.addAttribute("PLATINUM_PLAN_PRICE", AppConstants.PLATINUM_PLAN_PRICE);
 
+		model.addAttribute("rzp_key_id", "rzp_live_xko5HzmXhUOjwN");
+		model.addAttribute("rzp_key_secret", "n2xolVPLJ88zOuCyrmbAnt73");
 //	    List<Map<String, Object>> plans = new ArrayList<>();
 //	    
 //	    // Adding Gold Plan
@@ -171,4 +180,5 @@ public class PageController {
 
 		return "register";
 	}
+
 }

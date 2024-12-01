@@ -4442,11 +4442,13 @@ input[type="button"].btn-block {
 }
 
 .navbar {
-	position: relative;
+	position: fixed;
+	/* Fix the navbar at the top */
+	top: 0;
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
-	height: 5rem;
+	height: 4rem;
 	justify-content: space-between;
 	padding: 0.5rem 1rem;
 }
@@ -4456,11 +4458,13 @@ input[type="button"].btn-block {
 	font-weight: bold;
 	border-bottom: 2px solid #E47A2E;
 	border-radius: 5px 5px 0 0;
+
 	/* Rounds the top-left and top-right corners */
 }
 
 #navbarTemp {
-	opacity: 0.8;
+	opacity: 1;
+
 
 }
 
@@ -4473,6 +4477,7 @@ input[type="button"].btn-block {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
+
 	justify-content: space-between;
 }
 
@@ -4484,11 +4489,13 @@ input[type="button"].btn-block {
 	font-size: 1.25rem;
 	line-height: inherit;
 	white-space: nowrap;
+
 }
 
 .navbar-brand:hover,
 .navbar-brand:focus {
 	text-decoration: none;
+
 }
 
 .navbar-nav {
@@ -4498,6 +4505,7 @@ input[type="button"].btn-block {
 	margin-bottom: 0;
 
 	list-style: none;
+
 }
 
 .navbar-nav .nav-link {
@@ -4520,6 +4528,7 @@ input[type="button"].btn-block {
 	flex-basis: 100%;
 	flex-grow: 1;
 	align-items: center;
+	height: 4rem;
 }
 
 .navbar-toggler {
@@ -4895,6 +4904,21 @@ input[type="button"].btn-block {
 .navbar-dark .navbar-text a:hover,
 .navbar-dark .navbar-text a:focus {
 	color: #fff;
+}
+
+.collapse.show {
+	background-color: rgba(0, 0, 0, 0.9);
+	z-index: 1050;
+	position: absolute;
+	width: 100%;
+	left: 0;
+	top: 4rem;
+	padding: 1rem 0;
+	height: auto;
+}
+
+.navbar-collapse {
+	transition: all 0.3s ease-in-out;
 }
 
 .card {
@@ -6451,6 +6475,7 @@ a.close.disabled {
 
 .carousel {
 	position: relative;
+	margin-top: 8vh;
 }
 
 .carousel.pointer-event {
@@ -8244,7 +8269,7 @@ button.bg-dark:focus {
 
 .ml-4,
 .mx-4 {
-	margin-left: 1.5rem !important;
+	margin-left: 1rem !important;
 }
 
 .m-5 {
@@ -10970,6 +10995,92 @@ a.text-dark:focus {
 @media (max-width: 767.98px) {
 	#event .border-right {
 		border-right: none !important;
+	}
+}
+
+
+/* General responsiveness */
+.carousel-caption {
+	padding: 1rem;
+}
+
+@media (max-width: 768px) {
+
+	/* Target mobile devices */
+	.carousel-caption form label {
+		text-align: left;
+		/* Align text to the start (left) */
+		display: block;
+		/* Ensure label spans the full width */
+		margin-bottom: 0.3rem;
+		/* Add some spacing below the label */
+	}
+}
+
+/* Reduce font sizes and spacing for mobile */
+@media (max-width: 768px) {
+	.carousel-caption h1 {
+		font-size: 1.8rem;
+		/* Smaller headline */
+	}
+
+	.carousel-caption h3 {
+		font-size: 1rem;
+		/* Smaller subheadline */
+		margin-bottom: 1rem;
+		/* Less spacing */
+	}
+
+	.carousel-caption form .form-group {
+		margin-bottom: 1rem;
+		/* Reduce form spacing */
+	}
+
+	.carousel-caption form .form-control {
+		font-size: 0.9rem;
+		/* Smaller inputs */
+		padding: 0.4rem;
+		/* Compact padding */
+	}
+
+	.carousel-caption button {
+		padding: 0.6rem 1.5rem;
+		/* Smaller button size */
+		font-size: 0.9rem;
+		/* Adjust button font size */
+	}
+}
+
+/* Further refine styles for very small screens */
+@media (max-width: 576px) {
+	.carousel-caption {
+		max-width: 100%;
+		/* Reduce overall width */
+	}
+
+	.carousel-caption h1 {
+		font-size: 1.5rem;
+		/* Even smaller headline */
+	}
+
+	.carousel-caption h3 {
+		font-size: 0.9rem;
+		/* Smaller subheadline */
+	}
+
+	.carousel-caption .form-group {
+		flex: 0 0 100%;
+		/* Stack form elements */
+	}
+
+	.carousel-caption form .form-control {
+		width: 100%;
+		/* Full-width inputs */
+	}
+
+	.carousel-caption button {
+		width: 100%;
+		/* Full-width button */
 	}
 }
 

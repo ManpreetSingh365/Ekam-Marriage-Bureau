@@ -45,7 +45,9 @@
 				</div>
 -->
 
-				<div class="flex justify-between container text-center" th:unless="${isLoginProfile}">
+
+					<!-- User Navigation ( Forward & Next ) -->
+<!--				<div class="flex justify-between container text-center" th:unless="${isLoginProfile}">
 					<div>
 						<a th:if="${userId > 1}" th:href="@{/user/{userId}(userId=${userId-1})}" type="button"
 							class="text-center bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 text-white hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 rounded-lg text-md px-8 py-2.5">
@@ -68,7 +70,7 @@
 				<div class="text-center mt-5">
 					<span>Current User ID: [[${userId}]] / [[${totalUsers}]]</span>
 				</div>
-
+-->
 				<div data-th-replace="~{message::messagebox}"></div>
 				<!-- User Image -->
 				<div id="default-carousel" class="rounded-lg shadow relative w-full max-h-96 p-3" data-carousel="slide">
@@ -80,11 +82,6 @@
 								onerror="this.onerror=null; this.src='https://manpreetsingh.vercel.app/_next/image?url=%2FImage-removebg.png&w=1080&q=75';"
 								class="w-full h-full object-cover rounded-lg shadow" alt="User Image" />
 						</div>
-
-						<!--						<img th:src="${loggedInUser.picture}"
-												onerror="this.onerror=null; this.src='https://manpreetsingh.vercel.app/_next/image?url=%2FImage-removebg.png&w=1080&q=75';"
-												class="w-8 h-8 rounded-full" alt="user photo">
--->
 					</div>
 					<!-- Slider indicators -->
 					<div class="absolute z-30 flex -translate-x-1/2 bottom-5 left-1/2 space-x-3 rtl:space-x-reverse">
@@ -158,7 +155,7 @@
 
 					<!-- User Bio Button -->
 					<div class="mt-4">
-						<div>
+						<div th:if="${loggedInUser != null && loggedInUser.hasAnyRole('ROLE_ADMIN', 'ROLE_EMPLOYEE')}">
 							<div th:if="${user.subscriptionIsActive}"
 								class="text-white bg-green-800 hover:bg-green-900 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-sm px-4 py-2 w-50 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-blue-800">
 								<span class="font-bold"> Subscription:
@@ -566,19 +563,27 @@
 							class="flex-1 min-w-20  p-3 border border-2 rounded-xl border-blue-300 hover:border-blue-700 focus:ring-2 focus:outline-none focus:ring-blue-600">
 							<label
 								class="text-base text-sm font-bold text-gray-900 dark:text-white">PrimaryNumber:</label>
-							<span th:text="${user.phoneNumber1}" th:if="${loggedInUser.getEmail() == adminEmail}"
+							<span th:text="${user.phoneNumber1}" th:if="${loggedInUser != null && loggedInUser.hasAnyRole('ROLE_ADMIN', 'ROLE_EMPLOYEE')}"
 								class="text-sm uppercase text-gray-600 dark:text-white">phoneNumber1</span>
-							<span th:text="${user.phoneNumber1}" th:if="${loggedInUser.getEmail() != adminEmail}"
-								class="blur-sm text-sm uppercase text-gray-600 dark:text-white">phoneNumber1</span>
+								
+							<span th:text="${user.phoneNumber1}" th:if="${loggedInUser != null && loggedInUser.hasRole('ROLE_USER')}"
+								class="blur-sm text-sm uppercase text-gray-600 dark:text-white">phoneNumber1</span>								
 						</div>
 						<div
 							class="flex-1 min-w-20  p-3 border border-2 rounded-xl border-blue-300 hover:border-blue-700 focus:ring-2 focus:outline-none focus:ring-blue-600">
 							<label
 								class="text-base text-sm font-bold text-gray-900 dark:text-white">SecondaryNumber:</label>
-							<span th:text="${user.phoneNumber2}" th:if="${loggedInUser.getEmail() == adminEmail}"
+							<span th:text="${user.phoneNumber2}" th:if="${loggedInUser != null && loggedInUser.hasAnyRole('ROLE_ADMIN', 'ROLE_EMPLOYEE')}"
 								class="text-sm uppercase text-gray-600 dark:text-white">phoneNumber2</span>
-							<span th:text="${user.phoneNumber2}" th:if="${loggedInUser.getEmail() != adminEmail}"
+							<span th:text="${user.phoneNumber2}" th:if="${loggedInUser != null && loggedInUser.hasRole('ROLE_USER')}"
 								class="blur-sm text-sm uppercase text-gray-600 dark:text-white">phoneNumber2</span>
+						</div>
+						<div
+							class="flex-1 min-w-20  p-3 border border-2 rounded-xl border-blue-300 hover:border-blue-700 focus:ring-2 focus:outline-none focus:ring-blue-600">
+							<label
+								class="text-base text-sm font-bold text-gray-900 dark:text-white">Email:</label>
+							<span th:text="${user.email}" th:if="${loggedInUser != null && loggedInUser.hasAnyRole('ROLE_ADMIN', 'ROLE_EMPLOYEE')}"
+								class="text-sm text-gray-600 dark:text-white">formFilledBy</span>
 						</div>
 						<div
 							class="flex-1 min-w-20  p-3 border border-2 rounded-xl border-blue-300 hover:border-blue-700 focus:ring-2 focus:outline-none focus:ring-blue-600">

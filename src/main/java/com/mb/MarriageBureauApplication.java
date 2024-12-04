@@ -76,7 +76,7 @@ public class MarriageBureauApplication {
 		adminUser.setImagesList(adminImagesList);
 		adminUser.setGender("male");
 		adminUser.setReligion("sikh");
-		adminUser.setCaste("ramgharia");
+		adminUser.setCaste("ramgarhia");
 		adminUser.setDateOfBirth("16/11/2000");
 		adminUser.setHeight(6.2);
 		adminUser.setPlace("indian");
@@ -118,7 +118,7 @@ public class MarriageBureauApplication {
 		mbUser.setImagesList(mbImagesList);
 		mbUser.setGender("male");
 		mbUser.setReligion("sikh");
-		mbUser.setCaste("ramgharia");
+		mbUser.setCaste("ramgarhia");
 		mbUser.setDateOfBirth("16/11/2000");
 		mbUser.setHeight(6.2);
 		mbUser.setPlace("indian");
@@ -161,7 +161,7 @@ public class MarriageBureauApplication {
 		empUser.setImagesList(empImagesList);
 		empUser.setGender("male");
 		empUser.setReligion("sikh");
-		empUser.setCaste("ramgharia");
+		empUser.setCaste("ramgarhia");
 		empUser.setDateOfBirth("16/11/2000");
 		empUser.setHeight(6.2);
 		empUser.setPlace("indian");

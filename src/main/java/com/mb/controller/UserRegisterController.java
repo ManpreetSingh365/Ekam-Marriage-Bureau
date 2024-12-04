@@ -33,6 +33,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Null;
 
 import com.mb.utils.UniqueEmailGenerator;
+import java.util.Random;
 
 @Controller
 public class UserRegisterController {
@@ -168,14 +169,18 @@ public class UserRegisterController {
 		User user = new User();
 		UserForm userForm = (UserForm) session.getAttribute("userForm");
 
+
 		if (userForm != null && userForm.getEmail() != null && !userForm.getEmail().isEmpty()) {
 		    user.setEmail(userForm.getEmail());
 		    user.setPassword(userForm.getPassword());
 		} else {
+//			Random random = new Random();
+//			int randomNumber = random.nextInt(100000, 999999);
+//			String userPassword = "emp@" + randomNumber;
 		    // If userForm is null or email is empty, generate a unique email
 		    String uniqueEmail = uniqueEmailGenerator.generateUniqueEmail();
 		    user.setEmail(uniqueEmail); // Set the generated unique email
-		    user.setPassword("emp@321");
+		    user.setPassword("emb@321");
 		}
 
 		user.setName(userFormDetails.getYourName());

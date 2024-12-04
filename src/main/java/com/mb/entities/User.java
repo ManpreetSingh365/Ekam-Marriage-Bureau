@@ -192,6 +192,11 @@ public class User implements UserDetails {
 		return this.role;
 	}
 
+	// Method to get role as a String
+	public String getRoleAsString() {
+		return this.role != null ? this.role.name() : null; // Convert enum to String
+	}
+
 	public boolean hasRole(String roleName) {
 		return this.role != null && this.role.name().equals(roleName);
 	}

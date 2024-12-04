@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.mb.dto.UserProfileDto;
 import com.mb.entities.User;
 
 public interface UserService {
@@ -48,5 +49,7 @@ public interface UserService {
 	public List<String> getAllDistinctOccupation();
 
 	public boolean isEmailUnique(String email);
+
+//	public UserProfileDto getUserProfileById(Long userId);
 
 }

@@ -11,15 +11,46 @@
 
 	<div id="content">
 
-		<div class="text-center flex flex-col p-5 ">
-			<h3 class="text-3xl font-bold text-gray-900 dark:text-white">
-				User Profile
-			</h3>
-			<span class="text-sm sm:text-md text-gray-500 dark:text-white-300">
-				( Below has All Right Data about the User )
-			</span>
+		<div class="text-center flex flex-row justify-between p-5 ">
+
+			<div></div>
+			<div>
+				<h3 class="text-3xl font-bold text-gray-900 dark:text-white">
+					User Profile
+				</h3>
+				<span class="text-sm sm:text-md text-gray-500 dark:text-white-300">
+					( Below has All Right Data about the User )
+				</span>
+			</div>
+
+			<div class="text-center">
+				<!-- Share Button Section -->
+				<div class="flex justify-center mt-6">
+					<!--					<a th:href="@{'/generateShareLink/' + ${user.userId}}">
+						<button onclick="copyLink()"
+							class="px-6 py-2 bg-blue-500 text-white font-semibold rounded-full shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-200 ease-in-out">
+							Share Profile <i class="fas fa-share-alt mr-2"></i>
+						</button>
+					</a>
+-->
+					<button id="generateProfileShareLink"
+						class="px-6 py-2 bg-blue-500 text-white font-semibold rounded-full shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-200 ease-in-out">
+						Share Profile <i class="fas fa-share-alt mr-2"></i>
+					</button>
+				</div>
+
+				<!-- Hidden input field to store the generated link -->
+				<input id="shareableLink" type="text" class="hidden" readonly />
+
+				<!-- Message after copying link -->
+				<p id="copyMessage" class="mt-4 text-green-500 text-lg font-semibold hidden text-center">
+					Link copied!
+				</p>
+			</div>
 		</div>
-		<div id="userprofile"  
+
+
+		<div id="userprofile"
 			class="flex flex-row md:flex-col flex-now  w-full h-full border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
 
 
@@ -46,8 +77,8 @@
 -->
 
 
-					<!-- User Navigation ( Forward & Next ) -->
-<!--				<div class="flex justify-between container text-center" th:unless="${isLoginProfile}">
+				<!-- User Navigation ( Forward & Next ) -->
+				<!--				<div class="flex justify-between container text-center" th:unless="${isLoginProfile}">
 					<div>
 						<a th:if="${userId > 1}" th:href="@{/user/{userId}(userId=${userId-1})}" type="button"
 							class="text-center bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 text-white hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 rounded-lg text-md px-8 py-2.5">
@@ -563,27 +594,32 @@
 							class="flex-1 min-w-20  p-3 border border-2 rounded-xl border-blue-300 hover:border-blue-700 focus:ring-2 focus:outline-none focus:ring-blue-600">
 							<label
 								class="text-base text-sm font-bold text-gray-900 dark:text-white">PrimaryNumber:</label>
-							<span th:text="${user.phoneNumber1}" th:if="${loggedInUser != null && loggedInUser.hasAnyRole('ROLE_ADMIN', 'ROLE_EMPLOYEE')}"
+							<span th:text="${user.phoneNumber1}"
+								th:if="${loggedInUser != null && loggedInUser.hasAnyRole('ROLE_ADMIN', 'ROLE_EMPLOYEE')}"
 								class="text-sm uppercase text-gray-600 dark:text-white">phoneNumber1</span>
-								
-							<span th:text="${user.phoneNumber1}" th:if="${loggedInUser != null && loggedInUser.hasRole('ROLE_USER')}"
-								class="blur-sm text-sm uppercase text-gray-600 dark:text-white">phoneNumber1</span>								
+
+							<span th:text="${user.phoneNumber1}"
+								th:if="${loggedInUser != null && loggedInUser.hasRole('ROLE_USER')}"
+								class="blur-sm text-sm uppercase text-gray-600 dark:text-white">phoneNumber1</span>
 						</div>
 						<div
 							class="flex-1 min-w-20  p-3 border border-2 rounded-xl border-blue-300 hover:border-blue-700 focus:ring-2 focus:outline-none focus:ring-blue-600">
 							<label
 								class="text-base text-sm font-bold text-gray-900 dark:text-white">SecondaryNumber:</label>
-							<span th:text="${user.phoneNumber2}" th:if="${loggedInUser != null && loggedInUser.hasAnyRole('ROLE_ADMIN', 'ROLE_EMPLOYEE')}"
+							<span th:text="${user.phoneNumber2}"
+								th:if="${loggedInUser != null && loggedInUser.hasAnyRole('ROLE_ADMIN', 'ROLE_EMPLOYEE')}"
 								class="text-sm uppercase text-gray-600 dark:text-white">phoneNumber2</span>
-							<span th:text="${user.phoneNumber2}" th:if="${loggedInUser != null && loggedInUser.hasRole('ROLE_USER')}"
+							<span th:text="${user.phoneNumber2}"
+								th:if="${loggedInUser != null && loggedInUser.hasRole('ROLE_USER')}"
 								class="blur-sm text-sm uppercase text-gray-600 dark:text-white">phoneNumber2</span>
 						</div>
-						<div
+						<div th:if="${loggedInUser != null && loggedInUser.hasAnyRole('ROLE_ADMIN', 'ROLE_EMPLOYEE')}"
 							class="flex-1 min-w-20  p-3 border border-2 rounded-xl border-blue-300 hover:border-blue-700 focus:ring-2 focus:outline-none focus:ring-blue-600">
-							<label
-								class="text-base text-sm font-bold text-gray-900 dark:text-white">Email:</label>
-							<span th:text="${user.email}" th:if="${loggedInUser != null && loggedInUser.hasAnyRole('ROLE_ADMIN', 'ROLE_EMPLOYEE')}"
-								class="text-sm text-gray-600 dark:text-white">formFilledBy</span>
+							<label class="text-base text-sm font-bold text-gray-900 dark:text-white">Email:</label>
+							<span th:text="${user.email}" class="text-sm text-gray-600 dark:text-white">Email</span>
+							<label class="text-base text-sm font-bold text-gray-900 dark:text-white">Password:</label>
+							<span th:text="${user.password}"
+								class="text-sm text-gray-600 dark:text-white">password</span>
 						</div>
 						<div
 							class="flex-1 min-w-20  p-3 border border-2 rounded-xl border-blue-300 hover:border-blue-700 focus:ring-2 focus:outline-none focus:ring-blue-600">
@@ -593,7 +629,6 @@
 								class="text-sm uppercase text-gray-600 dark:text-white">formFilledBy</span>
 						</div>
 					</div>
-
 				</div>
 				<button type="button"
 					class="container text-center  bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 text-white hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 rounded-lg text-md px-8 py-2.5 ">
@@ -611,6 +646,43 @@
 
 	<script>
 		console.log("User Profile Page");
+		
+		// Fetch the shareable link from the backend
+		document.getElementById('generateProfileShareLink').addEventListener('click', function () {
+		    console.log("Button clicked!");
+
+		    // Assuming userId is available in a hidden input field or as a global variable
+		    const userId = [[${user.userId}]];
+			console.log("User ID:", userId);
+
+		    fetch(`/generateShareLink/${userId}`)
+		        .then(response => {
+		            console.log("Response received from backend for ShareProfile");
+		            return response.text(); // Ensure we're getting plain text
+		        })
+		        .then(shareableLink => {
+		            console.log("Shareable link:", shareableLink);
+
+		            document.getElementById('shareableLink').value = shareableLink;
+
+		            const message = document.getElementById("copyMessage");
+		            message.classList.remove("hidden");
+
+		            navigator.clipboard.writeText(shareableLink).then(() => {
+		                console.log("Link copied to clipboard!");
+		            }).catch(err => {
+		                console.error("Error copying link:", err);
+		            });
+
+		            setTimeout(() => {
+		                message.classList.add("hidden");
+		            }, 2000);
+		        })
+		        .catch(error => {
+		            console.error('Error fetching the shareable link:', error);
+		        });
+		});
+
 
 		var singleUploadForm = document.querySelector('#singleUploadForm');
 		var singleFileUploadInput = document.querySelector('#singleFileUploadInput');
@@ -692,6 +764,7 @@
 				statusXhr.send();
 			}, 1000); // Poll every 1 seconds
 		}
+
 
 	</script>
 

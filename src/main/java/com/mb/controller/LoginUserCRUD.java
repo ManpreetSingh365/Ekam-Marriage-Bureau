@@ -11,6 +11,8 @@ import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.mb.domain.USER_ROLE;
+import com.mb.dto.UserProfileDto;
 import com.mb.entities.PaymentResponse;
 import com.mb.entities.User;
 import com.mb.forms.UserForm;
@@ -35,6 +38,7 @@ import com.mb.helpers.MessageType;
 import com.mb.helpers.UserDefaultValues;
 import com.mb.services.ImageService;
 import com.mb.services.PaymentService;
+import com.mb.services.TokenService;
 import com.mb.services.UserService;
 
 import jakarta.servlet.http.HttpSession;
@@ -56,6 +60,12 @@ public class LoginUserCRUD {
 
 	@Autowired
 	private PaymentService paymentService;
+
+	@Autowired
+	private TokenService tokenService;
+
+	@Value("${server.baseUrl}")
+	private String BASE_URL;
 
 	// Showing Particular User Details.....
 	@RequestMapping("/user/{userId}")
@@ -133,7 +143,8 @@ public class LoginUserCRUD {
 			System.out.println("response: " + response);
 			model.addAttribute("paymentResponse", response);
 		}
-//		if (paymentResponse.isEmpty())
+
+		// if (paymentResponse.isEmpty())
 //			System.out.println("paymentResponse isEmpty(): " + paymentResponse);
 //
 //		if (paymentResponse.isPresent())
@@ -499,6 +510,78 @@ public class LoginUserCRUD {
 		userService.updateUser(userData);
 
 		return "redirect:/user/userlist";
+	}
+
+	// Share Profile to anyone-------->
+	// Endpoint for generating a shareable link with a token
+	@GetMapping("/generateShareLink/{userId}")
+	public ResponseEntity<String> generateShareLink(@PathVariable Long userId) {
+		// Generate the token for the given userId
+		String token = tokenService.generateToken(userId);
+
+		System.out.println("Generated Token: " + token);
+
+		// Construct the URL for sharing
+		String shareableLink = BASE_URL + "/shareprofile/" + userId + "/" + token;
+
+		// Return the generated link as a response
+		return ResponseEntity.ok(shareableLink);
+	}
+
+	@RequestMapping("/shareprofile/{userId}/{token}")
+	public String getShareableUserProfile(@PathVariable Long userId, @PathVariable String token, Model model) {
+		System.out.println("userId of User: " + userId);
+
+		// Validate the token
+		if (!tokenService.isValidToken(userId, token)) {
+			return "NotAuthorizedAccess"; // Forbidden if token is invalid
+		}
+
+		// Retrieve the user profile by userId
+		Optional<User> userOptional = userService.getUserById(userId);
+
+		// Check if user exists
+		if (userOptional.isPresent()) {
+			User userData = userOptional.get(); // Retrieve user data
+
+			System.out.println("User Data: " + userData);
+
+			// Handle payment response, if available
+			if (userData.getPaymentResponse() != null) {
+				PaymentResponse paymentResponse = userData.getPaymentResponse();
+				System.out.println("Payment Response: " + paymentResponse);
+				System.out.println("Razorpay Order ID: " + paymentResponse.getRazorpayOrderId());
+				System.out.println("Razorpay Payment ID: " + paymentResponse.getRazorpayPaymentId());
+				System.out.println("Razorpay Signature: " + paymentResponse.getRazorpaySignature());
+			}
+
+			// Check if payment response exists in the payment service
+			Optional<PaymentResponse> paymentResponseOptional = paymentService.getUserById(userData.getUserId());
+
+			if (paymentResponseOptional.isEmpty()) {
+				System.out.println("No payment response found for user: " + userData.getUserId());
+				model.addAttribute("paymentResponse", "empty");
+			} else {
+				PaymentResponse paymentResponse = paymentResponseOptional.get();
+				System.out.println("Payment Response found: " + paymentResponse);
+				model.addAttribute("paymentResponse", paymentResponse);
+			}
+
+			// Add user and related data to the model
+			model.addAttribute("user", userData);
+			model.addAttribute("userImages", userData.getImagesList());
+			model.addAttribute("isLoginProfile", false); // Since it's a shareable profile, this is false
+
+			// Add total number of users
+			int totalUsers = userService.getAllUsers().size();
+			model.addAttribute("totalUsers", totalUsers);
+
+			return "User/userprofile"; // Return the user profile page
+
+		} else {
+			// If no user is found for the provided userId
+			return "matchedusernotfound"; // User not found page
+		}
 	}
 
 }

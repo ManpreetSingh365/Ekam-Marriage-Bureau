@@ -17,6 +17,7 @@ D:\Main\Backend Framework\Spring Boot\MarriageBureau\src\main\java\com\mb\contro
 D:\Main\Backend Framework\Spring Boot\MarriageBureau\src\main\java\com\mb\controller\UserRegisterController.java
 D:\Main\Backend Framework\Spring Boot\MarriageBureau\src\main\java\com\mb\controller\UsersAPIController.java
 D:\Main\Backend Framework\Spring Boot\MarriageBureau\src\main\java\com\mb\domain\USER_ROLE.java
+D:\Main\Backend Framework\Spring Boot\MarriageBureau\src\main\java\com\mb\dto\UserProfileDto.java
 D:\Main\Backend Framework\Spring Boot\MarriageBureau\src\main\java\com\mb\entities\Admin.java
 D:\Main\Backend Framework\Spring Boot\MarriageBureau\src\main\java\com\mb\entities\ErrorResponse.java
 D:\Main\Backend Framework\Spring Boot\MarriageBureau\src\main\java\com\mb\entities\PaymentResponse.java
@@ -46,11 +47,13 @@ D:\Main\Backend Framework\Spring Boot\MarriageBureau\src\main\java\com\mb\servic
 D:\Main\Backend Framework\Spring Boot\MarriageBureau\src\main\java\com\mb\services\impl\ImageServiceImpl.java
 D:\Main\Backend Framework\Spring Boot\MarriageBureau\src\main\java\com\mb\services\impl\SecurityCustomUserDetailService.java
 D:\Main\Backend Framework\Spring Boot\MarriageBureau\src\main\java\com\mb\services\impl\TestimonialsServiceImpl.java
+D:\Main\Backend Framework\Spring Boot\MarriageBureau\src\main\java\com\mb\services\impl\TokenServiceImpl.java
 D:\Main\Backend Framework\Spring Boot\MarriageBureau\src\main\java\com\mb\services\impl\UserServiceImpl.java
 D:\Main\Backend Framework\Spring Boot\MarriageBureau\src\main\java\com\mb\services\PaymentService.java
 D:\Main\Backend Framework\Spring Boot\MarriageBureau\src\main\java\com\mb\services\SubscriptionValidatorJob.java
 D:\Main\Backend Framework\Spring Boot\MarriageBureau\src\main\java\com\mb\services\SubscriptionValidatorService.java
 D:\Main\Backend Framework\Spring Boot\MarriageBureau\src\main\java\com\mb\services\TestimonialsService.java
+D:\Main\Backend Framework\Spring Boot\MarriageBureau\src\main\java\com\mb\services\TokenService.java
 D:\Main\Backend Framework\Spring Boot\MarriageBureau\src\main\java\com\mb\services\UserService.java
 D:\Main\Backend Framework\Spring Boot\MarriageBureau\src\main\java\com\mb\subscription\SubscriptionChecker.java
 D:\Main\Backend Framework\Spring Boot\MarriageBureau\src\main\java\com\mb\subscription\SubscriptionManager.java

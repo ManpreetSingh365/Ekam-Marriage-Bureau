@@ -66,6 +66,10 @@ public class SecurityConfig {
 		httpSecurity.authorizeHttpRequests(authorize -> {
 			// authorize.requestMatchers("/home", "/register", "/services").permitAll();
 			authorize.requestMatchers("user/**").authenticated();
+			authorize.requestMatchers("shareprofile/**").permitAll();
+//			authorize.requestMatchers("admin/**").hasRole("ADMIN");
+//			authorize.requestMatchers("user/**").hasRole("USER");
+
 //			data-th-href="@{'/user/'+*{userId}}"
 			authorize.anyRequest().permitAll();
 		});
@@ -88,6 +92,7 @@ public class SecurityConfig {
 
 //		Disable AbstractHttpConfigurer, ByDefault is ON Provided by Spring Security...
 		httpSecurity.csrf(AbstractHttpConfigurer::disable);
+//		httpSecurity.csrf(csrf -> csrf.ignoringRequestMatchers("/api/**"));
 
 		httpSecurity.logout(logoutForm -> {
 			logoutForm.logoutUrl("/do-logout");

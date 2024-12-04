@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.mb.domain.USER_ROLE;
+import com.mb.dto.UserProfileDto;
 import com.mb.entities.User;
 import com.mb.helpers.ResourceNotFoundException;
 import com.mb.repositories.UserRepo;
@@ -200,7 +201,7 @@ public class UserServiceImpl implements UserService {
 		place = place != null && place.isEmpty() ? null : place;
 		qualification = qualification != null && qualification.isEmpty() ? null : qualification;
 		occupation = occupation != null && occupation.isEmpty() ? null : occupation;
-		
+
 		System.out.println("\n----->");
 		System.out.println(gender);
 		System.out.println(religion);
@@ -213,7 +214,6 @@ public class UserServiceImpl implements UserService {
 		System.out.println(place);
 		System.out.println(qualification);
 		System.out.println(occupation);
-
 
 		return userRepo.findUsersWithDynamicCriteria(gender, religion, caste, minAge, maxAge, minheight, maxheight,
 				marriedStatus, place, qualification, occupation, pageable);
@@ -269,6 +269,7 @@ public class UserServiceImpl implements UserService {
 		return userRepo.findAll(pageable);
 	}
 
+ 
 	public void saveFile(MultipartFile file) {
 
 		try {
@@ -279,4 +280,15 @@ public class UserServiceImpl implements UserService {
 		}
 
 	}
+//	public UserProfileDto getUserProfileById(Long userId) {
+//		// Fetch the user profile from the database
+//		User user = userRepo.findById(userId).orElse(null);
+//
+//		if (user == null) {
+//			return null;
+//		}
+//
+//		// Return the UserProfileDto based on the User entity 
+//		return new UserProfileDto(user); 
+//	}
 }

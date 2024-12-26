@@ -99,6 +99,16 @@ public class PageController {
 		return "paidSuccessfully";
 	}
 
+	@RequestMapping("/termcondition")
+	public String termcondition() {
+		return "termcondition";
+	}
+
+	@RequestMapping("/policy")
+	public String policy() {
+		return "policy";
+	}
+
 	@RequestMapping("/paymentplans")
 	public String paymentplans(Model model, Authentication authentication) {
 		Optional<Authentication> authOptional = Optional.ofNullable(authentication);

@@ -280,15 +280,4 @@ public class UserServiceImpl implements UserService {
 		}
 
 	}
-//	public UserProfileDto getUserProfileById(Long userId) {
-//		// Fetch the user profile from the database
-//		User user = userRepo.findById(userId).orElse(null);
-//
-//		if (user == null) {
-//			return null;
-//		}
-//
-//		// Return the UserProfileDto based on the User entity 
-//		return new UserProfileDto(user); 
-//	}
 }

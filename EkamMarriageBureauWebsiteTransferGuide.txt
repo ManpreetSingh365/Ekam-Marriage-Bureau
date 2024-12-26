@@ -101,4 +101,64 @@ docker-compose up
 
 
 
+Set Domain-Configuration in Hostinger (ekammatchmaker.com)---->
+Type   	       Name  Priority      Content                 		TTL
+
+From Railway Cloud :----->
+A		@	0	35.213.168.149	 	  		14400	
+A		www	0	35.213.168.149		 		14400	
+ALIAS|CNAME	@	0	u0yiod55.up.railway.app	  		14400	
+
+From R :----->
+CNAME           www	0	ekam-marriage-bureau-8s8e.onrender.com  14400
+ALIAS		@ 	0	ekam-marriage-bureau-8s8e.onrender.com	14400
+A		@ 	0	216.24.57.1 				14400
+
+Type   	       Name  Priority      Content                 		TTL
+CNAME           www	0	wahenoordigitalmedia.onrender.com       14400
+ALIAS		@ 	0	wahenoordigitalmedia.onrender.com	14400
+A		@ 	0	216.24.57.1 				14400
+
+
+wahenoordigitalmedia.onrender.com
+
+
+wahenoormedia.com
+DNS update needed
+Verify
+Add an ANAME or ALIAS record pointing to 
+wahenoordigitalmedia.onrender.com
+
+If your DNS provider does not support ANAME or ALIAS records, use an A record pointing to 
+216.24.57.1
+
+Delete
+www.wahenoormedia.com
+redirects to wahenoormedia.com
+DNS update needed
+Verify
+Add a CNAME record for www pointing to 
+wahenoordigitalmedia.onrender.com
+
+
+PGDATABASE
+railway
+
+
+
+PGHOST
+postgres.railway.internal
+
+
+
+PGPASSWORD
+jEaWZJaFcTHmEgQwexVFUyqPYcWWdUCL
+
+
+
+
+
+
+
+
 

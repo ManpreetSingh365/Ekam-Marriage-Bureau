@@ -6,11 +6,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
-
-import java.time.LocalTime;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +29,7 @@ public class PingScheduler {
 
 	@Scheduled(fixedRateString = "${server.ActiveTime:6000000}") // default to 10 min if not set
 	public void ping() {
-		
+
 //		String url = "http://" + BASE_URL + "/ping";
 		String url = BASE_URL + "/ping";
 		logger.info("Pinging application at {}", url); // Add this line

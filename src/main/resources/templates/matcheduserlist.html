@@ -22,7 +22,6 @@
 						<th scope="col" class="px-2 py-3"></th>
 						<th scope="col" class="px-2 py-3 text-orange">User</th>
 						<th scope="col" class="px-2 py-3 text-orange">Name</th>
-						<th scope="col" class="px-2 py-3 text-orange">Gender</th>
 						<th scope="col" class="px-2 py-3 text-orange">Religion</th>
 						<th scope="col" class="px-2 py-3 text-orange">Caste</th>
 						<th scope="col" class="px-2 py-3 text-orange">Age</th>
@@ -31,7 +30,7 @@
 						<th scope="col" class="px-2 py-3 text-orange">Place of Living</th>
 						<th scope="col" class="px-2 py-3 text-orange">Qualification</th>
 						<th scope="col" class="px-2 py-3 text-orange">Occupation</th>
-						<th scope="col" class="px-2 py-3 text-orange">Phone Number</th>
+						<!--<th scope="col" class="px-2 py-3 text-orange">Phone Number</th>-->
 						<th scope="col" class="px-2 py-3 text-orange">View Profile</th>
 					</tr>
 				</thead>
@@ -60,7 +59,6 @@
 							<p data-th-text="*{userId}" class="text-center text-gray-900 dark:text-white"></p>
 						</td>
 						<td data-th-text="*{name}" class="px-2 py-2"></td>
-						<td data-th-text="*{gender}" class="px-2 py-2"></td>
 						<td data-th-text="*{religion}" class="px-2 py-2"></td>
 						<td data-th-text="*{caste}" class="px-2 py-2"></td>
 						<td data-th-text="*{age}" class="px-2 py-2"></td>
@@ -69,7 +67,7 @@
 						<td data-th-text="*{place}" class="px-2 py-2"></td>
 						<td data-th-text="*{qualification}" class="px-2 py-2"></td>
 						<td data-th-text="*{occupation}" class="px-2 py-2"></td>
-						<td>
+<!--						<td>
 							<div data-th-if="${!authOptional}" data-th-text="*{phoneNumber1}" class="blur-sm px-2 py-2">
 							</div>
 							<div data-th-if="${authOptional}">
@@ -81,7 +79,7 @@
 									data-th-text="*{phoneNumber1}" class="px-2 py-2"></span>
 							</div>
 						</td>
-						<td class="px-6 py-4">
+-->						<td class="px-6 py-4">
 							<div data-th-if="${!authOptional}">
 								<a th:href="@{/paymentplans}"
 									class="font-medium text-blue-600 dark:text-blue-500 hover:underline">

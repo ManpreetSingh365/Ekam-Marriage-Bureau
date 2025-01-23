@@ -56,11 +56,12 @@
 								class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Delete
 								Account</a>
 -->
+							<!--				
 							<a href="javascript:void(0);"
 								th:onclick="|confirmDeleteAccount(event, '@{/do-deleteclient/{userId}(userId=${loggedInUser.userId})}')|"
 								class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white rounded-md transition-colors duration-200 ease-in-out">
 								Delete Account
-							</a>
+							</a>-->
 						</li>
 						<!--						<li>
 							<a data-th-href="@{'/do-logout'}"
@@ -91,8 +92,8 @@
 			</a>
 
 			<button id="theme_change_button"
-			  class="text-xs bg-gray-200 px-3 py-2 rounded-lg focus:ring-4 focus:ring-gray-300 dark:bg-gray-600 dark:focus:ring-gray-600 sm:text-sm sm:px-4 sm:py-3">
-			  <i class="fa-solid fa-circle-half-stroke"></i> <span>Light</span>
+				class="text-xs bg-gray-200 px-3 py-2 rounded-lg focus:ring-4 focus:ring-gray-300 dark:bg-gray-600 dark:focus:ring-gray-600 sm:text-sm sm:px-4 sm:py-3">
+				<i class="fa-solid fa-circle-half-stroke"></i> <span>Light</span>
 			</button>
 		</div>
 		<div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-user">

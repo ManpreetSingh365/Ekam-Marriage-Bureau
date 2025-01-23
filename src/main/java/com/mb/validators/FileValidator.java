@@ -13,7 +13,7 @@ import jakarta.validation.ConstraintValidatorContext;
 public class FileValidator implements ConstraintValidator<ValidFile, MultipartFile> {
 
 	// let's define... type, height, width
-	private static final long MAX_FILE_SIZE = 1024 * 1024 * 2; // 2MB
+	private static final long MAX_FILE_SIZE = 1024 * 1024 * 10; // 2MB
 
 	@Override
 	public boolean isValid(MultipartFile file, ConstraintValidatorContext context) {
@@ -28,7 +28,7 @@ public class FileValidator implements ConstraintValidator<ValidFile, MultipartFi
 		System.out.println("file size: " + file.getSize());
 		if (file.getSize() > MAX_FILE_SIZE) {
 			context.disableDefaultConstraintViolation();
-			context.buildConstraintViolationWithTemplate("File size should be less than 2MB").addConstraintViolation();
+			context.buildConstraintViolationWithTemplate("File size should be less than 10MB").addConstraintViolation();
 			return false;
 		}
 

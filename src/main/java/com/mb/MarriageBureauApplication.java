@@ -155,7 +155,7 @@ public class MarriageBureauApplication {
 
 		empUser.setName("MB Employee");
 		empUser.setUserCreationTime(currentDateAndTime);
-		empUser.setEmail(empEmail);
+		empUser.setEmail(empEmail); // employee@gmail.com
 		empUser.setPassword(appPasswordEncoder.encode("emp@321"));
 //		empUser.setRoleList(List.of("ADMIN"));
 		empUser.setImagesList(empImagesList);

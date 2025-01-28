@@ -17,7 +17,8 @@
 				<div
 					class="block p-6 py-4 border-t-[10px] border-orange bg-gray-300 w-full max-w-2xl sm:max-w-xl md:max-w-2xl lg:max-w-3xl mx-auto rounded-xl shadow hover:bg-gray-200 dark:bg-gray-800 dark:border-blue-700 dark:hover:bg-gray-700 backdrop-blur-lg bg-opacity-30">
 
-					<h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"> Please Fill the Details Correctly </h5>
+					<h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"> Please Fill the
+						Details Correctly </h5>
 					<p class="font-normal text-gray-400 dark:text-gray-400"> It'll Help you to earlier find your Soul
 						Made
 						... </p>
@@ -106,7 +107,7 @@
 								</label>
 								<p data-th-if="${#fields.hasErrors('religion')}" data-th-errors="*{religion}"
 									class="text-red-600"></p>
-								<select data-th-field="*{religion}" id="religion" name="religion"
+								<!--								<select data-th-field="*{religion}" id="religion" name="religion"
 									class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-sm p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
 									<option value="">Select Religions</option>
 									<th:block th:each="religion : ${religions}">
@@ -114,6 +115,11 @@
 											th:text="${#strings.trim(religion)}">
 										</option>
 									</th:block>
+								</select>-->
+								<select data-th-field="*{religion}" id="religion" name="religion"
+									class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-sm p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+									<option value="">Select Religions</option>
+									<!-- Religions Options will be populated here -->
 								</select>
 							</div>
 
@@ -125,8 +131,8 @@
 									class="text-red-600"></p>
 								<select data-th-field="*{caste}" id="caste" name="caste"
 									class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-									<option value="">Select Caste</option>
-									<!-- Options will be populated here -->
+									<option value="">Select Castes</option>
+									<!-- Castes Options will be populated here -->
 								</select>
 							</div>
 
@@ -372,37 +378,34 @@
 								<!-- Total Family Members -->
 								<div class="">
 									<label class="block text-gray-700 text-xs font-bold font-bold mb-2 dark:text-white"
-										for="totalFamilyMembers"> Family Members<super
-											class="text-red-600 ml-1 text-lg font-medium">*</super></label>
+										for="totalFamilyMembers"> Family Members</label>
 									<input
 										class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
 										placeholder="How Many Member?" data-th-field="*{totalFamilyMembers}"
-										type="number" id="totalFamilyMembers" name="totalFamilyMembers" min="0">
+										type="number" id="totalFamilyMembers" name="totalFamilyMembers" min="0"
+										value="0">
 									<p data-th-if="${#fields.hasErrors('totalFamilyMembers')}"
 										data-th-errors="*{totalFamilyMembers}" class="text-red-600 flex"> </p>
 								</div>
 								<!-- Total Family Brother -->
 								<div class="ml-3 md:mt-4">
 									<label class="block text-gray-700 text-sm font-bold mb-2 dark:text-white"
-										for="totalBrothers">Brothers<super
-											class="text-red-600 ml-1 text-lg font-medium">*
-										</super></label>
+										for="totalBrothers">Brothers</label>
 									<input
 										class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
 										placeholder="How Many Brother?" data-th-field="*{totalBrothers}" type="number"
-										id="totalBrothers" name="totalBrothers" min="0">
+										id="totalBrothers" name="totalBrothers" min="0" value="0">
 									<p data-th-if="${#fields.hasErrors('totalBrothers')}"
 										data-th-errors="*{totalBrothers}" class="text-red-600 flex"> </p>
 								</div>
 								<!-- Total Family Sister -->
 								<div class="ml-3 md:mt-4">
 									<label class="block text-gray-700 text-sm font-bold mb-2 dark:text-white"
-										for="totalSisters">Sisters<super class="text-red-600 ml-1 text-lg font-medium">*
-										</super></label>
+										for="totalSisters">Sisters</label>
 									<input
 										class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
 										placeholder="How Many Sister?" data-th-field="*{totalSisters}" type="number"
-										id="totalSisters" name="totalSisters" min="0">
+										id="totalSisters" name="totalSisters" min="0" value="0">
 									<p data-th-if="${#fields.hasErrors('totalSisters')}"
 										data-th-errors="*{totalSisters}" class="text-red-600 flex"> </p>
 								</div>
@@ -585,7 +588,8 @@
 								<label class="block text-gray-700 text-xs font-bold font-bold mb-2 dark:text-white"
 									for="formFilledBy">This Form Filled By<super
 										class="text-red-600 ml-1 text-lg font-medium">*</super></label>
-								<select th:unless="${loggedInUser != null && loggedInUser.hasRole('ROLE_EMPLOYEE')}" data-th-field="*{formFilledBy}" id="formFilledBy" name="formFilledBy"
+								<select th:unless="${loggedInUser != null && loggedInUser.hasRole('ROLE_EMPLOYEE')}"
+									data-th-field="*{formFilledBy}" id="formFilledBy" name="formFilledBy"
 									class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
 									<option value="">Mention here</option>
 									<option value="self" id="self" name="self">Self</option>
@@ -595,13 +599,15 @@
 									<option value="self-marriage-bureau" id="self-marriage-bureau"
 										name="self-marriage-bureau">Self-Marriage-Bureau </option>
 								</select>
-								<select th:if="${loggedInUser != null && loggedInUser.hasRole('ROLE_EMPLOYEE')}" data-th-field="*{formFilledBy}" id="formFilledBy" name="formFilledBy"
+								<select th:if="${loggedInUser != null && loggedInUser.hasRole('ROLE_EMPLOYEE')}"
+									data-th-field="*{formFilledBy}" id="formFilledBy" name="formFilledBy"
 									class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
 									<option value="">Mention here</option>
 									<option value="emp-self" id="emp-self" name="emp-self">emp-Self</option>
 									<option value="emp-parent" id="emp-parent" name="emp-parent">emp-Parent</option>
 									<option value="emp-friend" id="emp-friend" name="emp-friend">emp-Friends</option>
-									<option value="emp-relative" id="emp-relative" name="emp-relative">emp-Relative</option>
+									<option value="emp-relative" id="emp-relative" name="emp-relative">emp-Relative
+									</option>
 									<option value="emp-self-marriage-bureau" id="emp-self-marriage-bureau"
 										name="emp-self-marriage-bureau">emp-Self-Marriage-Bureau </option>
 								</select>
@@ -648,6 +654,23 @@
 	<script>
 		console.log("Register page");
 
+		// Fetch religions and populate the dropdown
+		document.addEventListener("DOMContentLoaded", function () {
+			fetch("/getReligions")
+				.then(response => response.json())
+				.then(data => {
+					const religionSelect = document.getElementById("religion");
+					data.forEach(religion => {
+						const option = document.createElement("option");
+						option.value = religion;
+						option.textContent = religion;
+						religionSelect.appendChild(option);
+					});
+				})
+				.catch(error => console.error("Error fetching religions:", error));
+		});
+
+		// Fetch Castes from selected Religions and populate the dropdown
 		document.getElementById('religion').addEventListener('change', function () {
 			const religion = this.value;
 			if (religion) {

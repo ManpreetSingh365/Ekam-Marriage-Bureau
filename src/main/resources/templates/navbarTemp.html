@@ -22,16 +22,15 @@
 	<!-- Collapsed Navbar -->
 	<div class="collapse navbar-collapse bg-dark lg:flex lg:justify-between lg:items-center w-full" style="font-size: 0.8rem;"  id="navbarCollapse">
 
-
 		<!-- Navbar Links -->
 		<div id="navbar-temp" class="navbar-nav max-w-md " style="margin: auto; text-align: center;">
-			<a href="#home" class="nav-item nav-link active">Home</a>
-			<a href="#about" class="nav-item nav-link">About</a>
-			<a href="#gallery" class="nav-item nav-link">Gallery</a>
+			<a data-th-href="@{'/home'}" class="nav-item nav-link active">Home</a>
+			<a data-th-href="@{'/about'}" class="nav-item nav-link">About</a>
+			<a data-th-href="@{'/gallery'}" class="nav-item nav-link">Gallery</a>
 			<a data-th-href="@{'/findmatch'}" class="nav-item nav-link">Find Match</a>
 			<a th:unless="${loggedInUser}" href="/paymentplans" class="nav-item nav-link">Payment Plans</a>
 			<a data-th-href="@{'/testimonials'}" class="nav-item nav-link">Testimonials</a>
-			<a href="#rsvp" class="nav-item nav-link">Contact</a>
+			<a data-th-href="@{'/contact-us'}"  class="nav-item nav-link">Contact</a>
 		</div>
 
 		<!-- Login and Signup Buttons -->

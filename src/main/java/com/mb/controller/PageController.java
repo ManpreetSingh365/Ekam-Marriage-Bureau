@@ -83,16 +83,17 @@ public class PageController {
 	public RedirectView Gallery() {
 		return new RedirectView("/index#gallery");
 	}
+	
+	@RequestMapping("/about")
+	public RedirectView About() {
+		return new RedirectView("/index#about");
+	}
 
 	@RequestMapping("/contact-us")
 	public RedirectView ContactUs() {
 		return new RedirectView("/index#rsvp");
 	}
 
-	@RequestMapping("/service")
-	public String service() {
-		return "service";
-	}
 
 	@RequestMapping("/paidSuccessfully")
 	public String paidSuccessfully() {

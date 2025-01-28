@@ -159,7 +159,7 @@
 								</label>
 								<p data-th-if="${#fields.hasErrors('religion')}" data-th-errors="*{religion}"
 									class="text-red-600"></p>
-								<select data-th-field="*{religion}" id="religion" name="religion"
+<!--								<select data-th-field="*{religion}" id="religion" name="religion"
 									class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-sm p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
 									<option value="">Select Religions</option>
 									<th:block th:each="religion : ${religions}">
@@ -168,6 +168,12 @@
 										</option>
 									</th:block>
 								</select>
+-->								<select data-th-field="*{religion}" id="religion" name="religion"
+									class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-sm p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+									<option value="">Select Religions</option>
+									<!-- Religions Options will be populated here -->
+								</select>
+
 							</div>
 
 							<!-- Caste -->
@@ -689,8 +695,25 @@
 	<script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
 
 	<script>
-		console.log("Register page");
+		console.log("Update page");
+		
+		// Fetch religions and populate the dropdown
+		document.addEventListener("DOMContentLoaded", function () {
+			fetch("/getReligions")
+				.then(response => response.json())
+				.then(data => {
+					const religionSelect = document.getElementById("religion");
+					data.forEach(religion => {
+						const option = document.createElement("option");
+						option.value = religion;
+						option.textContent = religion;
+						religionSelect.appendChild(option);
+					});
+				})
+				.catch(error => console.error("Error fetching religions:", error));
+		});
 
+		// Fetch Castes from selected Religions and populate the dropdown
 		document.getElementById('religion').addEventListener('change', function () {
 			const religion = this.value;
 			if (religion) {

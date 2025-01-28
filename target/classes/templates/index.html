@@ -8,6 +8,16 @@
 	<meta content="Free HTML Templates" name="keywords">
 	<meta content="Free HTML Templates" name="description">
 
+	<!-- Owl Carousel CSS -->
+	<link rel="stylesheet"
+		href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
+	<link rel="stylesheet"
+		href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" />
+	<!-- FontAwesome -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+	<!-- Lightbox CSS -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css" />
+
 </head>
 
 <body data-spy="scroll" data-target=".navbar" data-offset="51">
@@ -46,11 +56,16 @@
 									</div>
 									<div class="form-group mx-2">
 										<label class="text-white">Religion</label>
+										<!--						
 										<select class="form-control" id="religion" name="religion">
 											<option value="">Select</option>
 											<th:block th:each="religion : ${religions}">
 												<option th:value="${religion}" th:text="${religion}"></option>
 											</th:block>
+										</select>-->
+										<select class="form-control" id="religion" name="religion">
+											<option value="">Select Religions</option>
+											<!-- Religions Options will be populated here -->
 										</select>
 									</div>
 									<div class="form-group mx-2">
@@ -383,11 +398,12 @@
 						</div>
 					</div>
 				</div>
-			</div> <!-- Event End -->
+			</div>
+			<!-- Event End -->
 
 
 			<!-- Friends & Family Start -->
-<!--			<div class="container-fluid py-5" id="family">
+			<!--			<div class="container-fluid py-5" id="family">
 				<div class="container pt-5 pb-3">
 					<div class="section-title position-relative text-center">
 						<h6 class="text-uppercase text-primary mb-3" style="letter-spacing: 3px;">Testimonials</h6>
@@ -512,10 +528,10 @@
 					</div>
 				</div>
 			</div>
--->			<!-- Friends & Family End -->
+--> <!-- Friends & Family End -->
 
 			<!-- RSVP Start -->
-			<div class="container-fluid py-5 mt-4" id="rsvp">
+			<div class="container-fluid py-5 mt-4">
 				<div class="container py-5" id="rsvpInside">
 					<div class="section-title position-relative text-center mb-4">
 						<h6 class="text-uppercase text-primary mb-3">Contact Us</h6>
@@ -542,7 +558,7 @@
 										</div>
 									</div>
 
-									<div class="form-row">
+									<div class="form-row" id="rsvp">
 										<div class="form-group col-sm-6">
 											<input type="text" id="contactNumber" name="contactNumber"
 												class="form-control bg-secondary border-0 py-4 px-3"
@@ -603,7 +619,6 @@
 		<a href="#" class="btn btn-lg btn-outline-primary btn-lg-square back-to-top"><i
 				class="fa fa-angle-double-up"></i></a>
 
-
 		<!-- JavaScript Libraries -->
 		<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
@@ -613,10 +628,33 @@
 		<script src="lib/isotope/isotope.pkgd.min.js"></script>
 		<script src="lib/lightbox/js/lightbox.min.js"></script>
 
+		<!-- Scripts -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
+
 		<!-- Template Javascript -->
 		<script src="js/main.js"></script>
 		<script>
-			console.log("1-----")
+			console.log("Index Page")
+
+			// Fetch religions and populate the dropdown
+			document.addEventListener("DOMContentLoaded", function () {
+				fetch("/getReligions")
+					.then(response => response.json())
+					.then(data => {
+						const religionSelect = document.getElementById("religion");
+						data.forEach(religion => {
+							const option = document.createElement("option");
+							option.value = religion;
+							option.textContent = religion;
+							religionSelect.appendChild(option);
+						});
+					})
+					.catch(error => console.error("Error fetching religions:", error));
+			});
+
+			// Fetch Castes from selected Religions and populate the dropdown
 			document.getElementById('religion').addEventListener('change', function () {
 				const religion = this.value;
 				console.log("2-----")
@@ -647,6 +685,33 @@
 				minAgeSelect.innerHTML += `<option value="${age}">${age}</option>`;
 				maxAgeSelect.innerHTML += `<option value="${age}">${age}</option>`;
 			}
+
+
+
+			// Owl Carousel initialization on Gallery-Item
+			$(document).ready(function () {
+				$(".gallery-carousel").owlCarousel({
+					items: 3, // Number of items visible at a time
+					margin: 10,
+					loop: true,
+					autoplay: true,
+					autoplayTimeout: 2000,
+					nav: true,
+					navText: [
+						'<i class="fa fa-angle-left" aria-hidden="true"></i>',
+						'<i class="fa fa-angle-right" aria-hidden="true"></i>'
+					],
+					responsive: {
+						0: {items: 1},      // 1 item for small screens
+						576: {items: 2},    // 2 items for medium screens
+						768: {items: 3},    // 3 items for larger screens
+						1200: {items: 5}    // 5 items for extra-large screens
+					},
+					dots: true, // Add pagination dots
+					autoplayHoverPause: true, // Pause on hover
+				});
+			});
+
 
 		</script>
 

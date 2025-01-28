@@ -57,30 +57,36 @@ public class UserRegisterController {
 		System.out.println("Opening Registeration Details Handler...");
 		UserFormDetails userFormDetails = new UserFormDetails();
 
+		userFormDetails.setTotalFamilyMembers(0);
+		userFormDetails.setTotalBrothers(0);
+		userFormDetails.setTotalSisters(0);
+
 		model.addAttribute("userForm", userForm);
 		model.addAttribute("userFormDetails", userFormDetails);
 
 		return "registerdetails";
 	}
-	
+
 	@RequestMapping("/registerdetailsbyemployee")
 	public String registerationByEmp(Model model) {
 		System.out.println("Opening Registeration Handler...");
-		
+
 		UserFormDetails userFormDetails = new UserFormDetails();
-		model.addAttribute("userFormDetails", userFormDetails);
-		
+
 		// Fetch distinct relisions, castes categories from the database
 		List<String> religions = userService.getAllDistinctReligions();
 		List<String> castes = userService.getAllDistinctCastes(userFormDetails.getReligion());
 
+		userFormDetails.setTotalFamilyMembers(0);
+		userFormDetails.setTotalBrothers(0);
+		userFormDetails.setTotalSisters(0);
+
+		model.addAttribute("userFormDetails", userFormDetails);
 		model.addAttribute("religions", religions);
 		model.addAttribute("castes", castes);
 
-
 		return "registerdetails";
 	}
-
 
 	@PostMapping("/do-register")
 	public String processRegisteration(@Valid @ModelAttribute("userForm") UserForm userForm,
@@ -169,18 +175,17 @@ public class UserRegisterController {
 		User user = new User();
 		UserForm userForm = (UserForm) session.getAttribute("userForm");
 
-
 		if (userForm != null && userForm.getEmail() != null && !userForm.getEmail().isEmpty()) {
-		    user.setEmail(userForm.getEmail());
-		    user.setPassword(userForm.getPassword());
+			user.setEmail(userForm.getEmail());
+			user.setPassword(userForm.getPassword());
 		} else {
 //			Random random = new Random();
 //			int randomNumber = random.nextInt(100000, 999999);
 //			String userPassword = "emp@" + randomNumber;
-		    // If userForm is null or email is empty, generate a unique email
-		    String uniqueEmail = uniqueEmailGenerator.generateUniqueEmail();
-		    user.setEmail(uniqueEmail); // Set the generated unique email
-		    user.setPassword("emb@321");
+			// If userForm is null or email is empty, generate a unique email
+			String uniqueEmail = uniqueEmailGenerator.generateUniqueEmail();
+			user.setEmail(uniqueEmail); // Set the generated unique email
+			user.setPassword("emb@321");
 		}
 
 		user.setName(userFormDetails.getYourName());

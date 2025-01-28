@@ -36,6 +36,12 @@ public class FindMatch {
 	@Value("${admin.email}")
 	private String adminEmail;
 
+	@RequestMapping(value = "/getReligions", method = RequestMethod.GET)
+	@ResponseBody
+	public List<String> getReligion() {
+		return userService.getAllDistinctReligions();
+	}
+
 	@RequestMapping(value = "/getCastes", method = RequestMethod.GET)
 	@ResponseBody
 	public List<String> getCastesByReligion(@RequestParam String religion) {
@@ -334,7 +340,7 @@ public class FindMatch {
 //		}
 
 		if (!userData.hasAnyRole(USER_ROLE.ROLE_ADMIN, USER_ROLE.ROLE_EMPLOYEE)) {
-		    return "NotAuthorizedAccess";
+			return "NotAuthorizedAccess";
 		}
 
 		Page<User> pageContent = userService.getByUser(page, size, sortBy, direction);

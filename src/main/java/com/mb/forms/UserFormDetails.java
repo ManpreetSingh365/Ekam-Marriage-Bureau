@@ -36,7 +36,8 @@ import lombok.ToString;
 @Builder
 @ToString
 public class UserFormDetails {
-	@Size(min = 3, message = "Username is required and must be at least 3 characters long")
+	@Size(min = 3, message = "Username is Required")
+	@Size(min = 8, message = "Name must be Atleast 3 characters long")
 	private String yourName;
 	@NotBlank(message = "Gender is required")
 	private String gender;
@@ -95,11 +96,8 @@ public class UserFormDetails {
 
 	@NotBlank(message = "familyStatus is required")
 	private String familyStatus;
-	@NotNull(message = "totalFamilyMembers is required")
 	private Integer totalFamilyMembers;
-	@NotNull(message = "totalBrothers is required")
 	private Integer totalBrothers;
-	@NotNull(message = "totalSisters is required")
 	private Integer totalSisters;
 
 	private String fatherName;

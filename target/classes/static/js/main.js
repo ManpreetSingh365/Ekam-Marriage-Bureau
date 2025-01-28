@@ -2,25 +2,25 @@
 	"use strict";
 
 	// Ensure the navbar is always visible
-		$(document).ready(function() {
-			$('.navbar').fadeIn('slow').css('display', 'flex');
-		});
+	$(document).ready(function() {
+		$('.navbar').fadeIn('slow').css('display', 'flex');
+	});
 
-		// Smooth scrolling on the navbar links
-		$(".navbar-nav a").on('click', function(event) {
-			if (this.hash !== "") {
-				event.preventDefault();
+	// Smooth scrolling on the navbar links
+	$(".navbar-nav a").on('click', function(event) {
+		if (this.hash !== "") {
+			event.preventDefault();
 
-				$('html, body').animate({
-					scrollTop: $(this.hash).offset().top - 45
-				}, 1500, 'easeInOutExpo');
+			$('html, body').animate({
+				scrollTop: $(this.hash).offset().top - 45
+			}, 1500, 'easeInOutExpo');
 
-				if ($(this).parents('.navbar-nav').length) {
-					$('.navbar-nav .active').removeClass('active');
-					$(this).closest('a').addClass('active');
-				}
+			if ($(this).parents('.navbar-nav').length) {
+				$('.navbar-nav .active').removeClass('active');
+				$(this).closest('a').addClass('active');
 			}
-		});
+		}
+	});
 
 
 	// Modal Video
@@ -78,6 +78,7 @@
 	});
 
 
+	/*	
 	$(".gallery-carousel").owlCarousel({
 		autoplay: true,           // Enable autoplay
 		autoplayTimeout: 2000,     // Set interval for autoplay (2 seconds here)
@@ -98,7 +99,7 @@
 		}
 	});
 
-	/*	// Gallery carousel
+	// Gallery carousel
 		$(".gallery-carousel").owlCarousel({
 			autoplay: false,
 			smartSpeed: 1500,

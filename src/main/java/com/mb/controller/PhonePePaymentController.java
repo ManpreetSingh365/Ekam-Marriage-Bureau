@@ -56,7 +56,7 @@ public class PhonePePaymentController {
 	private final ObjectMapper objectMapper = new ObjectMapper();
 	private final RestTemplate restTemplate = new RestTemplate();
 	private final PhonePePaymentService paymentService;
-	
+
 	@Autowired
 	private UserService userService;
 
@@ -69,14 +69,14 @@ public class PhonePePaymentController {
 
 			// ✅ Generate a unique merchantTransactionId
 			String merchantTransactionId = "MTX" + System.currentTimeMillis();
-			System.out.println("Generated merchantTransactionId: " + merchantTransactionId); // 
+			System.out.println("Generated merchantTransactionId: " + merchantTransactionId); //
 			request.setMerchantTransactionId(merchantTransactionId);
-			
+
 			// ✅ Generate a unique PhonePe transaction ID
 			String phonePeTransactionId = "TRANS" + System.currentTimeMillis();
 			System.out.println("Generated phonePeTransactionId ID: " + phonePeTransactionId); // TRANS1741013200362
 			request.setPhonePeTransactionId(phonePeTransactionId);
-			
+
 			// Store a pending payment record in the database
 			paymentService.createPaymentRecord(request);
 
@@ -84,7 +84,7 @@ public class PhonePePaymentController {
 			String apiEndpoint = "/pg/v1/pay";
 			String xVerifyHeader = generateSignature(payload, apiEndpoint);
 			String paymentUrl = baseUrl + apiEndpoint;
- 
+
 			System.out.println("🔹 Sending payment request to: " + paymentUrl);
 			System.out.println("🔹 X-VERIFY Header: " + xVerifyHeader);
 
@@ -198,10 +198,16 @@ public class PhonePePaymentController {
 				phonePePayment.setExpiryDate(phonePePayment.getExpiryDate());
 			}
 
-			paymentService.updatePaymentStatus(phonePePayment);
-			userPaidBillingController.processSendUserPGPaidBilling(user, phonePePayment);
-			
+
+			try {
+				paymentService.updatePaymentStatus(phonePePayment);
+				userPaidBillingController.processSendUserPGPaidBilling(user, phonePePayment);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
 			response.put("status", "SUCCESS");
+			
 			return ResponseEntity.ok(response);
 		} else {
 			user.setSubscriptionIsActive(false);

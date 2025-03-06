@@ -111,7 +111,7 @@
 						<div th:each="image : ${userImages}" class="hidden duration-700 ease-in-out" data-carousel-item>
 							<img th:src="${image} ?: 'https://manpreetsingh.vercel.app/_next/image?url=%2FImage-removebg.png&w=1080&q=75'"
 								onerror="this.onerror=null; this.src='https://manpreetsingh.vercel.app/_next/image?url=%2FImage-removebg.png&w=1080&q=75';"
-								class="w-full h-full object-cover rounded-lg shadow" alt="User Image" />
+								class="w-full h-[720px] object-cover rounded-lg shadow" alt="User Image" />
 						</div>
 					</div>
 					<!-- Slider indicators -->

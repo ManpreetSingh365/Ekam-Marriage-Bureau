@@ -371,10 +371,13 @@ public class FindMatch {
 		model.addAttribute("currentPage", currentPage);
 
 		List<User> users = userService.getAllUsers();
+		int totalUsers = users.size();
+		
 		if (users.isEmpty()) {
 			model.addAttribute("users", Collections.emptyList());
 		} else {
 			model.addAttribute("users", users);
+			model.addAttribute("totalUsers", totalUsers);
 			model.addAttribute("adminEmail", adminEmail);
 		}
 

@@ -21,38 +21,6 @@ public class ImageServiceImpl implements ImageService {
 		this.cloudinary = cloudinary;
 	}
 
-//	@Override
-//	public String uploadImage(MultipartFile userImage, String filename) {
-//
-//		// Write Code here... To do Upload Image-MultipartFile & do Return Image-MultipartFile URL
-//		try {
-//			byte[] data = new byte[userImage.getInputStream().available()];
-//			userImage.getInputStream().read(data);
-//			cloudinary.uploader().upload(data, ObjectUtils.asMap("public_id", filename));
-//
-//			return this.getUrlFromPublicId(filename);
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//			return null;
-//		}
-//	}
-
-	// @Override
-//	public List<String> uploadImages(List<MultipartFile> userImages, String filename) {
-//	    List<String> imageUrls = new ArrayList<>();
-//	    for (MultipartFile userImage : userImages) {
-//	        try {
-//	            byte[] data = new byte[userImage.getInputStream().available()];
-//	            userImage.getInputStream().read(data);
-//	            cloudinary.uploader().upload(data, ObjectUtils.asMap("public_id", filename));
-//	            String imageUrl = this.getUrlFromPublicId(filename);
-//	            imageUrls.add(imageUrl);
-//	        } catch (IOException e) {
-//	            e.printStackTrace();
-//	        }
-//	    }
-//	    return imageUrls;
-//	}
 	@Override
 	public List<String> uploadImages(List<MultipartFile> userImages, String filename) {
 		List<String> imageUrls = new ArrayList<>();
@@ -76,9 +44,19 @@ public class ImageServiceImpl implements ImageService {
 
 	@Override
 	public String getUrlFromPublicId(String publicId) {
-		return cloudinary.url()
-				.transformation(new Transformation<>().width(AppConstants.CONTENT_IMAGE_WIDTH)
-						.height(AppConstants.CONTENT_IMAGE_HEIGHT).crop(AppConstants.CONTENT_IMAGE_CROP))
+		return cloudinary.url().transformation(new Transformation<>().width(AppConstants.CONTENT_IMAGE_WIDTH)
+				.height(AppConstants.CONTENT_IMAGE_HEIGHT).crop(AppConstants.CONTENT_IMAGE_CROP).gravity("face"))
 				.generate(publicId);
 	}
+
+	@Override
+	public List<String> getImagesByPublicIds(List<String> publicIds) {
+		List<String> imageUrls = new ArrayList<>();
+		for (String publicId : publicIds) {
+			String imageUrl = getUrlFromPublicId(publicId);
+			imageUrls.add(imageUrl);
+		}
+		return imageUrls;
+	}
+
 }

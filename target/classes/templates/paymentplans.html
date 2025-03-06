@@ -36,7 +36,14 @@
 							View Contact number</li>
 					</ul>
 					<div>
-						<div th:if="${authOptional}">
+
+						<div >
+							<button id="gold-button" onclick="startGoldPlan()"
+								class="fancy-button w-4/5 py-2 mt-4 bg-orange-500 text-white rounded-lg text-sm font-semibold">
+								Let's Subscribe
+							</button>
+						</div>
+<!--						<div th:if="${authOptional}">
 							<button id="gold-button" onclick="startGoldPlan()"
 								class="fancy-button w-4/5 py-2 mt-4 bg-orange-500 text-white rounded-lg text-sm font-semibold">
 								Let's Subscribe
@@ -50,7 +57,7 @@
 								</button>
 							</a>
 						</div>
-					</div>
+-->					</div>
 				</div>
 
 				<!-- DIAMOND Plan -->
@@ -140,7 +147,102 @@
 		integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
 		crossorigin="anonymous"></script>
 
+
 	<script th:inline="javascript">
+		console.log("Payment Plans page loaded");
+
+		// Debugging: Check if the plan prices are correctly loaded
+		var APP_USER_ID = [[${APP_USER_ID}]];
+		var MERCHANT_ID = [[${MERCHANT_ID}]];
+		var GOLD_PLAN_PRICE = [[${GOLD_PLAN_PRICE}]];
+		var DIAMOND_PLAN_PRICE = [[${DIAMOND_PLAN_PRICE}]];
+		var PLATINUM_PLAN_PRICE = [[${PLATINUM_PLAN_PRICE}]];
+
+		console.log("APP_USER_ID:", APP_USER_ID);
+		console.log("MERCHANT_ID:", MERCHANT_ID);
+		console.log("GOLD_PLAN_PRICE:", GOLD_PLAN_PRICE);
+		console.log("DIAMOND_PLAN_PRICE:", DIAMOND_PLAN_PRICE);
+		console.log("PLATINUM_PLAN_PRICE:", PLATINUM_PLAN_PRICE);
+
+		const startGoldPlan = () => {
+			console.log("Gold Plan Selected");
+			paymentStart(GOLD_PLAN_PRICE, 30, "days");
+		};
+
+		const startDiamondPlan = () => {
+			console.log("Diamond Plan Selected");
+			paymentStart(DIAMOND_PLAN_PRICE, 6, "months");
+		};
+
+		const startPlatinumPlan = () => {
+			console.log("Platinum Plan Selected");
+			paymentStart(PLATINUM_PLAN_PRICE, 1, "years");
+		};
+
+		const handleError = (error) => {
+			console.error("Error occurred:", error);
+			alert("Something went wrong!! Please try again.");
+		};
+
+		const paymentStart = (amount, validityPeriod, validityType) => {
+			console.log("Initiating Payment");
+			console.log("Amount:", amount);
+			console.log("Validity Period:", validityPeriod);
+			console.log("Validity Type:", validityType);
+
+			if (!amount || isNaN(amount)) {
+				console.error("Invalid amount detected:", amount);
+				alert("Amount is required and should be a valid number!");
+				return;
+			}
+
+ 
+			$.ajax({
+				url: "/api/payments/initiate",
+				data: JSON.stringify({
+					amount: amount,
+					merchantTransactionId: MERCHANT_ID,
+					appUserId: APP_USER_ID, 
+					validityPeriod: validityPeriod,
+					validityType: validityType
+				}),
+				contentType: "application/json",
+				type: "POST",
+				dataType: "json",
+				success: function (response) {
+					console.log("Payment Initiation Response:", response);
+					if (response.success && response.data && response.data.instrumentResponse) {
+						const redirectUrl = response.data.instrumentResponse.redirectInfo.url;
+						console.log("Redirecting to Payment Gateway:", redirectUrl);
+
+						// Store transactionId in local storage for later status check
+						console.log("appUserId: " + APP_USER_ID);
+						console.log("response.data: " + response.data);
+						console.log("MERCHANT_ID: " + MERCHANT_ID);
+						console.log("validityPeriod: " + validityPeriod);
+						console.log("validityType: " + validityType);
+
+						localStorage.setItem("appUserId", APP_USER_ID);
+						localStorage.setItem("validityPeriod: ", validityPeriod);
+						localStorage.setItem("validityType: ", validityType);
+
+						// Redirect to payment gateway
+						window.location.href = redirectUrl;
+					} else {
+						console.error("Payment initiation failed", response);
+						alert("Payment initiation failed. Please try again.");
+					}
+				},
+				error: function (xhr, status, error) {
+					console.error("AJAX Payment Initiation Error:", error);
+					// handleError should be defined to manage errors appropriately
+					handleError(error);
+				}
+			});
+		};
+	</script>
+
+	<!--	<script th:inline="javascript">
 		console.log("Payment Plans page");
 		// RazorPay Payment...........
 
@@ -273,7 +375,7 @@
 		};
 
 	</script>
-
+-->
 
 	<!--
 		contentType: "application/json",

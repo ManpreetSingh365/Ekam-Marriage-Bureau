@@ -13,6 +13,42 @@ import org.springframework.stereotype.Repository;
 
 import com.mb.entities.User;
 
+
+//# JpaRepository<User, String>
+//✅ Extends: PagingAndSortingRepository → CrudRepository
+//✅ Belongs to: Spring Data JPA (Hibernate-based)
+//✅ Use When: You need full ORM (Object-Relational Mapping) functionality
+//Provides CRUD operations (e.g., save(), findById(), deleteById())
+//Supports pagination and sorting (findAll(Pageable pageable))
+//Allows batch operations (flush(), saveAllAndFlush())
+//Works with Hibernate and EntityManager
+//More overhead due to ORM features
+
+//# CrudRepository<User, String>
+//✅ Extends: None (Base interface)
+//✅ Belongs to: Spring Data Commons
+//✅ Use When: You need only basic CRUD operations without additional features
+//Supports basic CRUD (save(), findById(), deleteById())
+//Does NOT support pagination & sorting
+//Lightweight compared to JpaRepository
+//Can be used with JPA, JDBC, or other persistence mechanisms
+//⚡ Best when you want a simple repository without JPA overhead.
+
+//# JdbcRepository<User, String>
+//✅ Extends: CrudRepository<User, String>
+//✅ Belongs to: Spring Data JDBC
+//✅ Use When: You want to use plain JDBC instead of Hibernate
+//No Hibernate, No Entity Manager – Direct SQL execution
+//Uses Spring Data JDBC instead of JPA
+//Faster than JPA in some cases (avoids ORM overhead)
+//Best for simple, high-performance applications using direct SQL queries
+//⚡ Best when you don’t need full ORM and prefer raw SQL-based repositories.
+
+//📌 When to Use What?
+//- Use JpaRepository → If you need Hibernate-ORM, Pagination-Sorting, & Batch-Operations
+//- Use CrudRepository → If you just need Basic CRUD without extra Features
+//- Use JdbcRepository → If you want to use Raw SQL (Spring Data JDBC) Instead of Hibernate
+
 @Repository
 public interface UserRepo extends JpaRepository<User, Long> {
 	// Extra Methods DB Related Operations

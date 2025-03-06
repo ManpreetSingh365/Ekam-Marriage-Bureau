@@ -12,5 +12,7 @@ public interface ImageService {
     
 	public List<String> uploadImages(List<MultipartFile> userImages, String filename);
 
+	List<String> getImagesByPublicIds(List<String> imagesList);
+
     
 }

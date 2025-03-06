@@ -102,9 +102,13 @@ public class LoginUserCRUD {
 		}
 
 		System.out.println("\n\n\nThis is userId from user.... Process UserProfile  Handler");
-
+		
+		List<String> userImages = imageService.getImagesByPublicIds(userData.getImagesList());
+		System.out.println("userImages: "+userImages);
+		
 		model.addAttribute("user", userData);
-		model.addAttribute("userImages", userData.getImagesList());
+//		model.addAttribute("userImages", userData.getImagesList());
+		model.addAttribute("userImages", userImages);
 		model.addAttribute("isLoginProfile", false);
 
 		int size = this.userService.getAllUsers().size();
@@ -252,7 +256,8 @@ public class LoginUserCRUD {
 			HttpSession session) throws Exception {
 
 		System.out.println("processUpdateUserFormView Handler..........");
-		String username = Helper.getEmailOfLoggedInUser(authentication);
+//		String username = Helper.getEmailOfLoggedInUser(authentication);
+		String username = authentication.getName();
 		User userData = userService.getUserByEmail(username);
 
 		if (!agreement) {

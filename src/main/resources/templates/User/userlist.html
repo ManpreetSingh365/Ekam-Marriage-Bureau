@@ -11,7 +11,10 @@
 <body>
 
 	<div id="content">
-		<div class="selfWritter text-2xl text-center p-1">All Users Right here...</div>
+		<div class="selfWritter text-2xl text-center p-1">All Users Right Here.</div>
+		<div class="selfWritter text-2xl text-center p-1 my-2"> Total Users: 
+			<span data-th-text="${totalUsers}"></span>
+		</div>
 		<div data-th-replace="~{message::messagebox}"></div>
 		<div
 			class="relative bg-white dark:bg-gray-800 overflow-x-auto shadow-md sm:rounded-lg h-screen flex flex-col justify-between">
@@ -180,7 +183,6 @@
 				No result found
 			</h1>
 		</div>
-
 	</div>
 
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -230,8 +232,6 @@
 				}
 			});
 		}
-
-
 	</script>
 
 

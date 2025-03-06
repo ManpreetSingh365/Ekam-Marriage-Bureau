@@ -7,6 +7,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Paid Successfully</title>
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 </head>
 
 <body>
@@ -35,6 +37,57 @@
 
 	<script>
 		console.log("paidSuccessfully page");
+		
+		const checkPaymentStatus = (appUserId, validityPeriod, validityType) => {
+			$.ajax({
+				url: `/api/payments/status/${appUserId}/${validityPeriod}/${validityType}`,
+				type: "GET",
+				success: function (response) {
+					console.log("🔄 Checking Payment:", response);
+					console.log("🔄 Checking Payment Status:", response.status);
+					if (response.status === "SUCCESS") {
+						console.log("✅ Payment Completed Successfully!");
+
+						console.log("Inside Findmatch getItem----->");
+						console.log("appUserId: " + appUserId);
+						console.log("validityPeriod: " + validityPeriod);
+						console.log("validityType: " + validityType);
+ 
+						// Optionally, trigger the webhook endpoint (normally invoked by PhonePe)
+						$.ajax({
+							url: "/api/payments/webhook",
+							type: "POST",
+							contentType: "application/json",
+							data: JSON.stringify(response),
+							success: function (storeResponse) {
+								console.log("✅ Payment Stored Successfully!", storeResponse);
+							},
+							error: function (err) {
+								console.error("❌ Error Storing Payment:", err);
+							}
+						});
+
+						clearInterval(statusInterval); // Stop polling once success is confirmed
+					}
+				},
+				error: function (xhr, status, error) {
+					console.error("❌ Error Fetching Payment Status:", error);
+				}
+			});
+		};
+
+		// Start Checking Payment Status Every 5 Seconds
+		$(document).ready(function () {
+			const appUserId = localStorage.getItem("appUserId");
+			const validityPeriod = localStorage.getItem("validityPeriod");
+			const validityType = localStorage.getItem("validityType");
+
+			if (appUserId) {
+				console.log("🚀 Checking payment status for appUserId:", appUserId);
+				statusInterval = setInterval(() => checkPaymentStatus(appUserId, validityPeriod, validityType), 1000); // Poll every 2 sec
+			}
+		});
+
 
 		const Confettiful = function (el) {
 			this.el = el;

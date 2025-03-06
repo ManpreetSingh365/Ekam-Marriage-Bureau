@@ -131,7 +131,7 @@ public class MarriageBureauApplication {
 		mbUser.setTotalSisters(1);
 		mbUser.setPhoneNumber1("1234567890");
 		mbUser.setFormFilledBy("Self");
-		mbUser.setSubscriptionIsActive(true);
+		mbUser.setSubscriptionIsActive(true); 
 		mbUser.setRole(USER_ROLE.ROLE_USER);
 
 		userRepo.findByEmail(mbEmail).ifPresentOrElse(user1 -> {

@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -47,6 +48,9 @@ public class PageController {
 	@Autowired
 	private UserService userService;
 
+	@Value("${phonepe.merchant-id}")
+	private String merchantId;
+
 	@RequestMapping(value = { "/", "/index" })
 	public String index(Model model) {
 
@@ -83,7 +87,7 @@ public class PageController {
 	public RedirectView Gallery() {
 		return new RedirectView("/index#gallery");
 	}
-	
+
 	@RequestMapping("/about")
 	public RedirectView About() {
 		return new RedirectView("/index#about");
@@ -93,7 +97,6 @@ public class PageController {
 	public RedirectView ContactUs() {
 		return new RedirectView("/index#rsvp");
 	}
-
 
 	@RequestMapping("/paidSuccessfully")
 	public String paidSuccessfully() {
@@ -115,12 +118,22 @@ public class PageController {
 		Optional<Authentication> authOptional = Optional.ofNullable(authentication);
 
 		model.addAttribute("authOptional", authOptional.isPresent());
+
+		if (authOptional.isPresent()) {
+			User user = (User) authentication.getPrincipal(); // Get the authenticated user
+			Long userId = user.getUserId(); // Get the user ID
+			model.addAttribute("APP_USER_ID", userId);
+		}
+
 		model.addAttribute("GOLD_PLAN_PRICE", AppConstants.GOLD_PLAN_PRICE);
 		model.addAttribute("DIAMOND_PLAN_PRICE", AppConstants.DIAMOND_PLAN_PRICE);
 		model.addAttribute("PLATINUM_PLAN_PRICE", AppConstants.PLATINUM_PLAN_PRICE);
 
-		model.addAttribute("rzp_key_id", "rzp_live_xko5HzmXhUOjwN");
-		model.addAttribute("rzp_key_secret", "n2xolVPLJ88zOuCyrmbAnt73");
+		model.addAttribute("MERCHANT_ID", merchantId);
+
+//		model.addAttribute("rzp_key_id", "rzp_live_xko5HzmXhUOjwN");
+//		model.addAttribute("rzp_key_secret", "n2xolVPLJ88zOuCyrmbAnt73");
+
 //	    List<Map<String, Object>> plans = new ArrayList<>();
 //	    
 //	    // Adding Gold Plan

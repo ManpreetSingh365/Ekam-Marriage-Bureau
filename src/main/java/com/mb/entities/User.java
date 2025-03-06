@@ -237,8 +237,18 @@ public class User implements UserDetails {
 	@JoinColumn()
 	@PrimaryKeyJoinColumn
 	private PaymentResponse paymentResponse;
-
+	
 	private String razorpaySignature;
+	
+//	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+//	@JoinColumn()
+//	@PrimaryKeyJoinColumn
+//	private PhonePePayment phonePePayment;
+
+	
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<PhonePePayment> phonePePayments; // List of payments
+
 
 	// for this project:
 	// email id hai wahi hamare username

@@ -12,7 +12,7 @@ public class AppConstants {
 
 	public static final int PAGE_SIZE = 1000;
 
-	public static final int GOLD_PLAN_PRICE = 1;
+	public static final int GOLD_PLAN_PRICE = 1100;
 	public static final int DIAMOND_PLAN_PRICE = 2100;
 	public static final int PLATINUM_PLAN_PRICE = 5100;
 

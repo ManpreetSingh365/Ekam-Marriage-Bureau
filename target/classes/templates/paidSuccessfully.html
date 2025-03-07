@@ -38,9 +38,9 @@
 	<script>
 		console.log("paidSuccessfully page");
 		
-		const checkPaymentStatus = (appUserId, validityPeriod, validityType) => {
+		const checkPaymentStatus = (appUserId) => {
 			$.ajax({
-				url: `/api/payments/status/${appUserId}/${validityPeriod}/${validityType}`,
+				url: `/api/payments/status/${appUserId}`,
 				type: "GET",
 				success: function (response) {
 					console.log("🔄 Checking Payment:", response);
@@ -50,8 +50,6 @@
 
 						console.log("Inside Findmatch getItem----->");
 						console.log("appUserId: " + appUserId);
-						console.log("validityPeriod: " + validityPeriod);
-						console.log("validityType: " + validityType);
  
 						// Optionally, trigger the webhook endpoint (normally invoked by PhonePe)
 						$.ajax({
@@ -67,7 +65,7 @@
 							}
 						});
 
-						clearInterval(statusInterval); // Stop polling once success is confirmed
+						//clearInterval(statusInterval); // Stop polling once success is confirmed
 					}
 				},
 				error: function (xhr, status, error) {
@@ -76,15 +74,13 @@
 			});
 		};
 
-		// Start Checking Payment Status Every 5 Seconds
 		$(document).ready(function () {
 			const appUserId = localStorage.getItem("appUserId");
-			const validityPeriod = localStorage.getItem("validityPeriod");
-			const validityType = localStorage.getItem("validityType");
 
 			if (appUserId) {
 				console.log("🚀 Checking payment status for appUserId:", appUserId);
-				statusInterval = setInterval(() => checkPaymentStatus(appUserId, validityPeriod, validityType), 1000); // Poll every 2 sec
+				checkPaymentStatus(appUserId);
+				//statusInterval = setInterval(() => checkPaymentStatus(appUserId, validityPeriod, validityType), 1000); // Poll every 2 sec
 			}
 		});
 

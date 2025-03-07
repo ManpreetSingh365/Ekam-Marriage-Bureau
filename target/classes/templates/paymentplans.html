@@ -194,7 +194,7 @@
 				url: "/api/payments/initiate",
 				data: JSON.stringify({
 					amount: amount,
-					merchantTransactionId: MERCHANT_ID,
+					merchantId: MERCHANT_ID,
 					appUserId: APP_USER_ID, 
 					validityPeriod: validityPeriod,
 					validityType: validityType
@@ -216,8 +216,6 @@
 						console.log("validityType: " + validityType);
 
 						localStorage.setItem("appUserId", APP_USER_ID);
-						localStorage.setItem("validityPeriod: ", validityPeriod);
-						localStorage.setItem("validityType: ", validityType);
 
 						// Redirect to payment gateway
 						window.location.href = redirectUrl;

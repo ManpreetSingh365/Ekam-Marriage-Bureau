@@ -27,53 +27,39 @@ public class PhonePePaymentService {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 
-//    @Transactional
-//    public void storePaymentResponse(PhonePePayment phonePePayment) {
-//        String query = "INSERT INTO phone_pe_payment "
-//                + "(app_user_id, merchant_transaction_id, phone_pe_transaction_id, amount, status, "
-//                + "validity_period, validity_type, created_at, expiry_date) "
-//                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-//
-//        System.out.println("🔹 Storing payment response: " + phonePePayment);
-//
-//        int rowsAffected = jdbcTemplate.update(query,
-//                phonePePayment.getAppUserId(),
-//                phonePePayment.getMerchantTransactionId(),
-//                phonePePayment.getPhonePeTransactionId(),
-//                phonePePayment.getAmount(),
-//                phonePePayment.getStatus(),
-//                phonePePayment.getValidityPeriod(),
-//                phonePePayment.getValidityType(),
-//                phonePePayment.getCreatedAt(),
-//                phonePePayment.getExpiryDate() != null ? new Timestamp(phonePePayment.getExpiryDate().getTime()) : null
-//        );
-//	System.out.println("✅ Rows affected: "+rowsAffected);
-//}
-
 	@Transactional
 	public void createPaymentRecord(PhonePePayment phonePePayment) {
 		String query = "INSERT INTO phone_pe_payment "
-				+ "(merchant_transaction_id, phone_pe_transaction_id, app_user_id, amount, status, created_at) "
-				+ "VALUES (?, ?, ?, ?, ?, ?)";
-		System.out.println("🔹 Creating payment record: " + phonePePayment);
+				+ "(merchant_transaction_id, phone_pe_transaction_id, app_user_id, amount, status, created_at, "
+				+ "expiry_date, validity_period, validity_type) " + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
 		jdbcTemplate.update(query, phonePePayment.getMerchantTransactionId(), phonePePayment.getPhonePeTransactionId(),
 				phonePePayment.getAppUserId(), phonePePayment.getAmount(), phonePePayment.getStatus(),
-				phonePePayment.getCreatedAt());
+				phonePePayment.getCreatedAt(), phonePePayment.getExpiryDate(), phonePePayment.getValidityPeriod(),
+				phonePePayment.getValidityType());
 	}
 
 	@Transactional
-	public void updatePaymentStatus(PhonePePayment phonePePayment) {
-		String query = "UPDATE phone_pe_payment SET "
-				+ "phone_pe_transaction_id = ?, status = ?, validity_period = ?, validity_type = ?, expiry_date = ? "
-				+ "WHERE app_user_id = ?";
-		System.out.println("🔹 Updating payment record: " + phonePePayment);
+    public void updatePaymentStatus(PhonePePayment phonePePayment) {
+        String query = "UPDATE phone_pe_payment SET "
+                + "merchant_transaction_id = ?, phone_pe_transaction_id = ?, app_user_id = ?, amount = ?, status = ?, "
+                + "created_at = ?, expiry_date = ?, validity_period = ?, validity_type = ? "
+                + "WHERE id = ?";
 
-		jdbcTemplate.update(query, phonePePayment.getPhonePeTransactionId(), phonePePayment.getStatus(),
-				phonePePayment.getValidityPeriod(), phonePePayment.getValidityType(),
-				phonePePayment.getExpiryDate() != null ? new Timestamp(phonePePayment.getExpiryDate().getTime()) : null,
-				phonePePayment.getAppUserId());
-	}
-
+        jdbcTemplate.update(query,
+                phonePePayment.getMerchantTransactionId(),
+                phonePePayment.getPhonePeTransactionId(),
+                phonePePayment.getAppUserId(),
+                phonePePayment.getAmount(),
+                phonePePayment.getStatus(),
+                phonePePayment.getCreatedAt() != null ? new Timestamp(phonePePayment.getCreatedAt().getTime()) : null,
+                phonePePayment.getExpiryDate() != null ? new Timestamp(phonePePayment.getExpiryDate().getTime()) : null,
+                phonePePayment.getValidityPeriod(),
+                phonePePayment.getValidityType(),
+                phonePePayment.getId()
+        );
+    }
+	
 	public PhonePePayment getPaymentByTransactionId(String transactionId) {
 		return phonePePaymentRepository.findByMerchantTransactionId(transactionId).orElse(null);
 	}
@@ -82,30 +68,30 @@ public class PhonePePaymentService {
 		return phonePePaymentRepository.findByAppUserId(appUserId).orElse(null);
 	}
 
-	@Transactional
-	public void updatePhonePePayment(PhonePePayment phonePePayment) {
-
-		System.out.println("Before: updation: ----->");
-		System.out.println(phonePePayment);
-
-		phonePePaymentRepository.save(phonePePayment);
-
-		System.out.println("💾 Payment status updated in phone_pe_payment: " + phonePePayment.getId());
-	}
-
-	public void updatePaymentStatus(PhonePeWebhookRequest request) {
-		Optional<PhonePePayment> paymentOptional = phonePePaymentRepository
-				.findByMerchantTransactionId(request.merchantTransactionId());
-		if (paymentOptional.isPresent()) {
-			PhonePePayment payment = paymentOptional.get();
-			payment.setStatus(request.status());
-			payment.setPhonePeTransactionId(request.transactionId());
-			phonePePaymentRepository.save(payment);
-			System.out.println("Payment updated successfully.");
-		} else {
-			System.err.println("Payment not found for Transaction ID: " + request.merchantTransactionId());
-		}
-	}
+	//	@Transactional
+//	public void updatePhonePePayment(PhonePePayment phonePePayment) {
+//
+//		System.out.println("Before: updation: ----->");
+//		System.out.println(phonePePayment);
+//
+//		phonePePaymentRepository.save(phonePePayment);
+//
+//		System.out.println("💾 Payment status updated in phone_pe_payment: " + phonePePayment.getId());
+//	}
+//
+//	public void updatePaymentStatus(PhonePeWebhookRequest request) {
+//		Optional<PhonePePayment> paymentOptional = phonePePaymentRepository
+//				.findByMerchantTransactionId(request.merchantTransactionId());
+//		if (paymentOptional.isPresent()) {
+//			PhonePePayment payment = paymentOptional.get();
+//			payment.setStatus(request.status());
+//			payment.setPhonePeTransactionId(request.transactionId());
+//			phonePePaymentRepository.save(payment);
+//			System.out.println("Payment updated successfully.");
+//		} else {
+//			System.err.println("Payment not found for Transaction ID: " + request.merchantTransactionId());
+//		}
+//	}
 
 //	public void storePaymentResponse(Long userId, PhonePePayment phonePePayment) {
 //		String query = "INSERT INTO payments (user_id, razorpay_payment_id, razorpay_order_id, razorpay_signature, validity_period, validity_type) VALUES (?, ?, ?, ?, ?, ?)";

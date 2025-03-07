@@ -16,6 +16,7 @@ import com.mb.services.UserService;
 import com.mb.services.impl.PhonePePaymentService;
 import com.mb.services.impl.PhonePeWebhookRequest;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
@@ -64,17 +65,23 @@ public class PhonePePaymentController {
 	public ResponseEntity<?> initiatePayment(@RequestBody PhonePePayment request) {
 		try {
 			// Set initial status and createdAt timestamp for pending payment
+			request.setAppUserId(request.getAppUserId());
+			request.setAmount(request.getAmount());
+			request.setValidityPeriod(request.getValidityPeriod());
+			request.setValidityType(request.getValidityType());
 			request.setStatus("PENDING");
 			request.setCreatedAt(new Timestamp(System.currentTimeMillis()));
 
+			if (request.isSubscriptionValid()) {
+				request.setExpiryDate(request.getExpiryDate());
+			}
+
 			// ✅ Generate a unique merchantTransactionId
 			String merchantTransactionId = "MTX" + System.currentTimeMillis();
-			System.out.println("Generated merchantTransactionId: " + merchantTransactionId); //
 			request.setMerchantTransactionId(merchantTransactionId);
 
 			// ✅ Generate a unique PhonePe transaction ID
 			String phonePeTransactionId = "TRANS" + System.currentTimeMillis();
-			System.out.println("Generated phonePeTransactionId ID: " + phonePeTransactionId); // TRANS1741013200362
 			request.setPhonePeTransactionId(phonePeTransactionId);
 
 			// Store a pending payment record in the database
@@ -100,15 +107,33 @@ public class PhonePePaymentController {
 		Map<String, Object> requestData = new LinkedHashMap<>();
 		requestData.put("merchantId", merchantId);
 		requestData.put("merchantTransactionId", request.getMerchantTransactionId());
-		requestData.put("merchantUserId", request.getAppUserId()); // Fixed issue here
+		requestData.put("appUserId", request.getAppUserId()); // Fixed issue here
 		requestData.put("amount", (int) (request.getAmount() * 100)); // Convert to paise
+		requestData.put("phonePeTransactionId", request.getPhonePeTransactionId());
+		requestData.put("status", request.getStatus());
+		requestData.put("validityPeriod", request.getValidityPeriod());
+		requestData.put("validityType", request.getValidityType());
+		requestData.put("createdAt", request.getCreatedAt());
+		requestData.put("expiryDate", request.getExpiryDate());
 		requestData.put("redirectUrl", redirectUrl);
 		requestData.put("redirectMode", "REDIRECT");
 		requestData.put("callbackUrl", callbackUrl);
 		requestData.put("mobileNumber", "1234567890");
 
+		request.setMerchantTransactionId(request.getMerchantTransactionId());
+		request.setAppUserId(request.getAppUserId());
+		request.setAmount(request.getAmount());
+		request.setPhonePeTransactionId(request.getPhonePeTransactionId());
+		request.setStatus(request.getStatus());
+		request.setValidityPeriod(request.getValidityPeriod());
+		request.setValidityType(request.getValidityType());
+		request.setCreatedAt(request.getCreatedAt());
+		request.setExpiryDate(request.getExpiryDate());
+
 		Map<String, String> instrument = Map.of("type", "PAY_PAGE");
 		requestData.put("paymentInstrument", instrument);
+
+		paymentService.updatePaymentStatus(request);
 
 		String jsonPayload = objectMapper.writeValueAsString(requestData);
 		String base64Payload = Base64.getEncoder().encodeToString(jsonPayload.getBytes(StandardCharsets.UTF_8));
@@ -168,18 +193,14 @@ public class PhonePePaymentController {
 		Map<String, String> response = new HashMap<>();
 
 		System.out.println("🔹 Inside handlePaymentWebhook method --->");
+		System.out.println("Webhook Payment: " + phonePePayment);
 		User user = (User) authentication.getPrincipal(); // Get the authenticated user
-		System.out.println("Before-Before: user.isSubscriptionIsActive(): " + user.isSubscriptionIsActive());
 
 		if (phonePePayment == null || phonePePayment.getMerchantTransactionId() == null) {
 			System.err.println("❌ Error: Invalid Payment Data Received");
 			response.put("error", "Invalid Payment Data");
 			return ResponseEntity.badRequest().body(response);
 		}
-
-		System.out.println("✅ Webhook Received: " + phonePePayment);
-// ✅ Webhook Received: PhonePePayment(id=1, merchantTransactionId=TESTPGPAYUATX, phonePeTransactionId=TRANS1741175336866, amount=1.0, status=SUCCESS, validityPeriod=30, validityType=days, appUserId=3, user=null, createdAt=2025-03-05 22:48:56.866, expiryDate=Fri Apr 04 22:48:56 IST 2025)
-// ✅ Webhook Received: PhonePePayment(id=1, merchantTransactionId=TESTPGPAYUATX, phonePeTransactionId=TRANS1741253222873, amount=1.0, status=SUCCESS, validityPeriod=30, validityType=days, appUserId=1, user=null, createdAt=2025-03-06 20:27:02.872, expiryDate=Sat Apr 05 20:27:02 IST 2025)
 
 		// Update the existing payment record with the webhook details
 		if ("SUCCESS".equalsIgnoreCase(phonePePayment.getStatus())) {
@@ -191,13 +212,7 @@ public class PhonePePaymentController {
 
 			userService.saveUser(user);
 
-			phonePePayment.setPhonePeTransactionId(phonePePayment.getPhonePeTransactionId());
-			phonePePayment.setValidityPeriod(phonePePayment.getValidityPeriod());
-			phonePePayment.setValidityType(phonePePayment.getValidityType());
-			if (phonePePayment.isSubscriptionValid()) {
-				phonePePayment.setExpiryDate(phonePePayment.getExpiryDate());
-			}
-
+			phonePePayment.setAppUserId(phonePePayment.getAppUserId());
 
 			try {
 				paymentService.updatePaymentStatus(phonePePayment);
@@ -207,7 +222,7 @@ public class PhonePePaymentController {
 			}
 
 			response.put("status", "SUCCESS");
-			
+
 			return ResponseEntity.ok(response);
 		} else {
 			user.setSubscriptionIsActive(false);
@@ -217,28 +232,18 @@ public class PhonePePaymentController {
 		}
 	}
 
-	@GetMapping("/status/{appUserId}/{validityPeriod}/{validityType}")
-	public ResponseEntity<Map<String, String>> checkPaymentStatus(@PathVariable Long appUserId,
-			@PathVariable String validityPeriod, @PathVariable String validityType) {
+	@GetMapping("/status/{appUserId}")
+	public ResponseEntity<Map<String, String>> checkPaymentStatus(HttpSession session, @PathVariable Long appUserId) {
 		Map<String, String> response = new HashMap<>();
 
 		System.out.println("Inside checkPaymentStatus method --->");
 		// Fetch payment status from your database
 		PhonePePayment payment = paymentService.getPaymentByAppUserId(appUserId);
 
-		System.out.println("payment: " + payment);
-
 		if (payment == null) {
 			response.put("status", "NOT_FOUND");
 			System.out.println("Status Not Found --->");
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-		}
-
-		System.out.println("After: Inside checkPaymentStatus method --->");
-		payment.setValidityPeriod(validityPeriod);
-		payment.setValidityType(validityType);
-		if (payment.isSubscriptionValid()) {
-			payment.setExpiryDate(payment.getExpiryDate());
 		}
 
 		// ✅ Format expiryDate properly before adding to response
@@ -249,7 +254,7 @@ public class PhonePePaymentController {
 		response.put("id", String.valueOf(payment.getId()));
 		response.put("appUserId", String.valueOf(payment.getAppUserId()));
 		response.put("status", "SUCCESS");
-		response.put("merchantTransactionId", String.valueOf(merchantId));
+		response.put("merchantTransactionId", String.valueOf(payment.getMerchantTransactionId()));
 		response.put("phonePeTransactionId", String.valueOf(payment.getPhonePeTransactionId()));
 		response.put("validityPeriod", String.valueOf(payment.getValidityPeriod()));
 		response.put("validityType", String.valueOf(payment.getValidityType()));
@@ -257,8 +262,35 @@ public class PhonePePaymentController {
 		response.put("createdAt", formatter.format(payment.getCreatedAt())); // ✅ Format createdAt
 		response.put("expiryDate", formattedExpiryDate); // ✅ Format expiryDate
 
-		System.out.println("After: payment: " + payment);
-
 		return ResponseEntity.ok(response);
 	}
+
+//	 @PostMapping("/callback")
+//	    public ResponseEntity<String> handlePhonePeCallback(@RequestBody Map<String, Object> callbackData) {
+//	        System.out.println("Received PhonePe Callback: " + callbackData);
+//
+//	        try {
+//	            String transactionId = (String) callbackData.get("transactionId");
+//	            String merchantTransactionId = (String) callbackData.get("merchantTransactionId");
+//	            String status = (String) callbackData.get("code"); // 'PAYMENT_SUCCESS', 'PAYMENT_FAILED', 'PAYMENT_PENDING'
+//
+//	            // Process the transaction status accordingly
+//	            if ("PAYMENT_SUCCESS".equals(status)) {
+//	                System.out.println("Payment successful for MerchantTransactionId: " + merchantTransactionId);
+//	                // Update the order/payment status in DB
+//	            } else if ("PAYMENT_FAILED".equals(status)) {
+//	                System.out.println("Payment failed for MerchantTransactionId: " + merchantTransactionId);
+//	                // Handle payment failure
+//	            } else {
+//	                System.out.println("Payment status pending for MerchantTransactionId: " + merchantTransactionId);
+//	                // Handle pending status
+//	            }
+//
+//	            return ResponseEntity.ok("Callback processed successfully");
+//
+//	        } catch (Exception e) {
+//	            System.out.println("Error processing PhonePe callback: " + e.getMessage());
+//	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error processing callback");
+//	        }
+//	    }
 }

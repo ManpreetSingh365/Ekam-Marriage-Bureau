@@ -34,7 +34,7 @@
 						<th scope="col" class="px-2 py-3 text-orange">Married Status</th>
 						<th scope="col" class="px-2 py-3 text-orange">Place of Living</th>
 						<th scope="col" class="px-2 py-3 text-orange">Occupation</th>
-						<th scope="col" class="px-2 py-3 text-orange">Contact & Email</th>
+						<th scope="col" class="px-2 py-3 text-orange">Ph., Email, Creation</th>
 						<th scope="col" class="px-2 py-3 text-orange">View Profile</th>
 						<th scope="col" class="px-2 py-3 text-orange">Authority Control</th>
 					</tr>
@@ -45,7 +45,7 @@
 
 						<td class="px-2 py-2"></td>
 						<td class="px-2 py-2">
-							<img class="w-10 h-10 rounded-full border-orange" th:src="*{picture}"
+							<img loading="lazy" class="w-10 h-10 rounded-full border-orange" th:src="*{picture}"
 								onerror="this.onerror=null; this.src='https://res.cloudinary.com/dcrlfty5k/image/upload/v1729153915/yjllp8ag6uab4gdq7hog.png';"
 								alt="User Pic">
 							<p data-th-text="*{userId}" class="text-gray-900 dark:text-white"></p>
@@ -64,11 +64,14 @@
 							<li class="mt-1 ">
 								<a href="mailto: '*{email}'" class="text-blue-600" data-th-text="*{email}"> </a>
 							</li>
+							<li class="mt-1 ">
+								<a  data-th-text="*{userCreationTime}"> </a>
+							</li>
 						</td>
 						<td class="px-2 py-2">
 							<a data-th-href="@{'/user/'+*{userId}}"
 								class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
-								<i class="fa-solid fa-eye"></i>
+								<i class="fa-solid fa-eye ml-2"></i> <span>View Profile</span>
 							</a>
 						</td>
 						<td class="px-2 py-2 flex gap-2 ">

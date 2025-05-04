@@ -110,10 +110,12 @@
 						<!-- Item 1 -->
 						<div th:each="image : ${userImages}" class="hidden duration-700 ease-in-out" data-carousel-item>
 							<img th:src="${image} ?: 'https://manpreetsingh.vercel.app/_next/image?url=%2FImage-removebg.png&w=1080&q=75'"
+								th:data-fullimage="${image} ?: 'https://manpreetsingh.vercel.app/_next/image?url=%2FImage-removebg.png&w=1080&q=75'"
 								onerror="this.onerror=null; this.src='https://manpreetsingh.vercel.app/_next/image?url=%2FImage-removebg.png&w=1080&q=75';"
-								class="w-full h-[720px] object-cover rounded-lg shadow" alt="User Image" />
+								class="w-full h-[720px] object-cover rounded-lg shadow cursor-pointer" alt="User Image" 
+								onclick="openFullscreen(this.getAttribute('data-fullimage'))" />
 						</div>
-					</div>
+					</div> 
 					<!-- Slider indicators -->
 					<div class="absolute z-30 flex -translate-x-1/2 bottom-5 left-1/2 space-x-3 rtl:space-x-reverse">
 						<th:block th:each="i,iterStat : ${userImages}">
@@ -148,6 +150,24 @@
 							<span class="sr-only">Next</span>
 						</span>
 					</button>
+				</div>
+				
+				<!-- Full Screen Image Modal -->
+				<div id="fullscreenModal" class="fixed inset-0 bg-black bg-opacity-0 z-50 flex items-center justify-center hidden transition-all duration-300" onclick="closeFullscreen()">
+					<div class="relative w-full h-full flex items-center justify-center p-4">
+						<div class="absolute inset-0 bg-black opacity-0 transition-opacity duration-300" id="modalBackdrop"></div>
+						<div class="relative z-10 transform scale-95 opacity-0 transition-all duration-300" id="modalContent" onclick="event.stopPropagation()">
+							<img id="fullscreenImage" class="max-h-[90vh] max-w-[90vw] object-contain rounded-lg shadow-2xl" src="" alt="Fullscreen Image" onclick="event.stopPropagation()" />
+							<button onclick="closeFullscreen()" class="absolute -top-3 -right-3 bg-white text-gray-800 rounded-full w-10 h-10 flex items-center justify-center shadow-lg hover:bg-gray-200 focus:outline-none transition-all">
+								<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+								</svg>
+							</button>
+						</div>
+						<div class="absolute bottom-6 left-0 right-0 text-center text-white text-sm opacity-0 pointer-events-none transition-opacity duration-300" id="closeHint">
+							Click anywhere to close
+						</div>
+					</div>
 				</div>
 
 				<!-- User Details Section -->
@@ -651,7 +671,7 @@
 		    console.log("Button clicked!");
 
 		    // Assuming userId is available in a hidden input field or as a global variable
-		    const userId = [[${user.userId}]];
+		    const userId = "[[${user.userId}]]";
 			console.log("User ID:", userId);
 
 		    fetch(`/generateShareLink/${userId}`)
@@ -764,7 +784,69 @@
 			}, 1000); // Poll every 1 seconds
 		}
 
-
+		// Enhanced fullscreen functions with animations
+		function openFullscreen(imageSrc) {
+			console.log("Opening fullscreen with image:", imageSrc);
+			const fullscreenImage = document.getElementById('fullscreenImage');
+			fullscreenImage.src = imageSrc;
+			
+			const modal = document.getElementById('fullscreenModal');
+			const backdrop = document.getElementById('modalBackdrop');
+			const content = document.getElementById('modalContent');
+			const closeHint = document.getElementById('closeHint');
+			
+			// Show the modal container first
+			modal.classList.remove('hidden');
+			
+			// Trigger a reflow to ensure transitions work
+			void modal.offsetWidth;
+			
+			// Animate the backdrop and content
+			modal.classList.add('bg-opacity-90');
+			backdrop.classList.add('opacity-80');
+			content.classList.remove('scale-95', 'opacity-0');
+			content.classList.add('scale-100', 'opacity-100');
+			
+			// Show the close hint with delay
+			setTimeout(() => {
+				closeHint.classList.add('opacity-80');
+				setTimeout(() => {
+					closeHint.classList.remove('opacity-80');
+				}, 2000);
+			}, 1000);
+			
+			document.body.style.overflow = 'hidden'; // Prevent scrolling
+		}
+		
+		function closeFullscreen() {
+			const modal = document.getElementById('fullscreenModal');
+			const backdrop = document.getElementById('modalBackdrop');
+			const content = document.getElementById('modalContent');
+			
+			// Animate out
+			modal.classList.remove('bg-opacity-90');
+			backdrop.classList.remove('opacity-80');
+			content.classList.remove('scale-100', 'opacity-100');
+			content.classList.add('scale-95', 'opacity-0');
+			
+			// Hide after animation completes
+			setTimeout(() => {
+				modal.classList.add('hidden');
+				document.body.style.overflow = 'auto'; // Re-enable scrolling
+			}, 300);
+		}
+		
+		// Add event listeners for fullscreen modal
+		document.addEventListener('DOMContentLoaded', function() {
+			// No need for modal click handlers as we're using direct onclick attribute on the modal
+			
+			// Close modal with ESC key
+			document.addEventListener('keydown', function(event) {
+				if (event.key === 'Escape' && !document.getElementById('fullscreenModal').classList.contains('hidden')) {
+					closeFullscreen();
+				}
+			});
+		});
 	</script>
 
 </body>

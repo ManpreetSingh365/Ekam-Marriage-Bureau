@@ -62,6 +62,7 @@ D:\Main\Backend Framework\Spring Boot\MarriageBureau\src\main\java\com\mb\servic
 D:\Main\Backend Framework\Spring Boot\MarriageBureau\src\main\java\com\mb\services\UserService.java
 D:\Main\Backend Framework\Spring Boot\MarriageBureau\src\main\java\com\mb\subscription\SubscriptionChecker.java
 D:\Main\Backend Framework\Spring Boot\MarriageBureau\src\main\java\com\mb\subscription\SubscriptionManager.java
+D:\Main\Backend Framework\Spring Boot\MarriageBureau\src\main\java\com\mb\utils\sendMail.java
 D:\Main\Backend Framework\Spring Boot\MarriageBureau\src\main\java\com\mb\utils\UniqueEmailGenerator.java
 D:\Main\Backend Framework\Spring Boot\MarriageBureau\src\main\java\com\mb\validators\FileValidator.java
 D:\Main\Backend Framework\Spring Boot\MarriageBureau\src\main\java\com\mb\validators\ValidFile.java

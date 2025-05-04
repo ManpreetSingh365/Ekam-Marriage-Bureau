@@ -8,7 +8,7 @@
 	<link rel="stylesheet" th:href="@{/css/style.css}" />
 </head>
 
-<body>
+<body> 
 
 	<div id="content">
 		<div class="grid grid-cols-12 mt-6">
@@ -119,6 +119,560 @@
 						</div>
 
 
+						
+						<div class="flex flex-wrap justify-between mt-5">
+							<!-- Gender -->
+							<fieldset class="mx-2 sm:w-1/2">
+								<legend class="sr-only">Gender</legend>
+								<label
+									class="block mb-2 text-sm font-bold font-medium text-gray-900 dark:text-white">Gender
+									<super class="text-red-600 ml-1 text-lg font-medium">*</super>
+								</label>
+
+								<div class="flex items-center mb-4 space-x-3">
+									<label
+										class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">
+										<input data-th-field="*{gender}" id="gender-option-1" type="radio" name="gender"
+											value="male" class="mr-3">
+										Male
+									</label>
+
+									<label
+										class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">
+										<input data-th-field="*{gender}" id="gender-option-2" type="radio" name="gender"
+											value="female" class="mr-3">
+										Female
+									</label>
+								</div>
+								<p data-th-if="${#fields.hasErrors('gender')}" data-th-errors="*{gender}"
+									class="text-red-600 flex"></p>
+							</fieldset>
+
+							<!-- Your Name -->
+							<div class="mx-2 mb-5 sm:w-1/2">
+								<label class="block text-gray-700 text-sm font-bold mb-2 dark:text-white"
+									for="yourName">Name<super class="text-red-600 ml-1 text-lg font-medium">*</super>
+								</label>
+								<input data-th-field="*{yourName}"
+									class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+									placeholder="Enter your FULL Name" type="text" id="yourName" name="yourName">
+								<p data-th-if="${#fields.hasErrors('yourName')}" data-th-errors="*{yourName}"
+									class="text-red-600 flex flex-wrap w-full"> </p>
+							</div>
+						</div>
+						<hr>
+
+						<div class="mt-5 flex flex-wrap lg:flex-nowrap justify-between gap-4">
+							<!-- Religion -->
+							<div class="flex-1 min-w-0 mx-2">
+								<label for="religion"
+									class="block mb-2 text-sm font-bold font-medium text-gray-900 dark:text-white">Religion
+									<super class="text-red-600 ml-1 text-lg font-medium">*</super>
+								</label>
+								<p data-th-if="${#fields.hasErrors('religion')}" data-th-errors="*{religion}"
+									class="text-red-600"></p>
+<!--								<select data-th-field="*{religion}" id="religion" name="religion"
+									class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-sm p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+									<option value="">Select Religions</option>
+									<th:block th:each="religion : ${religions}">
+										<option th:value="${#strings.trim(religion)}"
+											th:text="${#strings.trim(religion)}">
+										</option>
+									</th:block>
+								</select>
+-->								<select data-th-field="*{religion}" id="religion" name="religion"
+									class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-sm p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+									<option value="">Select Religions</option>
+									<!-- Religions Options will be populated here -->
+								</select>
+
+							</div>
+
+							<!-- Caste -->
+							<div class="flex-1 min-w-0 mx-2 mt-2" id="sikh-caste-section">
+								<label for="caste"
+									class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Caste</label>
+								<p data-th-if="${#fields.hasErrors('caste')}" data-th-errors="*{caste}"
+									class="text-red-600"></p>
+								<select data-th-field="*{caste}" id="caste" name="caste"
+									class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+									<option value="">Select Caste</option>
+									<!-- Options will be populated here -->
+								</select>
+							</div>
+
+							<!-- Sub-Caste -->
+							<div class="flex-1 min-w-0 mx-2 mt-2 mb-5" id="subcaste-section">
+								<label for="subcaste"
+									class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Sub-Caste</label>
+								<p data-th-if="${#fields.hasErrors('subcaste')}" data-th-errors="*{subcaste}"
+									class="text-red-600 flex"></p>
+								<input data-th-field="*{subcaste}" type="text" id="subcaste"
+									class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+									placeholder="Sub Caste" />
+							</div>
+						</div>
+
+						<!-- Date Of Birth -->
+						<div class="mt-5 flex flex-wrap lg:flex-nowrap justify-between gap-4">
+							<div class="w-44 sm:w-1/2 mx-2 mb-5">
+								<div class="relative max-w-sm">
+									<label for="dateOfBirth"
+										class="block mb-2 text-sm font-bold font-medium text-gray-900 dark:text-white">Date
+										Of Birth<super class="text-red-600 ml-1 text-lg font-medium">*</super></label>
+									<small> At least 18+</small>
+									<div
+										class="absolute inset-y-0 start-0 flex items-center ps-3 pt-10 pointer-events-none">
+										<svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
+											xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+											<path
+												d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
+										</svg>
+									</div>
+									<input data-th-field="*{dateOfBirth}" type="text" name="dateOfBirth"
+										id="dateOfBirth" datepicker dateOfBirth="MM-dd-yyyy"
+										class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+										placeholder="Select your Date-Of-Birth">
+									<p data-th-if="${#fields.hasErrors('dateOfBirth')}" data-th-errors="*{dateOfBirth}"
+										class="text-red-600 flex"> </p>
+								</div>
+							</div>
+
+							<!-- Birth Time -->
+							<div class="w-44  sm:w-1/2 mx-2 mt-2 mb-5">
+								<label for="brithTime"
+									class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Birth
+									Time</label>
+								<small> Enter Exact Birth-Time (if known)</small>
+								<div class="flex">
+									<input data-th-field="*{brithTime}" type="time" name="brithTime" id="brithTime"
+										class="rounded-none rounded-s-lg bg-gray-50 border text-gray-900 leading-none focus:ring-blue-500 focus:border-blue-500 block flex-1 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+										min="09:00" max="18:00" value="00:00" required>
+									<span
+										class="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border rounded-s-0 border-s-0 border-gray-300 rounded-e-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
+										<svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
+											xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+											<path fill-rule="evenodd"
+												d="M2 12C2 6.477 6.477 2 12 2s10 4. 477 10 10-4.477 10-10 10S2 17.523 2 12Zm11-4a1 1 0 1 0-2 0v4a1 1 0 0 0 .293.707l3 3a1 1 0 0 0 1.414-1.414L13 11.586V8Z"
+												clip-rule="evenodd" />
+										</svg>
+									</span>
+								</div>
+							</div>
+
+							<!-- Height -->
+							<div class="w-44 sm:w-1/2 mx-2">
+								<label for="height"
+									class="block mb-2 text-sm font-bold font-medium text-gray-900 dark:text-white">Height
+									<super class="text-red-600 ml-1 text-lg font-medium">*</super>
+								</label>
+								<small> Height may vary 4 to 6.5 (in foot)</small>
+								<input data-th-field="*{height}" type="number" id="height"
+									class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+									placeholder="Enter Height" min="3" max="8" />
+								<p data-th-if="${#fields.hasErrors('height')}" data-th-errors="*{height}"
+									class="text-red-600 flex"> </p>
+							</div>
+						</div>
+
+						<div class="flex flex-wrap gap-4 mt-5">
+							<!-- Place of Living -->
+							<div class="flex-1 min-w-0 mx-2 mb-5">
+								<fieldset>
+									<legend class="sr-only">Place of Living<super
+											class="text-red-600 ml-1 text-lg font-medium">*</super>
+									</legend>
+									<label
+										class="block mb-2 text-sm font-bold font-medium text-gray-900 dark:text-white">Place
+										of Living<super class="text-red-600 ml-1 text-lg font-medium">*</super></label>
+									<div class="flex items-center space-x-3" id="place">
+										<label
+											class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">
+											<input data-th-field="*{place}" id="place-option-1" type="radio"
+												name="place" value="indian" class="mr-3">
+											Indian
+										</label>
+										<label
+											class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">
+											<input data-th-field="*{place}" id="place-option-2" type="radio"
+												name="place" value="nri" class="mr-3">
+											NRI
+										</label>
+									</div>
+									<p data-th-if="${#fields.hasErrors('place')}" data-th-errors="*{place}"
+										class="text-red-600 flex"></p>
+								</fieldset>
+
+								<!-- NRI Place -->
+								<div class="mt-4" id="nriPlace-section" style="display: none;">
+									<label for="nriPlace"
+										class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">NRI
+										Place</label>
+									<input data-th-field="*{nriPlace}" type="text" id="nriPlace"
+										class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+										placeholder="Mention your NRI Place" />
+								</div>
+							</div>
+
+							<!-- Married Status -->
+							<div class="flex-1 min-w-0 mx-2 mb-5">
+								<label for="marriedStatus"
+									class="block mb-2 text-sm font-bold font-medium text -gray-900 dark:text-white">Married
+									Status<super class="text-red-600 ml-1 text-lg font-medium">*</super></label>
+								<select data-th-field="*{marriedStatus}" id="marriedStatus" name="marriedStatus"
+									class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+									<option value="">Select Status from here</option>
+									<option value="single">Single</option>
+									<option value="married">Married</option>
+									<option value="divorced">Divorced</option>
+									<option value="widowed">Widowed</option>
+								</select>
+								<p data-th-if="${#fields.hasErrors('marriedStatus')}" data-th-errors="*{marriedStatus}"
+									class="text-red-600 flex"></p>
+							</div>
+						</div>
+
+						<div class="mt-5 flex flex-wrap gap-4">
+							<!-- Qualification -->
+							<div class="flex-1 min-w-0 mx-2 mb-5">
+								<label for="qualification"
+									class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your
+									Qualification
+									<super class="text-red-600 ml-1 text-lg font-medium">*</super>
+								</label>
+								<select data-th-field="*{qualification}" id="qualification" name="qualification"
+									class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+									<option value="">Select Qualification from here</option>
+									<option value="no-study" id="no-study" name="no-study">No Study</option>
+									<option value="10th-pass" id="10th-pass" name="10th-pass">10th Pass</option>
+									<option value="12th-pass" id="12th-pass" name="12th-pass">12th Pass</option>
+									<option value="under-graduate" id="under-graduate" name="under-graduate">
+										Under-Graduate
+									</option>
+									<option value="post-graduate" id="post-graduate" name="post-graduate">Post-Graduate
+									</option>
+									<option value="phd" id="phd" name="phd">PHD/ Research</option>
+								</select>
+								<p data-th-if="${#fields.hasErrors('qualification')}" data-th-errors="*{qualification}"
+									class="text-red-600 flex"> </p>
+							</div>
+
+							<!-- Qualification Field Mention -->
+							<div class="flex-1 min-w-0 mx-2 mt-2 sm:mt-8 md:mt-4 lg:mt-4 mb-5"
+								id="qualificationField-section" style="display: none;">
+								<label for="qualificationField"
+									class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Study
+									Field</label>
+								<input data-th-field="*{qualificationField}" type="text" id="qualificationField"
+									class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+									placeholder="Enter your Qualification Field" />
+							</div>
+						</div>
+
+						<div class="mt-5 flex flex-wrap gap-4">
+							<!-- Occupation -->
+							<div class="flex-1 min-w-0 mx-2 mb-5">
+								<label for="occupation"
+									class="block mb-2 text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl font-bold text-gray-900 dark:text-white">Your
+									Occupation<span
+										class="text-red-600 ml-1 text-sm md:text-base font-medium">*</span></label>
+								<select data-th-field="*{occupation}" id="occupation" name="occupation" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark ```html
+:focus:ring-blue-500 dark:focus:border-blue-500">
+									<option value="">Select Occupation from here</option>
+									<option value="noJob" id="noJob" name="noJob">No Job</option>
+									<option value="privateJob" id="privateJob" name="privateJob">Private Job</option>
+									<option value="governmentJob" id="governmentJob" name="governmentJob">Government Job
+									</option>
+									<option value="business" id="business" name="business">Business</option>
+								</select>
+								<p data-th-if="${#fields.hasErrors('occupation')}" data-th-errors="*{occupation}"
+									class="text-red-600 flex"> </p>
+							</div>
+
+							<!-- Related Occupation -->
+							<!-- Job Title -->
+							<div class="flex-1 min-w-0 mx-2 mt-2 sm:mt-12 md:mt-0 lg:mt-0 mb-5"
+								id="yourJobTitle-section" style="display: none;">
+								<label for="yourJobTitle"
+									class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Your: Job
+									Title</label>
+								<input data-th-field="*{yourJobTitle}" type="text" id="yourJobTitle"
+									class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+									placeholder="your Job Title" />
+							</div>
+
+							<!-- Estimated Salary -->
+							<div class="flex-1 min-w-0 mx-2 mt-2 sm:mt-8 md:mt-0 lg:mt-0 mb-5"
+								id="yourJobSalary-section" style="display: none;">
+								<label for="yourJobSalary"
+									class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Your:
+									Salary</label>
+								<input data-th-field="*{yourJobSalary}" type="text" id="yourJobSalary"
+									class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+									placeholder="your Salary (In ₹-Rupee)" />
+							</div>
+						</div>
+
+						<!-- Family Background -->
+						<div class="mt-10">
+							<h2 class="text-lg text-center font-bold dark:text-white my-4">
+								<hr class="text-gray-700 text-sm font-bold dark:text-white"> Family Background
+								<hr class="text-gray-700 text-sm font-bold dark:text-white">
+							</h2>
+							<!-- Family Status -->
+							<div class="mb-4">
+								<label class="block text-gray-700 text-sm font-bold font-bold mb-2 dark:text-white"
+									for="familyStatus">Family Status<super
+										class="text-red-600 ml-1 text-lg font-medium">*
+									</super></label>
+								<select data-th-field="*{familyStatus}" id="familyStatus" name="familyStatus"
+									class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+									<option value="">Select Status from here</option>
+									<option value="lower" id="lower" name="lower">Lower</option>
+									<option value="lower-middle" id="lower-middle" name="lower-middle">Lower Middle
+									</option>
+									<option value="moderate" id="moderate" name="moderate">Moderate</option>
+									<option value="high-profile" id="high-profile" name="high-profile">High Profile
+									</option>
+								</select>
+								<p data-th-if="${#fields.hasErrors('familyStatus')}" data-th-errors="*{familyStatus}"
+									class="text-red-600 flex"> </p>
+							</div>
+
+							<div class="flex flex-row justify-between">
+								<!-- Total Family Members -->
+								<div class="">
+									<label class="block text-gray-700 text-xs font-bold font-bold mb-2 dark:text-white"
+										for="totalFamilyMembers"> Family Members<super
+											class="text-red-600 ml-1 text-lg font-medium">*</super></label>
+									<input
+										class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+										placeholder="How Many Member?" data-th-field="*{totalFamilyMembers}"
+										type="number" id="totalFamilyMembers" name="totalFamilyMembers" min="0">
+									<p data-th-if="${#fields.hasErrors('totalFamilyMembers')}"
+										data-th-errors="*{totalFamilyMembers}" class="text-red-600 flex"> </p>
+								</div>
+								<!-- Total Family Brother -->
+								<div class="ml-3 md:mt-4">
+									<label class="block text-gray-700 text-sm font-bold mb-2 dark:text-white"
+										for="totalBrothers">Brothers<super
+											class="text-red-600 ml-1 text-lg font-medium">*
+										</super></label>
+									<input
+										class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+										placeholder="How Many Brother?" data-th-field="*{totalBrothers}" type="number"
+										id="totalBrothers" name="totalBrothers" min="0">
+									<p data-th-if="${#fields.hasErrors('totalBrothers')}"
+										data-th-errors="*{totalBrothers}" class="text-red-600 flex"> </p>
+								</div>
+								<!-- Total Family Sister -->
+								<div class="ml-3 md:mt-4">
+									<label class="block text-gray-700 text-sm font-bold mb-2 dark:text-white"
+										for="totalSisters">Sisters<super class="text-red-600 ml-1 text-lg font-medium">*
+										</super></label>
+									<input
+										class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+										placeholder="How Many Sister?" data-th-field="*{totalSisters}" type="number"
+										id="totalSisters" name="totalSisters" min="0">
+									<p data-th-if="${#fields.hasErrors('totalSisters')}"
+										data-th-errors="*{totalSisters}" class="text-red-600 flex"> </p>
+								</div>
+							</div>
+
+							<!-- Father Name -->
+							<div class="flex flex-row mt-5">
+								<div class="mr-5">
+									<label class="block text-gray-700 text-sm font-bold mb-2 dark:text-white"
+										for="fatherName">Father Name</label>
+									<input data-th-field="*{fatherName}"
+										class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+										placeholder="Enter your Father Name" type="text" id="fatherName"
+										name="fatherName">
+								</div>
+
+								<!-- Mother Name -->
+								<div class="ml-3">
+									<label class="block text-gray-700 text-sm font-bold mb-2 dark:text-white"
+										for="motherName">Mother Name</label>
+									<input data-th-field="*{motherName}"
+										class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+										placeholder="Enter your Mother Name" type="text" id="motherName"
+										name="motherName">
+								</div>
+							</div>
+
+							<div class="mt-5 flex justify-between gap-4">
+								<!-- Father: Occupation -->
+								<div class="flex-1 min-w- 0 mx-2 mb-5">
+									<label for="fatherOccupation"
+										class="block mb-2 text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl font-bold text-gray-900 dark:text-white">Father:
+										Occupation</label>
+									<select data-th-field="*{fatherOccupation}" id="fatherOccupation"
+										name="fatherOccupation"
+										class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+										<option value="">Select Occupation from here</option>
+										<option value="no-job" id="no-job" name="no-job">No Job</option>
+										<option value="privateJob" id="privateJob" name="privateJob">Private Job
+										</option>
+										<option value="governmentJob" id="governmentJob" name="governmentJob">Government
+											Job
+										</option>
+										<option value="business" id="business" name="business">Business</option>
+										<option value="late" id="late" name="late">LATE</option>
+									</select>
+								</div>
+
+								<!-- Father: Related Occupation -->
+								<div class="flex-1 min-w-0 mx-2 mt-2 sm:mt-8 md:mt-0 lg:mt-0 mb-5"
+									id="fatherJobTitle-section" style="display: none;">
+									<label for="fatherJobTitle"
+										class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Father: Job
+										Title</label>
+									<input data-th-field="*{fatherJobTitle}" type="text" id="fatherJobTitle"
+										class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+										placeholder="Enter your Job Title" />
+								</div>
+
+								<!-- Estimated Salary -->
+								<div class="flex-1 min-w-0 mx-2 mt-2 sm:mt-8 md:mt-0 lg:mt-0 mb-5"
+									id="fatherJobSalary-section" style="display: none;">
+									<label for="fatherJobSalary"
+										class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Father:
+										Salary</label>
+									<input data-th-field="*{fatherJobSalary}" type="text" id="fatherJobSalary"
+										class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+										placeholder="Enter your Salary (In ₹-Rupee)" />
+								</div>
+							</div>
+
+							<div class="mt-5 flex justify-between gap-4">
+								<!-- Mother: Occupation -->
+								<div class="flex-1 min-w-0 mx-2 mb-5">
+									<label for="motherOccupation"
+										class="block mb-2 text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl font-bold text-gray-900 dark:text-white">Mother:
+										Occupation</label>
+									<select data-th-field="*{motherOccupation}" id="motherOccupation"
+										name="motherOccupation"
+										class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+										<option value="">Select Occupation from here</option>
+										<option value="no-job" id="no-job" name="no-job">No Job</option>
+										<option value="privateJob" id="privateJob" name="privateJob">Private Job
+										</option>
+										<option value="governmentJob" id="governmentJob" name="governmentJob">Government
+											Job
+										</option>
+										<option value="business" id="business" name="business">Business</option>
+										<option value="late" id="late" name="late">LATE</option>
+									</select>
+								</div>
+
+								<!-- Mother: Related Occupation -->
+								<div class="flex-1 min-w-0 mx-2 mt-2 sm:mt-8 md:mt-0 lg:mt-0 mb-5"
+									id="motherJobTitle-section" style="display: none;">
+									<label for="motherJobTitle"
+										class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Mother: Job
+										Title</label>
+									<input data-th-field="*{motherJobTitle}" type="text" id="motherJobTitle"
+										class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+										placeholder="Enter your Job Title" />
+								</div>
+
+								<!-- Estimated Salary -->
+								<div class="flex-1 min-w-0 mx-2 mt-2 sm:mt-8 md:mt-0 lg:mt-0 mb-5"
+									id="motherJobSalary-section" style="display: none;">
+									<label for="motherJobSalary"
+										class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Mother:
+										Salary</label>
+									<input data-th-field="*{motherJobSalary}" type="text" id="motherJobSalary"
+										class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+										placeholder="Enter your Salary (In ₹-Rupee)" />
+								</div>
+							</div>
+						</div>
+
+						<h2 class="text-lg text-center font-bold dark:text-white my-4">
+							<hr class="text-gray-700 text-sm font-bold dark:text-white"> Additionally Information
+							<hr class="text-gray-700 text-sm font-bold dark:text-white">
+						</h2>
+
+						<div class="flex justify-between mt-5">
+							<!-- Any Demand -->
+							<div class="mr-2 w-full">
+								<label for="anyDemand"
+									class="block mb-2 text-sm font-bold font-medium text-gray-900 dark:text-white">Any
+									Demand</label>
+								<textarea data-th-field="*{anyDemand}" id="anyDemand" name="anyDemand" rows="4"
+									class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+									placeholder="Write your Demand here"></textarea>
+							</div>
+
+							<!-- Any Remarks -->
+							<div class="ml-2 w-full">
+								<label for="anyRemarks"
+									class="block mb-2 text-sm font-bold font-medium text-gray-900 dark:text-white">Any
+									Remarks</label>
+								<textarea data-th-field="*{anyRemarks}" id="anyRemarks" name="anyRemarks" rows="4"
+									class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+									placeholder="Write your Remarks here"></textarea>
+							</div>
+						</div>
+
+						<!-- Any Address -->
+						<div class="mt-5">
+							<label for="address"
+								class="block mb-2 text-sm font-bold font-medium text-gray-900 dark:text-white">Address</label>
+							<textarea data-th-field="*{address}" id="address" name="address" rows="4"
+								class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+								placeholder="Write your Proper Address in this Format: Include your House/Building No. | Street-Address | City | State/Region | Country | ZIP/Pincode/Postal Code"></textarea>
+						</div>
+
+						<!-- Phone Number field -->
+						<div class="mt-5 flex flex-wrap lg:flex-nowrap justify-between">
+
+							<div class="mt-5 flex justify-between gap-4">
+								<div class="flex-1 min-w-0 mx-2 mb-5">
+									<label for="phoneNumber1"
+										class="block mb-2 text-sm font-bold font-medium text-gray-900 dark:text-white">Contact
+										Number: 1<super class="text-red-600 ml-1 text-lg font-medium">*</super></label>
+									<input type="text" id="phoneNumber1" data-th-field="*{phoneNumber1}"
+										class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+										placeholder="Your Primary Phone Number" />
+									<p data-th-if="${#fields.hasErrors('phoneNumber1')}"
+										data-th-errors="*{phoneNumber1}" class="text-red-600 flex"> </p>
+								</div>
+
+								<div class="flex-1 min-w-0 mx-2 mb-5">
+									<label for="phoneNumber2"
+										class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Contact
+										Number:
+										2</label>
+									<input type="text" id="phoneNumber2" data-th-field="*{phoneNumber2}"
+										class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+										placeholder="Your Secondary Phone Number" />
+								</div>
+							</div>
+
+							<div class="flex-1 min-w-0 mx-2 mt-4 mb-5">
+								<label class="block text-gray-700 text-xs font-bold font-bold mb-2 dark:text-white"
+									for="formFilledBy">This Form Filled By<super
+										class="text-red-600 ml-1 text-lg font-medium">*</super></label>
+								<select data-th-field="*{formFilledBy}" id="formFilledBy" name="formFilledBy"
+									class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+									<option value="">Mention here</option>
+									<option value="self" id="self" name="self">Self</option>
+									<option value="parent" id="parent" name="parent">Parent</option>
+									<option value="friend" id="friend" name="friend">Friends</option>
+									<option value="relative" id="relative" name="relative">Relative</option>
+									<option value="self-marriage-bureau" id="self-marriage-bureau"
+										name="self-marriage-bureau">Self-Marriage-Bureau </option>
+								</select>
+								<p data-th-if="${#fields.hasErrors('formFilledBy')}" data-th-errors="*{formFilledBy}"
+									class="text-red-600 flex"> </p>
+							</div>
+						</div>
+
+
+
 						<!--  Mark as Agreed Parameter  -->
 						<div class="flex items-start my-4 mt-6">
 							<div class="flex items-center h-5">
@@ -130,7 +684,7 @@
 								Agree with the <a href="#"
 									class="text-blue-600 hover:underline dark:text-blue-500">Terms and Conditions<super
 										class="text-red-600 mx-1 text-lg font-medium">*</super></a></label>
-							<p data-th-if="${#fields.hasErrors('agreement')}" data-th-errors="*{agreement}"
+							<p data-th-if="${#fields.hasErrors('agreement')}" data-th-errors="*{agreement}" 
 								class="text-red-600 flex"> </p>
 
 						</div>
@@ -156,6 +710,116 @@
 
 	<script>
 		console.log("Register page");
+
+				// Fetch religions and populate the dropdown
+				document.addEventListener("DOMContentLoaded", function () {
+			fetch("/getReligions")
+				.then(response => response.json())
+				.then(data => {
+					const religionSelect = document.getElementById("religion");
+					data.forEach(religion => {
+						const option = document.createElement("option");
+						option.value = religion;
+						option.textContent = religion;
+						religionSelect.appendChild(option);
+					});
+				})
+				.catch(error => console.error("Error fetching religions:", error));
+		});
+
+		// Fetch Castes from selected Religions and populate the dropdown
+		document.getElementById('religion').addEventListener('change', function () {
+			const religion = this.value;
+			if (religion) {
+				fetch(`/getCastes?religion=${religion}`)
+					.then(response => response.json())
+					.then(data => {
+						const casteSelect = document.getElementById('caste');
+						casteSelect.innerHTML = '<option value="">Select Caste</option>'; // Reset options
+						data.forEach(caste => {
+							const option = document.createElement('option');
+							option.value = caste;
+							option.textContent = caste;
+							casteSelect.appendChild(option);
+						});
+					})
+					.catch(error => console.error('Error fetching castes:', error));
+			}
+		});
+
+		// Select NRI Category based on Place
+		const placeSelect = document.getElementById('place');
+		const nriplaceSection = document.getElementById('nriPlace-section');
+
+		placeSelect.addEventListener('change', (e) => {
+			const selectedplace = document.querySelector('input[name="place"]:checked').value;
+			if (selectedplace === 'nri') {
+				nriplaceSection.style.display = 'block';
+			} else {
+				nriplaceSection.style.display = 'none';
+			}
+		});
+
+		// Select Your Job Title & Salary Category based on Occupation
+		const occupationSelect = document.getElementById('occupation');
+		const jobtitleSection = document.getElementById('yourJobTitle-section');
+		const salarySection = document.getElementById('yourJobSalary-section');
+
+		occupationSelect.addEventListener('change', (e) => {
+			const selectedOccupation = e.target.value;
+			if (selectedOccupation === 'privateJob' || selectedOccupation === 'governmentJob' || selectedOccupation === 'business') {
+				jobtitleSection.style.display = 'block';
+				salarySection.style.display = 'block';
+			} else {
+				jobtitleSection.style.display = 'none';
+				salarySection.style.display = 'none';
+			}
+		});
+
+		// Select Your Job Title & Salary Category based on Occupation
+		const qualificationSelect = document.getElementById('qualification');
+		const qualificationFieldSection = document.getElementById('qualificationField-section');
+
+		qualificationSelect.addEventListener('change', (e) => {
+			const selectedQualification = e.target.value;
+			if (selectedQualification != 'no-study') {
+				qualificationFieldSection.style.display = 'block';
+			} else {
+				qualificationFieldSection.style.display = 'none';
+			}
+		});
+
+		// Select Father Job Title & Salary Category based on Occupation
+		const fatherOccupationSelect = document.getElementById('fatherOccupation');
+		const fatherJobtitleSection = document.getElementById('fatherJobTitle-section');
+		const fatherJobSalarySection = document.getElementById('fatherJobSalary-section');
+
+		fatherOccupationSelect.addEventListener('change', (e) => {
+			const selectedOccupation = e.target.value;
+			if (selectedOccupation === 'privateJob' || selectedOccupation === 'governmentJob' || selectedOccupation === 'business') {
+				fatherJobtitleSection.style.display = 'block';
+				fatherJobSalarySection.style.display = 'block';
+			} else {
+				fatherJobtitleSection.style.display = 'none';
+				fatherJobSalarySection.style.display = 'none';
+			}
+		});
+
+		// Select Mother Job Title & Salary Category based on Occupation
+		const motherOccupationSelect = document.getElementById('motherOccupation');
+		const motherJobtitleSection = document.getElementById('motherJobTitle-section');
+		const motherJobSalarySection = document.getElementById('motherJobSalary-section');
+
+		motherOccupationSelect.addEventListener('change', (e) => {
+			const selectedOccupation = e.target.value;
+			if (selectedOccupation === 'privateJob' || selectedOccupation === 'governmentJob' || selectedOccupation === 'business') {
+				motherJobtitleSection.style.display = 'block';
+				motherJobSalarySection.style.display = 'block';
+			} else {
+				motherJobtitleSection.style.display = 'none';
+				motherJobSalarySection.style.display = 'none';
+			}
+		});
 	</script>
 </body>
 

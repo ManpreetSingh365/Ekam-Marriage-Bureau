@@ -10,7 +10,7 @@
 
 	<!-- Mobile View Logo -->
 	<a data-th-href="@{'/findmatch'}" class="navbar-brand block lg:hidden">
-		<h1 class="font-secondary text-white" style="font-size: 1.2rem;"><span class="text-primary">Ekam</span> Marriage Bureau</h1>
+		<h1 class="font-secondary text-white" style="font-size: 1.7rem;"><span class="text-primary">Ekam</span> Marriage Bureau</h1>
 	</a>
 
 	<!-- Toggler Button for Mobile View -->
@@ -35,6 +35,13 @@
 
 		<!-- Login and Signup Buttons -->
 		<div th:unless="${loggedInUser}" style="display: flex; gap: 1rem; justify-content: center; padding:  20px 0px">
+			<div>
+				<a type="button" id="indexContactUs" href="https://api.whatsapp.com/send?phone=8528167122"
+					class="text-red-600 bg-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 animate-pulse hover:animate-none"
+					style="animation: blink 1.5s infinite; color: rgb(255, 162, 0);;">
+					Contact Us
+				</a>
+			</div>
 			<div>
 				<a data-th-href="@{'/login'}" type="button" id="indexLogin"
 					class="text-white bg-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">

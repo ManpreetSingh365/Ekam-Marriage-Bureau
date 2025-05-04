@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,6 +26,7 @@ import com.mb.forms.UserFormDetails;
 import com.mb.helpers.Message;
 import com.mb.helpers.MessageType;
 import com.mb.helpers.UserDefaultValues;
+import com.mb.services.EmailService;
 import com.mb.services.ImageService;
 import com.mb.services.UserService;
 
@@ -33,6 +35,8 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Null;
 
 import com.mb.utils.UniqueEmailGenerator;
+import com.mb.utils.sendMail;
+
 import java.util.Random;
 
 @Controller
@@ -50,11 +54,13 @@ public class UserRegisterController {
 	@Autowired
 	private UserDefaultValues userDefaultValues;
 
-//  Open for Register Page Handler----->
+	@Autowired
+	private sendMail sendMail;
+
+	// Open for Register Page Handler----->
 	@RequestMapping("/registerdetails")
 	public String registerationDetails(@Valid @ModelAttribute("userForm") UserForm userForm,
 			BindingResult bindingResult, Model model) {
-		System.out.println("Opening Registeration Details Handler...");
 		UserFormDetails userFormDetails = new UserFormDetails();
 
 		userFormDetails.setTotalFamilyMembers(0);
@@ -69,7 +75,6 @@ public class UserRegisterController {
 
 	@RequestMapping("/registerdetailsbyemployee")
 	public String registerationByEmp(Model model) {
-		System.out.println("Opening Registeration Handler...");
 
 		UserFormDetails userFormDetails = new UserFormDetails();
 
@@ -93,23 +98,18 @@ public class UserRegisterController {
 			BindingResult bindingResult, Model model, HttpSession session) {
 
 		if (bindingResult.hasErrors()) {
-			System.out.println("\n ---> processRegisteration\n" + bindingResult.toString());
 			return "register";
 		}
 
 		// Check If Email is Unique, Forward to Next Registration step...
 		boolean isEmailValid = userService.isEmailUnique(userForm.getEmail());
-		System.out.println("1isEmailValid: " + isEmailValid);
 
 		if (!isEmailValid) {
-			System.out.println("2isEmailValid: " + isEmailValid);
 			Message message = Message.builder().content("Oops! This Email is taken. Kindly use Another One")
 					.type(MessageType.red).build();
 			session.setAttribute("message", message);
 			return "register";
 		}
-
-		System.out.println("isEmailValid=================> :" + isEmailValid);
 
 		UserFormDetails userFormDetails = new UserFormDetails();
 
@@ -128,7 +128,7 @@ public class UserRegisterController {
 		return "registerdetails";
 	}
 
-//  Processing for User_Registering Handler----->
+	// Processing for User_Registering Handler----->
 	@PostMapping("/do-registerdetails")
 	public String processRegisterationDetails(@Valid @ModelAttribute("userFormDetails") UserFormDetails userFormDetails,
 			BindingResult bindingResult, @RequestParam(value = "agreement", defaultValue = "false") boolean agreement,
@@ -140,31 +140,30 @@ public class UserRegisterController {
 		}
 
 		// Fetch Form-Data from UserForm to bind with Model_Object by @ModelAttribute
-		System.out.println("Processing Process do-register Handler...");
-//		System.out.println(userForm);
+		// System.out.println(userForm);
 
-//		if (!agreement) {
-//			System.out.println("You have not agreed the terms and conditions");
-//			throw new Exception("You have not agreed the terms and conditions");
-//		}
+		// if (!agreement) {
+		// System.out.println("You have not agreed the terms and conditions");
+		// throw new Exception("You have not agreed the terms and conditions");
+		// }
 
-//		 FileValidator imageValidator = new FileValidator();
-//		    imageValidator.validate(userFormDetails, bindingResult);
+		// FileValidator imageValidator = new FileValidator();
+		// imageValidator.validate(userFormDetails, bindingResult);
 
 		// Store the uploaded files in a temporary location
 		session.setAttribute("uploadedFiles", userImages);
 
 		// validate form data
 		if (bindingResult.hasErrors()) {
-			System.out.println("\n ---> processRegisterationDetails\n" + bindingResult.toString());
 			return "registerdetails";
 		}
 
-//		if (userImages.isEmpty() || userImages == null) {
-//			System.out.println("\n ---> processRegisterationDetails\n" + userImages.toString());
-//			return "registerdetails";
-//			// throw new RuntimeException("File is empty");
-//		}
+		// if (userImages.isEmpty() || userImages == null) {
+		// System.out.println("\n ---> processRegisterationDetails\n" +
+		// userImages.toString());
+		// return "registerdetails";
+		// // throw new RuntimeException("File is empty");
+		// }
 
 		String date = LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 		String time = LocalTime.now().format(DateTimeFormatter.ofPattern("HH-mm"));
@@ -179,9 +178,9 @@ public class UserRegisterController {
 			user.setEmail(userForm.getEmail());
 			user.setPassword(userForm.getPassword());
 		} else {
-//			Random random = new Random();
-//			int randomNumber = random.nextInt(100000, 999999);
-//			String userPassword = "emp@" + randomNumber;
+			// Random random = new Random();
+			// int randomNumber = random.nextInt(100000, 999999);
+			// String userPassword = "emp@" + randomNumber;
 			// If userForm is null or email is empty, generate a unique email
 			String uniqueEmail = uniqueEmailGenerator.generateUniqueEmail();
 			user.setEmail(uniqueEmail); // Set the generated unique email
@@ -193,8 +192,6 @@ public class UserRegisterController {
 		user.setGender(userFormDetails.getGender());
 		user.setReligion(userFormDetails.getReligion());
 		user.setCaste(userFormDetails.getCaste().trim());
-		System.out.println("userFormDetails.getCaste(): " + userFormDetails.getCaste());
-		System.out.println("userFormDetails.getCaste().trim(): " + userFormDetails.getCaste().trim());
 		user.setSubcaste(userFormDetails.getSubcaste());
 
 		// Getting Age from DOB...
@@ -208,11 +205,6 @@ public class UserRegisterController {
 		user.setDateOfBirth(formattedDateOfBirth); // Set formatted date for database storage
 		int age = Period.between(dob, LocalDate.now()).getYears(); // Calculate age
 		user.setAge(age); // Set age on user object
-
-		System.out.println("--------------------------------------birthDate-------------------------------------"
-				+ user.getDateOfBirth());
-		System.out.println(
-				"--------------------------------------Age-------------------------------------" + user.getAge());
 
 		user.setBrithTime(userFormDetails.getBrithTime());
 		user.setHeight(userFormDetails.getHeight());
@@ -250,12 +242,9 @@ public class UserRegisterController {
 		user.setFormFilledBy(userFormDetails.getFormFilledBy());
 		user.setRole(USER_ROLE.ROLE_USER);
 
-//		List<String> userRole = new ArrayList<>();
-//		userRole.add("normal");
-//		user.setRoleList(userRole);
-
-		System.out.println("--------------------------------------BrithTime-------------------------------------"
-				+ user.getBrithTime());
+		// List<String> userRole = new ArrayList<>();
+		// userRole.add("normal");
+		// user.setRoleList(userRole);
 
 		if (userImages != null && !userImages.isEmpty()) {
 			List<String> imageUrls = imageService.uploadImages(userImages, UUID.randomUUID().toString());
@@ -265,31 +254,28 @@ public class UserRegisterController {
 				publicIds.add(UUID.randomUUID().toString());
 			}
 
-//			user.setPicture(imageUrls.get(0)); // set the first image as the profile picture
-//			user.setImages(imageUrls); // store the list of image URLs
+			// user.setPicture(imageUrls.get(0)); // set the first image as the profile
+			// picture
+			// user.setImages(imageUrls); // store the list of image URLs
 			user.setImagesList(imageUrls); // store the list of image URLs
-
-			System.out.println("URL-------------------");
-			System.out.println(imageUrls);
-			System.out.println("Public IDs-------------------");
-			System.out.println(publicIds);
 		}
 
-//		 for (Iterator<String> iterator = user.getImages().iterator(); iterator.hasNext();) {
-//			String string = iterator.next();
-////			System.out.println(imageUrls.get());
-//		}
-//		 userImages.toString();
+		// for (Iterator<String> iterator = user.getImages().iterator();
+		// iterator.hasNext();) {
+		// String string = iterator.next();
+		//// System.out.println(imageUrls.get());
+		// }
+		// userImages.toString();
 
-		System.out.println("\n\n --->do-registerdetails: " + userForm);
 		model.addAttribute("users", user);
 		model.addAttribute("userFormDetails", userFormDetails);
 		User savedUser = userService.saveUser(user);
-		System.out.println("user Saved 2: " + savedUser);
 
 		// Adding Message that Register Successfully :)
 		Message message = Message.builder().content("Registration Successful :)").type(MessageType.green).build();
 		session.setAttribute("message", message);
+
+		sendMail.sendRegisterationMail(user);
 
 		// Re-direct to Register_Page
 		return "redirect:/login";

@@ -34,6 +34,7 @@ com\mb\forms\UserFormDetailsAdmin$UserFormDetailsAdminBuilder.class
 com\mb\controller\PhonePePaymentController.class
 com\mb\forms\UserForm$UserFormBuilder.class
 com\mb\services\ImageService.class
+com\mb\utils\sendMail.class
 com\mb\entities\Testimonials.class
 com\mb\controller\LoginUserCRUD.class
 com\mb\config\Ping.class

@@ -122,7 +122,7 @@ public class UserFormDetails {
 	@NotBlank(message = "formFilledBy is required")
 	private String formFilledBy;
 
-	@NotBlank(message = "Accept Terms & Conditions to Register")
+	// @NotBlank(message = "Accept Terms & Conditions to Register")
 	private String agreement;
 
 //	@Getter(value = AccessLevel.NONE)

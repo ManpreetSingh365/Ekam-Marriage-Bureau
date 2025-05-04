@@ -328,7 +328,7 @@ public class FindMatch {
 	public String userList(@RequestParam(value = "page", defaultValue = "0") int page,
 			@RequestParam(value = "size", defaultValue = "1000") int size, // Allow dynamic size
 			@RequestParam(value = "sortBy", defaultValue = "userId") String sortBy,
-			@RequestParam(value = "direction", defaultValue = "asc") String direction, Model model,
+			@RequestParam(value = "direction", defaultValue = "desc") String direction, Model model,
 			Authentication authentication) {
 
 		// Illegal Access Handler

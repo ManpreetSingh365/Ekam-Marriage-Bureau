@@ -51,6 +51,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@ToString
 public class User implements UserDetails {
 
 	@Id
@@ -275,24 +276,6 @@ public class User implements UserDetails {
 	@Override
 	public String getPassword() {
 		return this.password;
-	}
-
-	@Override
-	public String toString() {
-		return "User [userId=" + userId + ", name=" + name + ", email=" + email + ", password=" + password + ", images="
-				+ images + ", gender=" + gender + ", religion=" + religion + ", caste=" + caste + ", subcaste="
-				+ subcaste + ", minAge=" + minAge + ", maxAge=" + maxAge + ", dateOfBirth=" + dateOfBirth + ", age="
-				+ age + ", brithTime=" + brithTime + ", minHeight=" + minHeight + ", height=" + height + ", maxHeight="
-				+ maxHeight + ", marriedStatus=" + marriedStatus + ", place=" + place + ", nriPlace=" + nriPlace
-				+ ", qualification=" + qualification + ", qualificationField=" + qualificationField + ", occupation="
-				+ occupation + ", yourJobTitle=" + yourJobTitle + ", yourJobSalary=" + yourJobSalary + ", familyStatus="
-				+ familyStatus + ", totalFamilyMembers=" + totalFamilyMembers + ", totalBrothers=" + totalBrothers
-				+ ", totalSisters=" + totalSisters + ", fatherName=" + fatherName + ", fatherOccupation="
-				+ fatherOccupation + ", fatherJobTitle=" + fatherJobTitle + ", fatherJobSalary=" + fatherJobSalary
-				+ ", motherName=" + motherName + ", motherOccupation=" + motherOccupation + ", motherJobTitle="
-				+ motherJobTitle + ", motherJobSalary=" + motherJobSalary + ", anyDemand=" + anyDemand + ", anyRemarks="
-				+ anyRemarks + ", address=" + address + ", phoneNumber1=" + phoneNumber1 + ", phoneNumber2="
-				+ phoneNumber2 + ", formFilledBy=" + formFilledBy + ", roleList=" + roleList + "]";
 	}
 
 }

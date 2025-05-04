@@ -7,17 +7,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mb.entities.PhonePePayment;
 import com.mb.entities.User;
-import com.mb.repositories.UserRepo;
 import com.mb.services.UserService;
 import com.mb.services.impl.PhonePePaymentService;
-import com.mb.services.impl.PhonePeWebhookRequest;
-
 import jakarta.servlet.http.HttpSession;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 import java.nio.charset.StandardCharsets;

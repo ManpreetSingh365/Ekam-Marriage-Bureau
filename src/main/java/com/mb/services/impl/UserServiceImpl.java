@@ -179,19 +179,6 @@ public class UserServiceImpl implements UserService {
 		String qualification = user.getQualification();
 		String occupation = user.getOccupation();
 
-		System.out.println("\n----->");
-		System.out.println(gender);
-		System.out.println(religion);
-		System.out.println(caste);
-		System.out.println(minAge);
-		System.out.println(maxAge);
-		System.out.println(minheight);
-		System.out.println(maxheight);
-		System.out.println(marriedStatus);
-		System.out.println(place);
-		System.out.println(qualification);
-		System.out.println(occupation);
-
 		Sort sort = direction.equals("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
 		Pageable pageable = PageRequest.of(page, size, sort);
 
@@ -201,19 +188,6 @@ public class UserServiceImpl implements UserService {
 		place = place != null && place.isEmpty() ? null : place;
 		qualification = qualification != null && qualification.isEmpty() ? null : qualification;
 		occupation = occupation != null && occupation.isEmpty() ? null : occupation;
-
-		System.out.println("\n----->");
-		System.out.println(gender);
-		System.out.println(religion);
-		System.out.println(caste);
-		System.out.println(minAge);
-		System.out.println(maxAge);
-		System.out.println(minheight);
-		System.out.println(maxheight);
-		System.out.println(marriedStatus);
-		System.out.println(place);
-		System.out.println(qualification);
-		System.out.println(occupation);
 
 		return userRepo.findUsersWithDynamicCriteria(gender, religion, caste, minAge, maxAge, minheight, maxheight,
 				marriedStatus, place, qualification, occupation, pageable);

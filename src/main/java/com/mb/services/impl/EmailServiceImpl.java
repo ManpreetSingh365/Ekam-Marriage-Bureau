@@ -28,7 +28,6 @@ public class EmailServiceImpl implements EmailService {
 
 		// Getting the System Properties
 		Properties properties = System.getProperties();
-		System.out.println("PROPERTIES " + properties);
 
 		// Setting Important Information to Properties Object--->
 		// Host Set
@@ -68,7 +67,6 @@ public class EmailServiceImpl implements EmailService {
 			// Step 3: Send the Message using Transport Class
 			Transport.send(m);
 
-			System.out.println("Email Sent Successfully by Manpreet Singh 2027466 :)");
 			isEmailSend = true;
 
 		} catch (Exception e) {

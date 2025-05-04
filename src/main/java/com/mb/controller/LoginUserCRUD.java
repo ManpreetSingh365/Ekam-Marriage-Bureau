@@ -44,6 +44,7 @@ import com.mb.services.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
+
 @Controller
 public class LoginUserCRUD {
 
@@ -51,6 +52,9 @@ public class LoginUserCRUD {
 
 	@Autowired
 	private UserService userService;
+
+	@Autowired
+	private UserRegisterController userRegisterController;
 
 	@Autowired
 	private ImageService imageService;
@@ -64,6 +68,7 @@ public class LoginUserCRUD {
 	@Autowired
 	private TokenService tokenService;
 
+
 	@Value("${server.baseUrl}")
 	private String BASE_URL;
 
@@ -71,43 +76,29 @@ public class LoginUserCRUD {
 	@RequestMapping("/user/{userId}")
 	public String showUserDetail(@PathVariable("userId") Long userId, Model model) {
 
-		System.out.println("userId of User: " + userId);
-
 		Optional<User> userOptional = this.userService.getUserById(userId);
 		User userData = userOptional.get();
 
-//		String username = Helper.getEmailOfLoggedInUser(authentication);
-//		User userData = userService.getUserByEmail(username);
-
-		System.out.println("userData.getPaymentResponse()----------------->");
-		System.out.println(userData);
-		if (userData.getPaymentResponse() != null) {
-			System.out.println(userData.getPaymentResponse());
-			System.out.println(userData.getPaymentResponse().toString());
-			System.out.println(userData.getPaymentResponse().getRazorpayOrderId());
-			System.out.println(userData.getPaymentResponse().getRazorpayPaymentId());
-			System.out.println(userData.getPaymentResponse().getRazorpaySignature());
-		}
+		// String username = Helper.getEmailOfLoggedInUser(authentication);
+		// User userData = userService.getUserByEmail(username);
 
 		if (paymentService.getUserById(userData.getUserId()).isEmpty()) {
-			System.out.println("isEmpty(): " + paymentService.getUserById(userData.getUserId()).isEmpty());
+			// System.out.println("isEmpty(): " +
+			// paymentService.getUserById(userData.getUserId()).isEmpty());
 			model.addAttribute("paymentResponse", "empty");
 		}
 		if (paymentService.getUserById(userData.getUserId()).isPresent()) {
 			Optional<PaymentResponse> paymentResponse = paymentService.getUserById(userData.getUserId());
-			System.out.println("isPresent(): " + paymentService.getUserById(userData.getUserId()).isPresent());
+			// System.out.println("isPresent(): " +
+			// paymentService.getUserById(userData.getUserId()).isPresent());
 			PaymentResponse response = paymentResponse.get();
-			System.out.println("response: " + response);
 			model.addAttribute("paymentResponse", response);
 		}
 
-		System.out.println("\n\n\nThis is userId from user.... Process UserProfile  Handler");
-		
 		List<String> userImages = imageService.getImagesByPublicIds(userData.getImagesList());
-		System.out.println("userImages: "+userImages);
-		
+
 		model.addAttribute("user", userData);
-//		model.addAttribute("userImages", userData.getImagesList());
+		// model.addAttribute("userImages", userData.getImagesList());
 		model.addAttribute("userImages", userImages);
 		model.addAttribute("isLoginProfile", false);
 
@@ -124,61 +115,47 @@ public class LoginUserCRUD {
 		String username = Helper.getEmailOfLoggedInUser(authentication);
 		User userData = userService.getUserByEmail(username);
 
-		System.out.println("\n\n\nThis is LoginUser from logginprofile.... Process showLoginUserDetail  Handler");
-
-		System.out.println("userData.getPaymentResponse()----------------->");
-		System.out.println(userData);
-		if (userData.getPaymentResponse() != null) {
-			System.out.println(userData.getPaymentResponse());
-			System.out.println(userData.getPaymentResponse().toString());
-			System.out.println(userData.getPaymentResponse().getRazorpayOrderId());
-			System.out.println(userData.getPaymentResponse().getRazorpayPaymentId());
-			System.out.println(userData.getPaymentResponse().getRazorpaySignature());
-		}
-
 		if (paymentService.getUserById(userData.getUserId()).isEmpty()) {
-			System.out.println("isEmpty(): " + paymentService.getUserById(userData.getUserId()).isEmpty());
 			model.addAttribute("paymentResponse", "empty");
 		}
 		if (paymentService.getUserById(userData.getUserId()).isPresent()) {
 			Optional<PaymentResponse> paymentResponse = paymentService.getUserById(userData.getUserId());
-			System.out.println("isPresent(): " + paymentService.getUserById(userData.getUserId()).isPresent());
 			PaymentResponse response = paymentResponse.get();
-			System.out.println("response: " + response);
 			model.addAttribute("paymentResponse", response);
 		}
 
 		// if (paymentResponse.isEmpty())
-//			System.out.println("paymentResponse isEmpty(): " + paymentResponse);
-//
-//		if (paymentResponse.isPresent())
-//			System.out.println("paymentResponse isPresent(): " + paymentResponse);
-////		System.out.println("paymentResponse.get(): " + paymentResponse.get());
+		// System.out.println("paymentResponse isEmpty(): " + paymentResponse);
+		//
+		// if (paymentResponse.isPresent())
+		// System.out.println("paymentResponse isPresent(): " + paymentResponse);
+		//// System.out.println("paymentResponse.get(): " + paymentResponse.get());
 
-//		if (paymentResponse.isEmpty()) {
-//			model.addAttribute("paymentResponse", "empty"); // or some default value
-//		} else {
-//			PaymentResponse response = paymentResponse.get();
-//			System.out.println("response: " + response);
-//			model.addAttribute("paymentResponse", response);
-//		}
+		// if (paymentResponse.isEmpty()) {
+		// model.addAttribute("paymentResponse", "empty"); // or some default value
+		// } else {
+		// PaymentResponse response = paymentResponse.get();
+		// System.out.println("response: " + response);
+		// model.addAttribute("paymentResponse", response);
+		// }
 
-//		List<PaymentResponse> allPaymentResponses = paymentService.getAllPaymentResponses();
-//		for (PaymentResponse pr : allPaymentResponses) {
-//			System.out.println("pr: " + pr);
-//		}
+		// List<PaymentResponse> allPaymentResponses =
+		// paymentService.getAllPaymentResponses();
+		// for (PaymentResponse pr : allPaymentResponses) {
+		// System.out.println("pr: " + pr);
+		// }
 
 		model.addAttribute("user", userData);
 		model.addAttribute("userImages", userData.getImagesList());
 		model.addAttribute("isLoginProfile", true);
+
 		return "User/userprofile";
 	}
 
-//  Open Update_Contact Handler----->
+	// Open Update_Contact Handler----->
 	@GetMapping("/view/userDetailsUpdateForm")
 	public String updateUserFormView(Model model, Authentication authentication) {
 
-		System.out.println("updateUserFormView Handler..........");
 		String username = Helper.getEmailOfLoggedInUser(authentication);
 		User userData = userService.getUserByEmail(username);
 
@@ -187,7 +164,7 @@ public class LoginUserCRUD {
 		userFormDetails.setYourName(userData.getName());
 		userFormDetails.setGender(userData.getGender());
 		userFormDetails.setReligion(userData.getReligion());
-//		userFormDetails.setCaste(userData.getCaste());
+		// userFormDetails.setCaste(userData.getCaste());
 		userFormDetails.setSubcaste(userData.getSubcaste());
 
 		userFormDetails.setDateOfBirth(userData.getDateOfBirth());
@@ -234,29 +211,20 @@ public class LoginUserCRUD {
 
 		model.addAttribute("religions", religions);
 		model.addAttribute("castes", castes);
-
-		for (String val : religions) {
-			System.out.println(val);
-		}
-		for (String val : castes) {
-			System.out.println(val);
-		}
-
 		model.addAttribute("userFormDetails", userFormDetails);
 		model.addAttribute("userImages", userData.getImagesList());
 
 		return "User/update_user_view";
 	}
 
-//  Processing for Update_Contact Handler----->
+	// Processing for Update_Contact Handler----->
 	@PostMapping("/update/userDetailsUpdateForm")
 	public String processUpdateUserFormView(@Valid @ModelAttribute("userFormDetails") UserFormDetails userFormDetails,
 			BindingResult bindingResult, @RequestParam(value = "agreement", defaultValue = "false") boolean agreement,
 			@RequestParam("userImages") List<MultipartFile> userImages, Model model, Authentication authentication,
 			HttpSession session) throws Exception {
 
-		System.out.println("processUpdateUserFormView Handler..........");
-//		String username = Helper.getEmailOfLoggedInUser(authentication);
+		// String username = Helper.getEmailOfLoggedInUser(authentication);
 		String username = authentication.getName();
 		User userData = userService.getUserByEmail(username);
 
@@ -277,10 +245,10 @@ public class LoginUserCRUD {
 		userData.setCaste(userFormDetails.getCaste());
 		userData.setSubcaste(userFormDetails.getSubcaste());
 
-//		String dateOfBirth = userFormDetails.getDateOfBirth();
-//		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-//		LocalDate dob = LocalDate.parse(dateOfBirth, formatter);
-//		int age = Period.between(dob, LocalDate.now()).getYears();
+		// String dateOfBirth = userFormDetails.getDateOfBirth();
+		// DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		// LocalDate dob = LocalDate.parse(dateOfBirth, formatter);
+		// int age = Period.between(dob, LocalDate.now()).getYears();
 
 		// Getting Age from DOB...
 		String dateOfBirth = userFormDetails.getDateOfBirth(); // This is in "MM/dd/yyyy"
@@ -338,14 +306,10 @@ public class LoginUserCRUD {
 				publicIds.add(UUID.randomUUID().toString());
 			}
 
-//			userData.setPicture(imageUrls.get(0)); // set the first image as the profile picture
-//			userData.setImages(imageUrls); // store the list of image URLs
+			// userData.setPicture(imageUrls.get(0)); // set the first image as the profile
+			// picture
+			// userData.setImages(imageUrls); // store the list of image URLs
 			userData.setImagesList(imageUrls); // store the list of image URLs
-
-			System.out.println("URL-------------------");
-			System.out.println(imageUrls);
-			System.out.println("Public IDs-------------------");
-			System.out.println(publicIds);
 		}
 
 		var updateUser = userService.updateUser(userData);
@@ -361,67 +325,185 @@ public class LoginUserCRUD {
 		return "redirect:/user/logginprofile";
 	}
 
-//  Open Update_Contact Handler by Admin ----->
+	// Open Update_Contact Handler by Admin ----->
+
+	// {
+	// "reviewId": 0,
+	// "timestamp": "2025-04-26T19:02:48.938+00:00",
+	// "message": "Text '16/11/2000' could not be parsed: Invalid value for
+	// MonthOfYear (valid values 1 - 12): 16",
+	// "details": "uri=/update/userDetailsUpdateForm/2"
+	// }
 	@GetMapping("/view/userDetailsUpdateForm/{userId}")
 	public String updateUserFormViewAdmin(@PathVariable("userId") Long userId, Model model) {
-
-		System.out.println("updateUserFormView Handler..........");
 
 		Optional<User> userOptional = this.userService.getUserById(userId);
 		User userData = userOptional.get();
 
-		UserFormDetailsAdmin userFormDetailsAdmin = new UserFormDetailsAdmin();
+		UserFormDetails userFormDetails = new UserFormDetails();
 
-		model.addAttribute("userId", userId);
-		model.addAttribute("userFormDetails", userFormDetailsAdmin);
+		userFormDetails.setYourName(userData.getName());
+		userFormDetails.setGender(userData.getGender());
+		userFormDetails.setReligion(userData.getReligion());
+		userFormDetails.setCaste(userData.getCaste());
+		userFormDetails.setSubcaste(userData.getSubcaste());
+
+		userFormDetails.setDateOfBirth(userData.getDateOfBirth());
+		userFormDetails.setAge(userData.getAge());
+
+		// userFormDetails.setBrithTime(userData.getBrithTime());
+		userFormDetails.setHeight(userData.getHeight());
+		userFormDetails.setMarriedStatus(userData.getMarriedStatus());
+		userFormDetails.setPlace(userData.getPlace());
+		userFormDetails.setNriPlace(userData.getNriPlace());
+		userFormDetails.setQualification(userData.getQualification());
+		userFormDetails.setQualificationField(userData.getQualificationField());
+		userFormDetails.setOccupation(userData.getOccupation());
+		userFormDetails.setYourJobTitle(userData.getYourJobTitle());
+		userFormDetails.setYourJobSalary(userData.getYourJobSalary());
+
+		userFormDetails.setFamilyStatus(userData.getFamilyStatus());
+		userFormDetails.setTotalFamilyMembers(userData.getTotalFamilyMembers());
+		userFormDetails.setTotalBrothers(userData.getTotalBrothers());
+		userFormDetails.setTotalSisters(userData.getTotalSisters());
+
+		userFormDetails.setFatherName(userData.getFatherName());
+		userFormDetails.setFatherOccupation(userData.getFatherOccupation());
+		userFormDetails.setFatherJobTitle(userData.getFatherJobTitle());
+		userFormDetails.setFatherJobSalary(userData.getFatherJobSalary());
+
+		userFormDetails.setMotherName(userData.getMotherName());
+		userFormDetails.setMotherOccupation(userData.getMotherOccupation());
+		userFormDetails.setMotherJobTitle(userData.getMotherJobTitle());
+		userFormDetails.setMotherJobSalary(userData.getMotherJobSalary());
+
+		userFormDetails.setAnyDemand(userData.getAnyDemand());
+		userFormDetails.setAnyRemarks(userData.getAnyRemarks());
+		userFormDetails.setAddress(userData.getAddress());
+
+		userFormDetails.setPhoneNumber1(userData.getPhoneNumber1());
+		userFormDetails.setPhoneNumber1(userData.getPhoneNumber1());
+		userFormDetails.setPhoneNumber2(userData.getPhoneNumber2());
+
+		userFormDetails.setFormFilledBy(userData.getFormFilledBy());
+
+		// Fetch distinct Religions, castes categories from the database
+		List<String> religions = userService.getAllDistinctReligions();
+		List<String> castes = userService.getAllDistinctCastes(userData.getReligion());
+
+		model.addAttribute("religion", religions);
+		model.addAttribute("caste", castes);
+		model.addAttribute("userFormDetails", userFormDetails);
 		model.addAttribute("userImages", userData.getImagesList());
+
+		// UserFormDetailsAdmin userFormDetailsAdmin = new UserFormDetailsAdmin();
+
+		// model.addAttribute("userId", userId);
+		// model.addAttribute("userFormDetails", userFormDetailsAdmin);
+		// model.addAttribute("userImages", userData.getImagesList());
 
 		return "User/update_user_view_by_admin";
 	}
 
-//  Processing for Update_Contact Handler by Admin ----->
+	// Processing for Update_Contact Handler by Admin ----->
 	@PostMapping("/update/userDetailsUpdateForm/{userId}")
 	public String processUpdateUserFormViewAdmin(
-			@Valid @ModelAttribute("userFormDetails") UserFormDetailsAdmin userFormDetailsAdmin,
-			BindingResult bindingResult, @RequestParam(value = "agreement", defaultValue = "false") boolean agreement,
-			@RequestParam("userImages") List<MultipartFile> userImages, @PathVariable("userId") Long userId,
-			Model model, HttpSession session) throws Exception {
-
-		System.out.println("processUpdateUserFormView Handler..........");
+			@Valid @ModelAttribute("userFormDetails") UserFormDetails userFormDetails,
+			BindingResult bindingResult,
+			@RequestParam("userImages") List<MultipartFile> userImages,
+			@PathVariable("userId") Long userId,
+			Model model,
+			HttpSession session) throws Exception {
 
 		Optional<User> userOptional = this.userService.getUserById(userId);
 		User userData = userOptional.get();
 
 		// If there are validation errors, return to the same form view
 		if (bindingResult.hasErrors()) {
-			return "user/update_user_view";
+			return "user/update_user_view_by_admin";
 		}
+
+		// Update user fields from form data
+		userData.setName(userFormDetails.getYourName());
+		userData.setGender(userFormDetails.getGender());
+		userData.setReligion(userFormDetails.getReligion());
+		userData.setCaste(userFormDetails.getCaste());
+		userData.setSubcaste(userFormDetails.getSubcaste());
+
+		// // Handling Date of Birth and Age calculation
+		// String dateOfBirth = userFormDetails.getDateOfBirth(); // expecting
+		// "dd/MM/yyyy"
+		// DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		// LocalDate dob = LocalDate.parse(dateOfBirth, formatter);
+		// int age = Period.between(dob, LocalDate.now()).getYears();
+
+		// userData.setDateOfBirth(dateOfBirth);
+		// userData.setAge(age);
+
+		// Getting Age from DOB...
+		String dateOfBirth = userFormDetails.getDateOfBirth(); // This is in "MM/dd/yyyy"
+		DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+		DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+		LocalDate dob = LocalDate.parse(dateOfBirth, inputFormatter); // Parse input date
+		String formattedDateOfBirth = dob.format(outputFormatter); // Format to "dd/MM/yyyy"
+
+		userData.setDateOfBirth(formattedDateOfBirth); // Set formatted date for database storage
+		int age = Period.between(dob, LocalDate.now()).getYears(); // Calculate age
+		userData.setAge(age); // Set age on user object
+
+		userData.setBrithTime(userFormDetails.getBrithTime());
+
+		userData.setHeight(userFormDetails.getHeight());
+		userData.setMarriedStatus(userFormDetails.getMarriedStatus());
+		userData.setPlace(userFormDetails.getPlace());
+		userData.setNriPlace(userFormDetails.getNriPlace());
+		userData.setQualification(userFormDetails.getQualification());
+		userData.setQualificationField(userFormDetails.getQualificationField());
+		userData.setOccupation(userFormDetails.getOccupation());
+		userData.setYourJobTitle(userFormDetails.getYourJobTitle());
+		userData.setYourJobSalary(userFormDetails.getYourJobSalary());
+
+		userData.setFamilyStatus(userFormDetails.getFamilyStatus());
+		userData.setTotalFamilyMembers(userFormDetails.getTotalFamilyMembers());
+		userData.setTotalBrothers(userFormDetails.getTotalBrothers());
+		userData.setTotalSisters(userFormDetails.getTotalSisters());
+
+		userData.setFatherName(userFormDetails.getFatherName());
+		userData.setFatherOccupation(userFormDetails.getFatherOccupation());
+		userData.setFatherJobTitle(userFormDetails.getFatherJobTitle());
+		userData.setFatherJobSalary(userFormDetails.getFatherJobSalary());
+
+		userData.setMotherName(userFormDetails.getMotherName());
+		userData.setMotherOccupation(userFormDetails.getMotherOccupation());
+		userData.setMotherJobTitle(userFormDetails.getMotherJobTitle());
+		userData.setMotherJobSalary(userFormDetails.getMotherJobSalary());
+
+		userData.setAnyDemand(userFormDetails.getAnyDemand());
+		userData.setAnyRemarks(userFormDetails.getAnyRemarks());
+		userData.setAddress(userFormDetails.getAddress());
+
+		userData.setPhoneNumber1(userFormDetails.getPhoneNumber1());
+		userData.setPhoneNumber2(userFormDetails.getPhoneNumber2());
+
+		userData.setFormFilledBy(userFormDetails.getFormFilledBy());
 
 		// Process and upload images if provided
 		if (userImages != null && !userImages.isEmpty()) {
 			List<String> imageUrls = imageService.uploadImages(userImages, UUID.randomUUID().toString());
-
-			System.out.println("URL-------------------");
-			System.out.println(imageUrls);
-			// Set image data on the user object
-			userData.setImagesList(imageUrls); // store the list of image URLs
+			userData.setImagesList(imageUrls);
 		}
 
-		// Update the user in the database
-		var updateUser = userService.updateUser(userData);
-		logger.info("Updated User {}", updateUser);
+		// Save the updated user
+		Optional<User> updatedUser = userService.updateUser(userData);
+		logger.info("Updated User: {}", updatedUser);
 
-		// Add user ID and success message to the model
-		model.addAttribute("userId", userId);
-		model.addAttribute("message", Message.builder().content("User Updated !!").type(MessageType.green).build());
+		// Set success message
+		session.setAttribute("message", Message.builder()
+				.content("Your Data is Updated Successfully :)")
+				.type(MessageType.green)
+				.build());
 
-		// Set a success message in the session
-		Message message = Message.builder().content("Your Data is Updated Successful :)").type(MessageType.green)
-				.build();
-		session.setAttribute("message", message);
-
-		// Redirect to the user details page after update
-		// return "redirect:/user/" + userId;
 		return "redirect:/user/userlist";
 	}
 
@@ -451,7 +533,6 @@ public class LoginUserCRUD {
 	@GetMapping("/do-deleteadmin/{userId}")
 	public String deleteUserByAdmin(@PathVariable("userId") Long userId, Model model, HttpSession session) {
 
-		System.out.println("deleteUser Handler..........");
 		Optional<User> userOptional = this.userService.getUserById(userId);
 		User userData = userOptional.get();
 
@@ -468,7 +549,6 @@ public class LoginUserCRUD {
 
 	@GetMapping("/do-deleteimgadmin/{userId}")
 	public String deleteAllUserImagesByAdmin(@PathVariable("userId") Long userId, Model model, HttpSession session) {
-		System.out.println("deleteAllUserImagesByAdmin Handler..........");
 
 		// Fetch the user by ID
 		Optional<User> userOptional = userService.getUserById(userId);
@@ -476,14 +556,14 @@ public class LoginUserCRUD {
 
 		// Create a modifiable copy of the images list
 		List<String> imagesList = new ArrayList<>(userData.getImagesList());
-//		System.out.println("Images before deletion: " + imagesList.toString());
+		// System.out.println("Images before deletion: " + imagesList.toString());
 
 		// Clear the list
 		imagesList.clear();
 
-//		System.out.println("Images after deletion: " + imagesList.toString());
+		// System.out.println("Images after deletion: " + imagesList.toString());
 		imagesList.add("https://res.cloudinary.com/dcrlfty5k/image/upload/v1729153915/yjllp8ag6uab4gdq7hog.png");
-//		System.out.println("Added Images after deletion: " + imagesList.toString());
+		// System.out.println("Added Images after deletion: " + imagesList.toString());
 
 		// Set the modified list back to the user object
 		userData.setImagesList(imagesList);
@@ -497,11 +577,9 @@ public class LoginUserCRUD {
 	@GetMapping("/do-togglesubscriptionisactive/{userId}")
 	public String toggleSubscriptionIsActive(@PathVariable("userId") Long userId, Model model) {
 
-		System.out.println("ToggleSubscriptionIsActive Handler..........");
 		Optional<User> userOptional = this.userService.getUserById(userId);
 		User userData = userOptional.get();
 
-		System.out.println("Before- userData.isSubscriptionIsActive(): " + userData.isSubscriptionIsActive());
 		if (userData.isSubscriptionIsActive()) {
 			System.out.println("insdie-true userData.isSubscriptionIsActive(): " + userData.isSubscriptionIsActive());
 			userData.setSubscriptionIsActive(false);
@@ -509,7 +587,6 @@ public class LoginUserCRUD {
 			System.out.println("insdie-false userData.isSubscriptionIsActive(): " + userData.isSubscriptionIsActive());
 			userData.setSubscriptionIsActive(true);
 		}
-		System.out.println("After- userData.isSubscriptionIsActive(): " + userData.isSubscriptionIsActive());
 
 		// Update subscriptionIsActive the user
 		userService.updateUser(userData);
@@ -535,7 +612,6 @@ public class LoginUserCRUD {
 
 	@RequestMapping("/shareprofile/{userId}/{token}")
 	public String getShareableUserProfile(@PathVariable Long userId, @PathVariable String token, Model model) {
-		System.out.println("userId of User: " + userId);
 
 		// Validate the token
 		if (!tokenService.isValidToken(userId, token)) {
@@ -549,26 +625,18 @@ public class LoginUserCRUD {
 		if (userOptional.isPresent()) {
 			User userData = userOptional.get(); // Retrieve user data
 
-			System.out.println("User Data: " + userData);
-
 			// Handle payment response, if available
 			if (userData.getPaymentResponse() != null) {
 				PaymentResponse paymentResponse = userData.getPaymentResponse();
-				System.out.println("Payment Response: " + paymentResponse);
-				System.out.println("Razorpay Order ID: " + paymentResponse.getRazorpayOrderId());
-				System.out.println("Razorpay Payment ID: " + paymentResponse.getRazorpayPaymentId());
-				System.out.println("Razorpay Signature: " + paymentResponse.getRazorpaySignature());
 			}
 
 			// Check if payment response exists in the payment service
 			Optional<PaymentResponse> paymentResponseOptional = paymentService.getUserById(userData.getUserId());
 
 			if (paymentResponseOptional.isEmpty()) {
-				System.out.println("No payment response found for user: " + userData.getUserId());
 				model.addAttribute("paymentResponse", "empty");
 			} else {
 				PaymentResponse paymentResponse = paymentResponseOptional.get();
-				System.out.println("Payment Response found: " + paymentResponse);
 				model.addAttribute("paymentResponse", paymentResponse);
 			}
 

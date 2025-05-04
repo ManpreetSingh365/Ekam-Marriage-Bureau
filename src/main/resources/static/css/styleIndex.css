@@ -10964,7 +10964,7 @@ a.text-dark:focus {
 }
 
 .bg-gallery {
-	background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(https://pataaree.com/cdn/shop/articles/17231016035927e9d9a1c-56a0-4430-8f8d-c3d2f3846184_2048x.jpg?v=1726220319), no-repeat center center;
+	background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(https://images.unsplash.com/photo-1519741497674-611481863552?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80), no-repeat center center;
 	background-size: cover;
 }
 
@@ -10978,6 +10978,12 @@ a.text-dark:focus {
 	align-items: center;
 	justify-content: space-between;
 	z-index: 1;
+}
+
+@keyframes blink {
+	0% { opacity: 1; }
+	50% { opacity: 0.4; }
+	100% { opacity: 1; }
 }
 
 .gallery-carousel .owl-nav .owl-prev,
@@ -11138,6 +11144,7 @@ a.text-dark:focus {
 	transform: translateY(2px);
 }
 
+#indexContactUs,
 #indexLogin,
 #indexRegister {
 	text-decoration: none;
@@ -11145,7 +11152,7 @@ a.text-dark:focus {
 	background-color: #1C64F2;
 	border-radius: 0.5rem;
 	font-size: 0.875rem;
-	font-weight: 800;
+	font-weight: 900;
 	padding: 0.5rem 1rem;
 	text-align: center;
 }

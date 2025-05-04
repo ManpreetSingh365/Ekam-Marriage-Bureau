@@ -169,10 +169,14 @@ function confirmLogout(event) {
 		text: 'By Click, You\'ll be Logged Out!',
 		icon: 'warning',
 		showCancelButton: true,
-		confirmButtonColor: '#3085d6',
-		cancelButtonColor: '#d33',
+		confirmButtonColor: '#E47A2E', // Using your primary color
+		cancelButtonColor: '#6c757d', // Using a neutral gray
 		confirmButtonText: 'Yes, Log me Out!',
-		cancelButtonText: 'Cancel'
+		cancelButtonText: 'Cancel',
+		customClass: {
+			confirmButton: 'swal2-confirm-button',
+			cancelButton: 'swal2-cancel-button'
+		}
 	}).then((result) => {
 		if (result.isConfirmed) {
 			// If the user confirms, redirect to the logout page

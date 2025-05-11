@@ -247,7 +247,7 @@ public class User implements UserDetails {
 //	private PhonePePayment phonePePayment;
 
 	
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private List<PhonePePayment> phonePePayments; // List of payments
 
 
